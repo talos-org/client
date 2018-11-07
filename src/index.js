@@ -50,7 +50,11 @@ const Component = () => (
   </Container>
 );
 
-render(<Component />, document.getElementById('root'));
+const root = document.getElementById('root');
+
+if (root != null) {
+  render(<Component />, root);
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
