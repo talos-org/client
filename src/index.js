@@ -1,5 +1,7 @@
 // @flow
-import React from 'react';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+import React, { Component } from 'react';
 import { render } from 'react-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
@@ -41,19 +43,36 @@ const StyledButton = styled.button`
   width: 200px;
 `;
 
-const Component = () => (
-  <Container>
-    <GlobalStyle />
-    <AbsolutelyCentered>
-      <StyledButton>Click me!</StyledButton>
-    </AbsolutelyCentered>
-  </Container>
-);
+@observer
+class Now extends Component {
+  @observable now;
+
+  constructor(props) {
+    super(props);
+    this.start = this.start.bind(this);
+  }
+
+  start() {
+    this.now = Date.now();
+    console.log(`Started running @ ${this.now}`);
+  }
+
+  render() {
+    return (
+      <Container>
+        <GlobalStyle />
+        <AbsolutelyCentered>
+          <StyledButton onClick={this.start}>Click to start</StyledButton>
+        </AbsolutelyCentered>
+      </Container>
+    );
+  }
+}
 
 const root = document.getElementById('root');
 
 if (root != null) {
-  render(<Component />, root);
+  render(<Now />, root);
 }
 
 // If you want your app to work offline and load faster, you can change
