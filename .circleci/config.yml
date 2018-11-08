@@ -47,7 +47,7 @@ jobs:
       ## this to the run.
       - run:
           name: Run Cypress tests
-          command: npm run cypress:run -- --record
+          command: npm run cypress:run --
 
       ## Alternatively we could specify
       ## a specific record key to use
