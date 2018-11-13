@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { DummyContainer as Component } from '.';
+import { HomeContainer as Component } from '.';
 
 describe('Component', () => {
   it('should render correctly in "debug" mode', () => {

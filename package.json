@@ -35,6 +35,7 @@
     "@babel/core": "7.1.0",
     "@reach/router": "^1.2.1",
     "@svgr/webpack": "2.4.1",
+    "ant-design-pro": "^2.1.1",
     "antd": "^3.10.4",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
@@ -116,7 +117,7 @@
     ],
     "resolver": "jest-pnp-resolver",
     "setupFiles": [
-      "react-app-polyfill/jsdom"
+      "./src/setupTests.js"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
@@ -149,8 +150,9 @@
       "jsx",
       "node"
     ],
-    "snapshotSerializers": ["enzyme-to-json/serializer"],
-    "setupFiles": ["./src/setupTests.js"]
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   },
   "babel": {
     "plugins": [
