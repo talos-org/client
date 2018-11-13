@@ -26,7 +26,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "*.{js,js,yml}": [
       "prettier --write --config .prettierrc",
       "git add"
     ]
@@ -148,7 +148,9 @@
       "web.jsx",
       "jsx",
       "node"
-    ]
+    ],
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
+    "setupFiles": ["./src/setupTests.js"]
   },
   "babel": {
     "plugins": [
