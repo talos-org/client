@@ -3,9 +3,10 @@ import * as React from 'react';
 
 import { Icon, Layout, Menu } from 'antd';
 
+import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 
-const { Content, Header, Footer, Sider } = Layout;
+const { Content, Header, Sider } = Layout;
 
 type Props = {};
 
