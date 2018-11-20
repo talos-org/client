@@ -7,7 +7,6 @@ import HeaderTitle from '../../components/headertitle/index';
 
 import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
-import FlexView from 'react-flexview';
 
 const { Content, Header, Sider } = Layout;
 

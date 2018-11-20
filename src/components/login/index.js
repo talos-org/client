@@ -1,20 +1,19 @@
 // @flow
 import * as React from 'react';
 
-import Login from 'ant-design-pro/lib/Login';
-import { Divider, Button } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 
 import HeaderTitle from '../../components/headertitle/index';
+
+import { Link } from 'react-router-dom';
 
 import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 import FlexView from 'react-flexview';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
-
 type Props = {};
 
-export default class LoginScreen extends React.Component {
+export default class LoginComponent extends React.Component {
   render() {
     return (
       <div>
@@ -22,22 +21,38 @@ export default class LoginScreen extends React.Component {
           <HeaderTitle />
         </FlexView>
         <FlexView hAlignContent="center">
-          <Login defaultActiveKey="tab1" onSubmit="">
-            <Tab key="tab1" tab="Blockchain">
-              <Button type="primary" block>
-                Connect to Existing Blockchain
-              </Button>
-              <Divider>or</Divider>
-              <Button type="primary" block>
-                Create new Blockchain
-              </Button>
-            </Tab>
-            <Tab key="tab2" tab="Account">
-              <UserName name="username" />
-              <Password name="password" />
-              <Submit>Login</Submit>
-            </Tab>
-          </Login>
+          <Form onSubmit={() => {}} className="login-form">
+            <Form.Item>
+              <Input
+                prefix={
+                  <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
+                }
+                type="user"
+                placeholder="Username"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Input
+                prefix={
+                  <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
+                }
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Link to="/">
+                <Button
+                  type="primary"
+                  hmtlType="submit"
+                  className="login-form-button"
+                  style={{ width: '100%' }}
+                >
+                  Login
+                </Button>
+              </Link>
+            </Form.Item>
+          </Form>
         </FlexView>
       </div>
     );
