@@ -24,9 +24,13 @@ export default class LoginScreen extends React.Component {
         <FlexView hAlignContent="center">
           <Login defaultActiveKey="tab1" onSubmit="">
             <Tab key="tab1" tab="Blockchain">
-              <Button block>Connect to Existing Blockchain</Button>
+              <Button type="primary" block>
+                Connect to Existing Blockchain
+              </Button>
               <Divider>or</Divider>
-              <Button block>Create new Blockchain</Button>
+              <Button type="primary" block>
+                Create new Blockchain
+              </Button>
             </Tab>
             <Tab key="tab2" tab="Account">
               <UserName name="username" />
