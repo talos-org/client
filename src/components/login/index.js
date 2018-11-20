@@ -16,11 +16,16 @@ type Props = {};
 export default class LoginComponent extends React.Component {
   render() {
     return (
-      <div>
-        <FlexView hAlignContent="center">
+      <FlexView
+        column
+        vAlignContent="center"
+        hAlignContent="center"
+        height="100%"
+      >
+        <FlexView marginBottom={'2em'}>
           <HeaderTitle />
         </FlexView>
-        <FlexView hAlignContent="center">
+        <FlexView>
           <Form onSubmit={() => {}} className="login-form">
             <Form.Item>
               <Input
@@ -54,7 +59,7 @@ export default class LoginComponent extends React.Component {
             </Form.Item>
           </Form>
         </FlexView>
-      </div>
+      </FlexView>
     );
   }
 }
