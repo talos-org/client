@@ -1,14 +1,28 @@
 // @flow
 import * as React from 'react';
 
-import { Icon, Layout, Menu } from 'antd';
+import { Icon, Avatar, Dropdown, Layout, Menu, Breadcrumb } from 'antd';
 
 import HeaderTitle from '../../components/headertitle/index';
+import MonitoringContainer from '../../containers/MonitoringContainer/index';
+import FlexView from 'react-flexview';
+
+import { Link } from 'react-router-dom';
 
 import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 
 const { Content, Header, Sider } = Layout;
+
+type Props = {};
+
+const avatarMenu = (
+  <Menu>
+    <Menu.Item>
+      <Link to="/login">Log out</Link>
+    </Menu.Item>
+  </Menu>
+);
 
 export default class SiderDemo extends React.Component<
   {},
@@ -51,23 +65,39 @@ export default class SiderDemo extends React.Component<
           </Menu>
         </Sider>
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }}>
-            <Icon
-              className="trigger"
-              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            />
+          <Header style={{ background: '#fff', padding: '1em' }}>
+            <FlexView vAlignContent="center" height="100%">
+              <FlexView>
+                <Icon
+                  className="trigger"
+                  type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                  onClick={this.toggle}
+                  style={{ fontSize: '1.5em' }}
+                />
+              </FlexView>
+              <FlexView marginLeft="auto">
+                <Dropdown overlay={avatarMenu} placement="bottomCenter">
+                  <Avatar icon="user" />
+                </Dropdown>
+              </FlexView>
+            </FlexView>
           </Header>
-          <Content
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              background: '#fff',
-              minHeight: 280,
-            }}
-          >
-            Content
-          </Content>
+          <Layout style={{ padding: '0 24px 24px' }}>
+            <Breadcrumb style={{ margin: '16px 0' }}>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+              <Breadcrumb.Item>Monitoring</Breadcrumb.Item>
+            </Breadcrumb>
+            <Content
+              style={{
+                margin: 0,
+                padding: 24,
+                background: '#fff',
+                minHeight: 280,
+              }}
+            >
+              <MonitoringContainer />
+            </Content>
+          </Layout>
         </Layout>
       </Layout>
     );

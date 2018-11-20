@@ -48,7 +48,7 @@ export default class LoginComponent extends React.Component {
                   className="login-form-button"
                   style={{ width: '100%' }}
                 >
-                  Login
+                  Log in
                 </Button>
               </Link>
             </Form.Item>
