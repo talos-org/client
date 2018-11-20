@@ -8,6 +8,7 @@ export default class HeaderTitle extends React.Component {
       <FlexView
         hAlignContent="center"
         vAlignContent="center"
+        wrap
         style={{ backgroundColor: 'white' }}
       >
         <img width="50" height="50" src={require('./talos_tmp_logo.png')} />
