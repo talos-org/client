@@ -1,18 +1,16 @@
 import React from 'react';
-import { Router } from '@reach/router';
+import { Route, Switch } from 'react-router-dom';
 
-// import Account from '../containers/Account/index';
-import { LoginContainer as Login } from '../containers/LoginContainer/index';
-import { HomeContainer as Home } from '../containers/HomeContainer/index';
-// import Settings from '../containers/Settings/index';
+import HomeScreen from '../screens/HomeScreen';
+import LoginScreen from '../screens/LoginScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
+import OnboardingScreen from '../screens/OnboardingScreen';
 
-export default ({ children }) => (
-  <div>
-    <Router primary={true}>
-      {/* <Account path="/account" /> */}
-      <Home path="/" />
-      <Login path="/login" />
-      {/* <Settings path="/settings" /> */}
-    </Router>
-  </div>
+export default () => (
+  <Switch>
+    <Route exact path="/" component={HomeScreen} />
+    <Route exact path="/login" component={LoginScreen} />
+    <Route exact path="/onboarding" component={WelcomeScreen} />
+    <Route path="/onboarding/:type/:id" component={OnboardingScreen} />
+  </Switch>
 );

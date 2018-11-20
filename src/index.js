@@ -1,6 +1,8 @@
 // @flow
+
 import React from 'react';
 import { render } from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './routes/index';
 import * as serviceWorker from './serviceWorker';
@@ -8,7 +10,12 @@ import * as serviceWorker from './serviceWorker';
 const root = document.getElementById('root');
 
 if (root != null) {
-  render(<App />, root);
+  render(
+    <Router>
+      <App />
+    </Router>,
+    root,
+  );
 }
 
 // Keep this
