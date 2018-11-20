@@ -1,4 +1,6 @@
 // @flow
+import 'antd/dist/antd.css';
+import 'ant-design-pro/dist/ant-design-pro.css';
 
 import React from 'react';
 import { render } from 'react-dom';
