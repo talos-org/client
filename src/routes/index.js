@@ -6,6 +6,7 @@ import OnboardingScreen from '../screens/OnboardingScreen';
 
 export default () => (
   <Switch>
-    <Route path="/onboarding/:id" component={OnboardingScreen} />
+    <Route component={HomeScreen} exact path="/" />
+    <Route component={OnboardingScreen} path="/onboarding/:type" />
   </Switch>
 );
