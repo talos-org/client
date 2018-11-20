@@ -3,8 +3,11 @@ import * as React from 'react';
 
 import { Icon, Layout, Menu } from 'antd';
 
+import HeaderTitle from '../../components/headertitle/index';
+
 import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
+import FlexView from 'react-flexview';
 
 const { Content, Header, Sider } = Layout;
 
@@ -28,19 +31,23 @@ export default class SiderDemo extends React.Component<
     return (
       <Layout style={{ height: '100vh' }}>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-          <div className="logo" />
+          <HeaderTitle />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
-              <Icon type="user" />
-              <span>nav 1</span>
+              <Icon type="pie-chart" />
+              <span>Monitoring</span>
             </Menu.Item>
             <Menu.Item key="2">
-              <Icon type="video-camera" />
-              <span>nav 2</span>
+              <Icon type="desktop" />
+              <span>Data</span>
             </Menu.Item>
             <Menu.Item key="3">
-              <Icon type="upload" />
-              <span>nav 3</span>
+              <Icon type="user" />
+              <span>Account</span>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <Icon type="setting" />
+              <span>Settings</span>
             </Menu.Item>
           </Menu>
         </Sider>
