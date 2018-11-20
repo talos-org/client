@@ -8,6 +8,7 @@ import App from './routes/index';
 import * as serviceWorker from './serviceWorker';
 
 const root = document.getElementById('root');
+root.style.height = '100%';
 
 if (root != null) {
   render(

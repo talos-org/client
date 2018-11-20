@@ -15,26 +15,29 @@ type Props = {};
 export default class WelcomeComponent extends React.Component {
   render() {
     return (
-      <div>
-        <FlexView hAlignContent="center">
+      <FlexView
+        column
+        vAlignContent="center"
+        hAlignContent="center"
+        height="100%"
+      >
+        <FlexView marginBottom={'2em'}>
           <HeaderTitle />
         </FlexView>
-        <FlexView hAlignContent="center">
-          <div>
-            <Link to="/onboarding/existing">
-              <Button type="primary" block>
-                Connect to Existing Blockchain
-              </Button>
-            </Link>
-            <Divider>or</Divider>
-            <Link to="/onboarding/new">
-              <Button type="primary" block>
-                Create new Blockchain
-              </Button>
-            </Link>
-          </div>
+        <FlexView column>
+          <Link to="/onboarding/existing">
+            <Button type="primary" block>
+              Connect to Existing Blockchain
+            </Button>
+          </Link>
+          <Divider>or</Divider>
+          <Link to="/onboarding/new">
+            <Button type="primary" block>
+              Create new Blockchain
+            </Button>
+          </Link>
         </FlexView>
-      </div>
+      </FlexView>
     );
   }
 }
