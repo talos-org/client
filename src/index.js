@@ -3,20 +3,36 @@ import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 
 import React from 'react';
-import { render } from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
+import { render } from 'react-dom';
 
 import App from './routes/index';
 import * as serviceWorker from './serviceWorker';
 
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+  *::after,before {
+    box-sizing: initial;
+  }
+  html {
+    margin: 0;
+    padding: 0;
+  }
+`;
+
 const root = document.getElementById('root');
-root.style.height = '100%';
 
 if (root != null) {
   render(
-    <Router>
-      <App />
-    </Router>,
+    <div>
+      <GlobalStyle />
+      <Router>
+        <App />
+      </Router>
+    </div>,
     root,
   );
 }
