@@ -123,7 +123,7 @@ export default class Form extends React.Component<
               </span>
             </h1>
             <p>
-              Give your blockhain a name. Giving it a description is
+              Give your blockchain a name. Giving it a description is
               recommended, but not required.
             </p>
             <Label>Name the blockchain</Label>
@@ -134,7 +134,7 @@ export default class Form extends React.Component<
             <Input
               name="name"
               onChange={this.handleChange}
-              placeholder="Name of blockhain"
+              placeholder="Name of blockchain"
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
               suffix={suffix}
               value={name}
