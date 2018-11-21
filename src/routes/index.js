@@ -11,6 +11,6 @@ export default () => (
     <Route exact path="/" component={HomeScreen} />
     <Route exact path="/login" component={LoginScreen} />
     <Route exact path="/onboarding" component={WelcomeScreen} />
-    <Route path="/onboarding/:type/:id" component={OnboardingScreen} />
+    <Route path="/onboarding/:type" component={OnboardingScreen} />
   </Switch>
 );
