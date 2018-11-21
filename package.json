@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@babel/core": "7.1.0",
+    "@rebass/grid": "^6.0.0-4",
     "@svgr/webpack": "2.4.1",
     "ant-design-pro": "^2.1.1",
     "antd": "^3.10.4",
@@ -69,6 +70,7 @@
     "mobx-react": "^5.3.6",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
+    "polished": "^2.3.0",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "6.0.6",
@@ -81,6 +83,7 @@
     "react-flexview": "^4.0.1",
     "react-grid-system": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "react-scroll-to-component": "^1.0.2",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
