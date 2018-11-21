@@ -1,10 +1,6 @@
 // @flow
 import * as React from 'react';
 
-import SiderDemo from '../../components/nav/index';
+import SiderDemo from '../../components/Nav/index';
 
-export default class HomeContainer extends React.Component<{}> {
-  render() {
-    return <SiderDemo />;
-  }
-}
+export default () => <SiderDemo />;

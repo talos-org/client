@@ -32,9 +32,8 @@ export default class OnboardingContainer extends React.Component<
     this.setState({ current });
   };
 
-  onUpdate = () => {
-    this.next();
-  };
+  onUpdate = (where: string) =>
+    where === 'next' ? this.next() : this.previous();
 
   previous = () => {
     const current = this.state.current - 1;
