@@ -3,7 +3,6 @@ import * as React from 'react';
 
 import { Icon, Avatar, Dropdown, Layout, Menu, Breadcrumb } from 'antd';
 
-import HeaderTitle from '../../components/headertitle/index';
 import MonitoringContainer from '../../containers/MonitoringContainer/index';
 import FlexView from 'react-flexview';
 
@@ -44,7 +43,6 @@ export default class SiderDemo extends React.Component<
     return (
       <Layout style={{ height: '100vh' }}>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-          <HeaderTitle />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
               <Icon type="pie-chart" />

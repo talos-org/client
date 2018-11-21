@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Button as _Button, Card as _Card, Icon, Input as _Input } from 'antd';
+import scrollToComponent from 'react-scroll-to-component';
 import styled from 'styled-components';
 
 const { TextArea } = _Input;
@@ -13,6 +14,10 @@ const Box = styled(_Card)`
 const Card = styled(_Card)`
   display: ${props => (props.visible ? null : 'none')};
   margin: 55px;
+`;
+
+const DescriptionBox = styled(_TextArea)`
+  margin-top: 11px;
 `;
 
 const InfoLabel = styled.div`
@@ -35,12 +40,12 @@ const NextButton = styled(_Button)`
   {/* Switch to \`rem\` units when we finally
     setup a design-system
   */}
-  margin-top: 25px;
+  margin: 25px 0 0 0;
   }
 `;
 
-const DescriptionBox = styled(_TextArea)`
-  margin-top: 11px;
+const PreviousButton = styled(NextButton)`
+  margin: 0 11px 0 0 !important;
 `;
 
 // Not worried about validation right now
@@ -60,6 +65,9 @@ export default class Form extends React.Component<
   },
 > {
   focusRef = React.createRef();
+  toAdvanced = React.createRef();
+  toName = React.createRef();
+  toReview = React.createRef();
 
   constructor() {
     super();
@@ -94,9 +102,52 @@ export default class Form extends React.Component<
     // Validation is going to look something like this
     // validate()
     //   .then(_ => this.setState({ showAdvanced: true, }));
-    this.props.onUpdate();
+    this.props.onUpdate('next');
     this.setState({ showAdvanced: true });
+    setTimeout(() => {
+      switch (to) {
+        case 'advanced':
+          this.scrollTo(this.toAdvanced);
+          break;
+        case 'name':
+          this.scrollTo(this.toName);
+          break;
+        case 'review':
+          this.scrollTo(this.toReview);
+          break;
+        default:
+          break;
+      }
+    }, 100);
   };
+
+  handlePrevious = (to: string) => {
+    // $FlowFixMe
+    // Validation is going to look something like this
+    // validate()
+    //   .then(_ => this.setState({ showAdvanced: true, }));
+    this.props.onUpdate('previous');
+    this.setState({ showAdvanced: true });
+    setTimeout(() => {
+      switch (to) {
+        case 'advanced':
+          this.scrollTo(this.toAdvanced);
+          break;
+        case 'name':
+          this.scrollTo(this.toName);
+          break;
+        case 'review':
+          this.scrollTo(this.toReview);
+          break;
+        default:
+          break;
+      }
+    }, 100);
+  };
+
+  // $FlowFixMe
+  scrollTo = (componentRef, options = {}) =>
+    scrollToComponent(componentRef, options);
 
   render() {
     const {
@@ -115,7 +166,12 @@ export default class Form extends React.Component<
     return (
       <div>
         <Box>
-          <Card visible={true}>
+          <Card
+            ref={r => {
+              this.toName = r;
+            }}
+            visible={true}
+          >
             <h1>
               Hello{' '}
               <span role="img" aria-label="waving">
@@ -162,7 +218,12 @@ export default class Form extends React.Component<
               Next
             </NextButton>
           </Card>
-          <Card visible={showAdvanced}>
+          <Card
+            ref={r => {
+              this.toAdvanced = r;
+            }}
+            visible={showAdvanced}
+          >
             <h1>Advanced</h1>
             <p>
               These configuration settings are chosen for you by default.
@@ -233,6 +294,15 @@ export default class Form extends React.Component<
               placeholder="Target block time"
               value={targetBlockTime}
             />
+            <PreviousButton onClick={() => this.handlePrevious('name')}>
+              Previous
+            </PreviousButton>
+            <NextButton
+              onClick={() => this.handleNext('review')}
+              type="primary"
+            >
+              Next
+            </NextButton>
           </Card>
         </Box>
       </div>

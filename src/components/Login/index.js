@@ -1,19 +1,10 @@
 // @flow
 import * as React from 'react';
-
+import FlexView from 'react-flexview';
 import { Form, Icon, Input, Button } from 'antd';
-
-import HeaderTitle from '../../components/headertitle/index';
-
 import { Link } from 'react-router-dom';
 
-import 'antd/dist/antd.css';
-import 'ant-design-pro/dist/ant-design-pro.css';
-import FlexView from 'react-flexview';
-
-type Props = {};
-
-export default class LoginComponent extends React.Component {
+export default class LoginComponent extends React.Component<{}> {
   render() {
     return (
       <FlexView
@@ -22,9 +13,7 @@ export default class LoginComponent extends React.Component {
         hAlignContent="center"
         height="100%"
       >
-        <FlexView marginBottom={'2em'}>
-          <HeaderTitle />
-        </FlexView>
+        <FlexView marginBottom={'2em'} />
         <FlexView>
           <Form onSubmit={() => {}} className="login-form">
             <Form.Item>
