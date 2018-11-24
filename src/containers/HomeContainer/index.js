@@ -1,20 +1,6 @@
 // @flow
 import * as React from 'react';
 
-import SiderDemo from '../../components/nav/index';
+import SiderDemo from 'components/Navigation/index';
 
-type Props = {};
-
-class HomeContainer extends React.Component<Props> {
-  constructor(props: {}) {
-    super(props);
-  }
-
-  componentDidMount() {}
-
-  render() {
-    return <SiderDemo />;
-  }
-}
-
-export { HomeContainer };
+export default () => <SiderDemo />;
