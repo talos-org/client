@@ -1,16 +1,10 @@
 import React from 'react';
-import { Router } from '@reach/router';
+import { Route, Switch } from 'react-router-dom';
 
-// import Account from '../containers/Account/index';
-import { HomeContainer as Home } from '../containers/HomeContainer/index';
-// import Settings from '../containers/Settings/index';
+import HomeContainer from '../containers/HomeContainer/index';
 
-export default ({ children }) => (
-  <div>
-    <Router primary={true}>
-      {/* <Account path="/account" /> */}
-      <Home path="/" />
-      {/* <Settings path="/settings" /> */}
-    </Router>
-  </div>
+export default () => (
+  <Switch>
+    <Route exact path="/" component={HomeContainer} />
+  </Switch>
 );

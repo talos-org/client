@@ -8,10 +8,8 @@ import 'ant-design-pro/dist/ant-design-pro.css';
 
 const { Content, Header, Sider } = Layout;
 
-type Props = {};
-
 export default class SiderDemo extends React.Component<
-  Props,
+  {},
   {
     collapsed: boolean,
   },
