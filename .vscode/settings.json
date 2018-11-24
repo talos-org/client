@@ -2,5 +2,11 @@
     "files.exclude": {
         "**/config/**": true
     },
-    "javascript.implicitProjectConfig.experimentalDecorators": true
+    "files.watcherExclude": {
+        "**/config/**": true
+    },
+    "flow.useNPMPackagedFlow": true,
+    "javascript.implicitProjectConfig.experimentalDecorators": true,
+    "javascript.validate.enable": false,
+    "typescript.disableAutomaticTypeAcquisition": true
 }
