@@ -6,8 +6,8 @@
     "type": "git",
     "url": "git+https://github.com/talos-org/client.git"
   },
-  "author": "Kunall Banerjee <yeskunall96@gmail.com> (https://kimchi.now.sh/)",
-  "license": "",
+  "author": "Talos Team",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/talos-org/client/issues"
   },
@@ -17,6 +17,7 @@
     "cypress:run": "cypress run",
     "glow": "glow --watch",
     "start": "node scripts/start.js",
+    "start:ff": "BROWSER='Firefox Nightly' node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
   },
