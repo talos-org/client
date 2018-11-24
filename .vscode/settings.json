@@ -5,7 +5,7 @@
     "files.watcherExclude": {
         "**/config/**": true
     },
-    "flow.useNPMPackagedFlow": true,
+    "flow.useNPMPackagedFlow": false,
     "javascript.implicitProjectConfig.experimentalDecorators": true,
     "javascript.validate.enable": false,
     "typescript.disableAutomaticTypeAcquisition": true
