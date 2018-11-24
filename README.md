@@ -10,16 +10,18 @@ Download and `cd` to the directory
 
 ## Install dependencies
 
-### npm (suggested)
+### npm
 
 ```shell
 $ npm install
 ```
 
-### Yarn (not recommended)
+## Setup
+
+Copy the contents of `env.example` into `.env` like so:
 
 ```shell
-$ yarn
+$ cp .env.example .env
 ```
 
 ## Running Talos’ client
@@ -28,10 +30,4 @@ $ yarn
 
 ```shell
 $ npm start
-```
-
-### Yarn
-
-```shell
-yarn start
 ```
