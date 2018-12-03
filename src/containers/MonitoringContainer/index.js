@@ -1,17 +1,5 @@
 // @flow
 import * as React from 'react';
-import MonitoringComponent from '../../components/monitoring/index';
+import MonitoringComponent from 'components/Monitoring/index';
 
-type Props = {};
-
-export default class MonitoringContainer extends React.Component<Props> {
-  constructor(props: {}) {
-    super(props);
-  }
-
-  componentDidMount() {}
-
-  render() {
-    return <MonitoringComponent />;
-  }
-}
+export default () => <MonitoringComponent />;

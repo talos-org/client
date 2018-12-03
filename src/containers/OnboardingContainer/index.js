@@ -5,7 +5,7 @@ import { Icon, Steps as _Steps } from 'antd';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Form from '../../components/Forms/Onboarding/index';
+import Form from 'components/Forms/Onboarding/index';
 
 export const Steps = styled(_Steps)`
   top: 240px;
