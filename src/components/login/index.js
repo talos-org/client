@@ -2,18 +2,12 @@
 import * as React from 'react';
 
 import { Form, Icon, Input, Button } from 'antd';
-
-import HeaderTitle from '../../components/headertitle/index';
-
+import FlexView from 'react-flexview';
 import { Link } from 'react-router-dom';
 
-import 'antd/dist/antd.css';
-import 'ant-design-pro/dist/ant-design-pro.css';
-import FlexView from 'react-flexview';
+import HeaderTitle from 'components/HeaderTitle/index';
 
-type Props = {};
-
-export default class LoginComponent extends React.Component {
+export default class LoginComponent extends React.Component<{}> {
   render() {
     return (
       <FlexView

@@ -1,20 +1,13 @@
 // @flow
 import * as React from 'react';
-
-import { Icon, Avatar, Dropdown, Layout, Menu, Breadcrumb } from 'antd';
-
-import HeaderTitle from '../../components/headertitle/index';
-import MonitoringContainer from '../../containers/MonitoringContainer/index';
 import FlexView from 'react-flexview';
-
+import { Icon, Avatar, Dropdown, Layout, Menu, Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 
-import 'antd/dist/antd.css';
-import 'ant-design-pro/dist/ant-design-pro.css';
+import HeaderTitle from 'components/HeaderTitle/index';
+import MonitoringContainer from 'containers/MonitoringContainer/index';
 
 const { Content, Header, Sider } = Layout;
-
-type Props = {};
 
 const avatarMenu = (
   <Menu>

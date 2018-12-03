@@ -2,8 +2,6 @@
 import * as React from 'react';
 import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
 
-type Props = {};
-
 const sample_data = [
   { stream: 'Cat Scan', size: 2400 },
   { stream: "Driver's License", size: 655 },
@@ -22,7 +20,7 @@ const cols = {
   },
 };
 
-export default class MonitoringComponent extends React.Component {
+export default class MonitoringComponent extends React.Component<{}> {
   render() {
     return (
       <div>
