@@ -98,6 +98,11 @@ export default class Form extends React.Component<
     this.setState({ showAdvanced: true });
   };
 
+  handleFinish = () => {
+    localStorage.setItem('chainName', this.state.name);
+    //history.push("/"); // not working here :(
+  };
+
   render() {
     const {
       description,
@@ -115,7 +120,7 @@ export default class Form extends React.Component<
     return (
       <div>
         <Box>
-          <Card visible={true}>
+          <Card visible={!showAdvanced}>
             <h1>
               Hello{' '}
               <span role="img" aria-label="waving">
@@ -233,6 +238,9 @@ export default class Form extends React.Component<
               placeholder="Target block time"
               value={targetBlockTime}
             />
+            <NextButton onClick={this.handleFinish} type="primary">
+              Finish
+            </NextButton>
           </Card>
         </Box>
       </div>
