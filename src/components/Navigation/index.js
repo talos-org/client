@@ -69,6 +69,11 @@ export default class SiderDemo extends React.Component<
                 />
               </FlexView>
               <FlexView marginLeft="auto">
+                <h1 style={{ margin: 0 }}>
+                  '{localStorage.getItem('chainName')}'
+                </h1>
+              </FlexView>
+              <FlexView marginLeft="auto">
                 <Dropdown overlay={avatarMenu} placement="bottomCenter">
                   <Avatar icon="user" />
                 </Dropdown>
