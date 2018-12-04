@@ -4,30 +4,4 @@
 
 [![Build Status](https://travis-ci.org/talos-org/client.svg?branch=master)](https://travis-ci.org/talos-org/client)
 
-## Download
-
-Download and `cd` to the directory
-
-## Install dependencies
-
-### npm
-
-```shell
-$ npm install
-```
-
-## Setup
-
-Copy the contents of `env.example` into `.env` like so:
-
-```shell
-$ cp .env.example .env
-```
-
-## Running Talos’ client
-
-### npm
-
-```shell
-$ npm start
-```
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to setup Talos.
