@@ -7,7 +7,7 @@ const { TextArea } = _Input;
 const _TextArea = TextArea;
 
 const Box = styled(_Card)`
-  margin: calc(10vh + 50px) auto;
+  margin: calc(10vh) auto;
 `;
 
 const Card = styled(_Card)`
