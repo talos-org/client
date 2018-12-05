@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
 import { Icon, Steps as _Steps } from 'antd';
 import HeaderTitle from 'components/HeaderTitle/index';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Form from 'components/Forms/Onboarding/index';
@@ -65,7 +65,6 @@ export default class OnboardingContainer extends React.Component<
             <Col md={10}>
               <HeaderTitle />
               <Form onUpdate={this.onUpdate} />
-              <Link to="/">tmp link to main dashboard</Link>
             </Col>
           </Row>
         </Container>
