@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Button as _Button, Card as _Card, Icon, Input as _Input } from 'antd';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const { TextArea } = _Input;
 const _TextArea = TextArea;
@@ -101,8 +102,29 @@ export default class Form extends React.Component<
   };
 
   handleFinish = () => {
-    localStorage.setItem('chainName', this.state.name);
-    this.setState({ done: true });
+    axios
+      .post('http://localhost:5000/create_chain/', {
+        name: this.state.name,
+      })
+      .then(response => console.log('Successfully created chain:', response))
+      .then(() =>
+        axios.post('http://localhost:5000/config_parameters/', {
+          name: this.state.name,
+          params: {
+            description: this.state.description,
+            max_block_size: this.state.maxBlockSize,
+            target_block_time: this.state.targetBlockTime,
+            mining_turnover: this.state.miningTurnover,
+            mining_diversity: this.state.miningDiversity,
+          },
+        }),
+      )
+      .then(response => {
+        console.log('Successfully configured chain:', response);
+        localStorage.setItem('chainName', this.state.name);
+        this.setState({ done: true });
+      })
+      .catch(error => console.error('Error:', error));
   };
 
   render() {
