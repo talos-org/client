@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Button as _Button, Card as _Card, Icon, Input as _Input } from 'antd';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 const { TextArea } = _Input;
@@ -74,6 +75,7 @@ export default class Form extends React.Component<
       showAdvanced: false,
       // Is this too little?
       targetBlockTime: 360000,
+      done: false,
     };
   }
 
@@ -100,7 +102,7 @@ export default class Form extends React.Component<
 
   handleFinish = () => {
     localStorage.setItem('chainName', this.state.name);
-    //history.push("/"); // not working here :(
+    this.setState({ done: true });
   };
 
   render() {
@@ -112,10 +114,15 @@ export default class Form extends React.Component<
       name,
       showAdvanced,
       targetBlockTime,
+      done,
     } = this.state;
     const suffix = name ? (
       <Icon type="close-circle" onClick={this.emitEmpty} />
     ) : null;
+
+    if (done) {
+      return <Redirect to="/" />;
+    }
 
     return (
       <div>
