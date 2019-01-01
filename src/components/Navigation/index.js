@@ -1,8 +1,16 @@
 // @flow
 import * as React from 'react';
 import FlexView from 'react-flexview';
-import { Icon, Avatar, Dropdown, Layout, Menu, Breadcrumb } from 'antd';
-import { Link } from 'react-router-dom';
+import {
+  Icon,
+  Avatar,
+  Dropdown,
+  Layout,
+  Menu,
+  Breadcrumb,
+  Tooltip,
+} from 'antd';
+import { Link, Redirect } from 'react-router-dom';
 
 import HeaderTitle from 'components/HeaderTitle/index';
 import MonitoringContainer from 'containers/MonitoringContainer/index';
@@ -21,10 +29,17 @@ export default class SiderDemo extends React.Component<
   {},
   {
     collapsed: boolean,
+    reload: boolean,
   },
 > {
   state = {
     collapsed: false,
+    reload: false /* used to reload the page when we disconnect from a chain */,
+  };
+
+  disconnectChain = () => {
+    localStorage.removeItem('chainName');
+    this.setState({ reload: true });
   };
 
   toggle = () => {
@@ -34,9 +49,16 @@ export default class SiderDemo extends React.Component<
   };
 
   render() {
+    const { reload, collapsed } = this.state;
+
+    if (reload) {
+      this.setState({ reload: false });
+      return <Redirect to="/" />;
+    }
+
     return (
       <Layout style={{ height: '100vh' }}>
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+        <Sider trigger={null} collapsible collapsed={collapsed}>
           <HeaderTitle />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
@@ -63,10 +85,23 @@ export default class SiderDemo extends React.Component<
               <FlexView>
                 <Icon
                   className="trigger"
-                  type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                  type={collapsed ? 'menu-unfold' : 'menu-fold'}
                   onClick={this.toggle}
                   style={{ fontSize: '1.5em' }}
                 />
+              </FlexView>
+              <FlexView marginLeft="auto">
+                <h1 style={{ margin: 0 }}>
+                  '{localStorage.getItem('chainName')}'
+                </h1>
+                <Tooltip placement="bottom" title="disconnect">
+                  <Icon
+                    className="trigger"
+                    style={{ lineHeight: '64px', marginLeft: '5px' }}
+                    type="disconnect"
+                    onClick={this.disconnectChain}
+                  />
+                </Tooltip>
               </FlexView>
               <FlexView marginLeft="auto">
                 <Dropdown overlay={avatarMenu} placement="bottomCenter">

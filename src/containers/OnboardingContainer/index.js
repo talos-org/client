@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
 import { Icon, Steps as _Steps } from 'antd';
+import HeaderTitle from 'components/HeaderTitle/index';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -62,6 +63,7 @@ export default class OnboardingContainer extends React.Component<
               </Steps>
             </Col>
             <Col md={10}>
+              <HeaderTitle />
               <Form onUpdate={this.onUpdate} />
             </Col>
           </Row>

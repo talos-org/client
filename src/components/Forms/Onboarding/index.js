@@ -1,13 +1,14 @@
 // @flow
 import * as React from 'react';
 import { Button as _Button, Card as _Card, Icon, Input as _Input } from 'antd';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 const { TextArea } = _Input;
 const _TextArea = TextArea;
 
 const Box = styled(_Card)`
-  margin: calc(10vh + 50px) auto;
+  margin: calc(10vh) auto;
 `;
 
 const Card = styled(_Card)`
@@ -74,6 +75,7 @@ export default class Form extends React.Component<
       showAdvanced: false,
       // Is this too little?
       targetBlockTime: 360000,
+      done: false /* used to indicate we are done onboarding, redirects user to main dashboard */,
     };
   }
 
@@ -98,6 +100,11 @@ export default class Form extends React.Component<
     this.setState({ showAdvanced: true });
   };
 
+  handleFinish = () => {
+    localStorage.setItem('chainName', this.state.name);
+    this.setState({ done: true });
+  };
+
   render() {
     const {
       description,
@@ -107,15 +114,20 @@ export default class Form extends React.Component<
       name,
       showAdvanced,
       targetBlockTime,
+      done,
     } = this.state;
     const suffix = name ? (
       <Icon type="close-circle" onClick={this.emitEmpty} />
     ) : null;
 
+    if (done) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <div>
         <Box>
-          <Card visible={true}>
+          <Card visible={!showAdvanced}>
             <h1>
               Hello{' '}
               <span role="img" aria-label="waving">
@@ -233,6 +245,9 @@ export default class Form extends React.Component<
               placeholder="Target block time"
               value={targetBlockTime}
             />
+            <NextButton onClick={this.handleFinish} type="primary">
+              Finish
+            </NextButton>
           </Card>
         </Box>
       </div>
