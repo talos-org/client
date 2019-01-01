@@ -34,7 +34,7 @@ export default class SiderDemo extends React.Component<
 > {
   state = {
     collapsed: false,
-    reload: false,
+    reload: false /* used to reload the page when we disconnect from a chain */,
   };
 
   disconnectChain = () => {
@@ -49,14 +49,16 @@ export default class SiderDemo extends React.Component<
   };
 
   render() {
-    if (this.state.reload) {
+    const { reload, collapsed } = this.state;
+
+    if (reload) {
       this.setState({ reload: false });
       return <Redirect to="/" />;
     }
 
     return (
       <Layout style={{ height: '100vh' }}>
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+        <Sider trigger={null} collapsible collapsed={collapsed}>
           <HeaderTitle />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
@@ -83,7 +85,7 @@ export default class SiderDemo extends React.Component<
               <FlexView>
                 <Icon
                   className="trigger"
-                  type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                  type={collapsed ? 'menu-unfold' : 'menu-fold'}
                   onClick={this.toggle}
                   style={{ fontSize: '1.5em' }}
                 />
