@@ -18,7 +18,6 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
-
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
@@ -35,6 +34,7 @@ const useTypeScript = fs.existsSync(paths.appTsConfig);
 // style files regexes
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
+const lessRegex = /\.less$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
@@ -135,7 +135,7 @@ module.exports = {
     // https://github.com/facebook/create-react-app/issues/253
     modules: ['node_modules'].concat(
       // It is guaranteed to exist because we tweak it in `env.js`
-      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
+      process.env.NODE_PATH.split(path.delimiter).filter(Boolean),
     ),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
@@ -186,7 +186,6 @@ module.exports = {
             options: {
               formatter: require.resolve('react-dev-utils/eslintFormatter'),
               eslintPath: require.resolve('eslint'),
-              
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -217,9 +216,9 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
               customize: require.resolve(
-                'babel-preset-react-app/webpack-overrides'
+                'babel-preset-react-app/webpack-overrides',
               ),
-              
+
               plugins: [
                 [
                   require.resolve('babel-plugin-named-asset-import'),
@@ -259,7 +258,7 @@ module.exports = {
               cacheDirectory: true,
               // Don't waste time on Gzipping the cache
               cacheCompression: false,
-              
+
               // If an error happens in a package, it's possible to be
               // because it was compiled. Thus, we don't want the browser
               // debugger to show the original code. Instead, the code
@@ -310,8 +309,13 @@ module.exports = {
                 modules: true,
                 getLocalIdent: getCSSModuleLocalIdent,
               },
-              'sass-loader'
+              'sass-loader',
             ),
+          },
+          // Adds support for LESS files, using `less-loader`
+          {
+            test: lessRegex,
+            use: getStyleLoaders({ javascriptEnabled: true }, 'less-loader'),
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
@@ -323,7 +327,7 @@ module.exports = {
             // its runtime that would otherwise be processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|mjs|jsx|ts|tsx|less)$/, /\.html$/, /\.json$/],
             loader: require.resolve('file-loader'),
             options: {
               name: 'static/media/[name].[hash:8].[ext]',
