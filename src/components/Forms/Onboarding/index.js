@@ -75,7 +75,7 @@ export default class Form extends React.Component<
       showAdvanced: false,
       // Is this too little?
       targetBlockTime: 360000,
-      done: false,
+      done: false /* used to indicate we are done onboarding, redirects user to main dashboard */,
     };
   }
 
