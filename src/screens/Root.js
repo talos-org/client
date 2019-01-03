@@ -1,28 +1,30 @@
 // @flow
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
-import HomeContainer from 'containers/HomeContainer/index';
-import Login from './Login/index';
+// FIXME: Use the screen component, not container
+import HomeContainer from 'containers/HomeContainer';
 import OnboardingScreen from './OnboardingScreen';
-import WelcomeScreen from './WelcomeScreen';
+import Welcome from './Welcome';
+
+import ProtectedRoute from '../utils/ProtectedRoute';
+
+import { getChainName } from 'utils/chainName';
+
+const chainName = getChainName();
+const CHAIN_NAME_EXISTS = process.env.__BYPASS_SIGN_UP_WIZARD__ || chainName;
 
 export default () => {
-  if (!localStorage.getItem('chainName')) {
-    return (
-      <Switch>
-        <Route exact path="/onboarding" component={WelcomeScreen} />
-        <Route path="/onboarding/:type" component={OnboardingScreen} />
-        <Redirect to="/onboarding" />
-      </Switch>
-    );
-  } else {
-    return (
-      <Switch>
-        <Route exact path="/" component={HomeContainer} />
-        <Route exact path="/login" component={Login} />
-        <Redirect to="/" />
-      </Switch>
-    );
-  }
+  return (
+    <Switch>
+      <ProtectedRoute
+        exact
+        path="/"
+        component={HomeContainer}
+        existing={CHAIN_NAME_EXISTS}
+      />
+      <Route path="/welcome" component={Welcome} />
+      <Route path="/wizard/:type" component={OnboardingScreen} />
+    </Switch>
+  );
 };

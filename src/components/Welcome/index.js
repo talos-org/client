@@ -1,37 +1,34 @@
 // @flow
 import * as React from 'react';
-import { Divider, Button } from 'antd';
-import FlexView from 'react-flexview';
+import { Button, Col, Divider, Layout, Row } from 'antd';
 import { Link } from 'react-router-dom';
 
-import HeaderTitle from 'components/HeaderTitle/index';
+import HeaderTitle from 'components/HeaderTitle';
 
-export default class WelcomeComponent extends React.Component<{}> {
+const { Content } = Layout;
+
+export default class Welcome extends React.Component<{}> {
   render() {
     return (
-      <FlexView
-        column
-        vAlignContent="center"
-        hAlignContent="center"
-        height="100%"
-      >
-        <FlexView marginBottom={'2em'}>
-          <HeaderTitle />
-        </FlexView>
-        <FlexView column>
-          <Link to="/onboarding/existing">
-            <Button type="primary" block>
-              Connect to Existing Blockchain
-            </Button>
-          </Link>
-          <Divider>or</Divider>
-          <Link to="/onboarding/new">
-            <Button type="primary" block>
-              Create new Blockchain
-            </Button>
-          </Link>
-        </FlexView>
-      </FlexView>
+      <Content>
+        <Row>
+          <Col span={12} />
+          <Col span={12}>
+            <HeaderTitle />
+            <Link to="/wizard/existing">
+              <Button type="primary" block>
+                Connect to Existing Blockchain
+              </Button>
+            </Link>
+            <Divider>or</Divider>
+            <Link to="/wizard/new">
+              <Button type="primary" block>
+                Create new Blockchain
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+      </Content>
     );
   }
 }

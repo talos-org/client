@@ -1,5 +1,4 @@
-// @flow
-import * as React from 'react';
-import WelcomeComponent from 'components/Welcome/index';
+import React from 'react';
+import Welcome from 'components/Welcome';
 
-export default () => <WelcomeComponent />;
+export default () => <Welcome />;

@@ -13,11 +13,9 @@ const root = document.getElementById('root');
 
 if (root != null) {
   render(
-    <div>
-      <Router>
-        <App />
-      </Router>
-    </div>,
+    <Router>
+      <App />
+    </Router>,
     root,
   );
 }
