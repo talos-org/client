@@ -1,9 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Button as _Button, Card as _Card, Icon, Input as _Input } from 'antd';
-import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 
 const { TextArea } = _Input;
 const _TextArea = TextArea;
@@ -50,7 +48,10 @@ const DescriptionBox = styled(_TextArea)`
 const validate = () => Promise.resolve(true);
 
 export default class Form extends React.Component<
-  { onUpdate: Function },
+  {
+    onUpdate: Function,
+    onFinish: Function,
+  },
   {
     description: string,
     maxBlockSize: number,
@@ -76,7 +77,6 @@ export default class Form extends React.Component<
       showAdvanced: false,
       // Is this too little?
       targetBlockTime: 360000,
-      done: false /* used to indicate we are done onboarding, redirects user to main dashboard */,
     };
   }
 
@@ -102,29 +102,13 @@ export default class Form extends React.Component<
   };
 
   handleFinish = () => {
-    axios
-      .post('http://localhost:5000/create_chain/', {
-        name: this.state.name,
-      })
-      .then(response => console.log('Successfully created chain:', response))
-      .then(() =>
-        axios.post('http://localhost:5000/config_parameters/', {
-          name: this.state.name,
-          params: {
-            description: this.state.description,
-            max_block_size: this.state.maxBlockSize,
-            target_block_time: this.state.targetBlockTime,
-            mining_turnover: this.state.miningTurnover,
-            mining_diversity: this.state.miningDiversity,
-          },
-        }),
-      )
-      .then(response => {
-        console.log('Successfully configured chain:', response);
-        localStorage.setItem('chainName', this.state.name);
-        this.setState({ done: true });
-      })
-      .catch(error => console.error('Error:', error));
+    this.props.onFinish(this.state.name, {
+      description: this.state.description,
+      max_block_size: this.state.maxBlockSize,
+      target_block_time: this.state.targetBlockTime,
+      mining_turnover: this.state.miningTurnover,
+      mining_diversity: this.state.miningDiversity,
+    });
   };
 
   render() {
@@ -136,15 +120,10 @@ export default class Form extends React.Component<
       name,
       showAdvanced,
       targetBlockTime,
-      done,
     } = this.state;
     const suffix = name ? (
       <Icon type="close-circle" onClick={this.emitEmpty} />
     ) : null;
-
-    if (done) {
-      return <Redirect to="/" />;
-    }
 
     return (
       <div>

@@ -1,10 +1,11 @@
 // @flow
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
-import { Icon, Steps as _Steps } from 'antd';
+import { Alert, Icon, Steps as _Steps } from 'antd';
 import HeaderTitle from 'components/HeaderTitle/index';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import Form from 'components/Forms/Onboarding/index';
 
@@ -18,13 +19,19 @@ const { Step } = Steps;
 // TODO: Need to change this up drastically. This is nasty.
 export default class OnboardingContainer extends React.Component<
   { type: string },
-  { current: number },
+  {
+    current: number,
+    done: boolean,
+    error: string,
+  },
 > {
   constructor() {
     super();
     this.onUpdate = this.onUpdate.bind(this);
     this.state = {
       current: 0,
+      done: false /* used to indicate we are done onboarding, redirects user to main dashboard */,
+      error: null /* error message from REST call */,
     };
   }
 
@@ -37,14 +44,46 @@ export default class OnboardingContainer extends React.Component<
     this.next();
   };
 
+  onFinishNew = (name, params) => {
+    axios
+      .post('http://localhost:5000/create_chain/', {
+        name: name,
+      })
+      .then(response => console.log('Successfully created chain:', response))
+      .then(() =>
+        axios.post('http://localhost:5000/config_parameters/', {
+          name: name,
+          params: params,
+        }),
+      )
+      .then(response => {
+        console.log('Successfully configured chain:', response);
+        localStorage.setItem('chainName', name);
+        this.setState({ done: true });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        this.setState({ error: error.toString() });
+      });
+  };
+
+  onCloseAlert = () => {
+    const error = null;
+    this.setState({ error });
+  };
+
   previous = () => {
     const current = this.state.current - 1;
     this.setState({ current });
   };
 
   render() {
-    const { current } = this.state;
+    const { current, done, error } = this.state;
     const { type } = this.props;
+
+    if (done) {
+      return <Redirect to="/" />;
+    }
 
     if (type === 'existing') {
       // I’m not even sure what the requirements are for
@@ -64,7 +103,16 @@ export default class OnboardingContainer extends React.Component<
             </Col>
             <Col md={10}>
               <HeaderTitle />
-              <Form onUpdate={this.onUpdate} />
+              {error && (
+                <Alert
+                  message="An error occurred"
+                  description={error}
+                  type="error"
+                  closable
+                  onClose={this.onCloseAlert}
+                />
+              )}
+              <Form onUpdate={this.onUpdate} onFinish={this.onFinishNew} />
             </Col>
           </Row>
         </Container>
