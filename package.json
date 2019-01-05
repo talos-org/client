@@ -98,6 +98,7 @@
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "canvas": "^2.2.0",
     "cypress": "^3.1.1",
+    "cz-conventional-changelog": "^2.1.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "enzyme-to-json": "^3.3.4",
@@ -174,5 +175,10 @@
     "presets": [
       "react-app"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
