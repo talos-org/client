@@ -9,6 +9,13 @@ flow-typed
 [lints]
 
 [options]
+esproposal.decorators=ignore
+[options]
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
+module.file_ext=.less
+module.name_mapper.extension='less' -> 'empty/object'
 module.system=haste
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=src
