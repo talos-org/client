@@ -14,13 +14,15 @@ import Logo from 'components/ui/Logo';
 class WelcomeComponent extends React.Component<{}> {
   @computed
   get name() {
-    return this.props.rootStore.blockchainStore.name;
+    return this.props.rootStore.rootState.currentBlockchain;
   }
 
   render() {
     const { currentBlockchain } = this.name;
 
-    if (!currentBlockchain) {
+    if (currentBlockchain) {
+      return <Redirect to="/" />;
+    } else {
       return (
         <FlexView
           column
@@ -46,8 +48,6 @@ class WelcomeComponent extends React.Component<{}> {
           </FlexView>
         </FlexView>
       );
-    } else {
-      return <Redirect to="/" />;
     }
   }
 }

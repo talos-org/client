@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
 
-import DisconnectModal from 'components/ui/Modal';
 import { Icon, Tooltip } from 'antd';
 import { inject, observer } from 'mobx-react';
+
+import DisconnectModal from 'components/ui/Modal';
 
 @inject('rootStore')
 @observer

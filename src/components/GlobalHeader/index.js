@@ -5,7 +5,7 @@ import { Col, Icon, Layout, Row } from 'antd';
 import { inject, observer } from 'mobx-react';
 import RootStore from 'stores/RootStore';
 
-import Blockchain from './Blockchain';
+import Blockchain from 'components/GlobalHeader/Blockchain';
 
 const { Header } = Layout;
 
@@ -13,6 +13,7 @@ const { Header } = Layout;
 @observer
 class GlobalHeader extends React.Component<{}> {
   rootStore: RootStore;
+  rootState: Object;
 
   constructor(props) {
     super(props);
