@@ -43,16 +43,16 @@ export default class OnboardingContainer extends React.Component<
   onUpdate = () => {
     this.next();
   };
-
+  s;
   onFinishNew = (name, params) => {
     axios
-      .post('http://localhost:5000/create_chain/', {
-        name: name,
+      .post('http://localhost:5000/api/create_chain/', {
+        blockchainName: name,
       })
       .then(response => console.log('Successfully created chain:', response))
       .then(() =>
-        axios.post('http://localhost:5000/config_parameters/', {
-          name: name,
+        axios.post('http://localhost:5000/api/config_parameters/', {
+          blockchainName: name,
           params: params,
         }),
       )

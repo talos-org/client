@@ -14,6 +14,7 @@ import { Link, Redirect } from 'react-router-dom';
 
 import HeaderTitle from 'components/HeaderTitle/index';
 import MonitoringContainer from 'containers/MonitoringContainer/index';
+import DataContainer from 'containers/DataContainer/index';
 
 const { Content, Header, Sider } = Layout;
 
@@ -123,7 +124,7 @@ export default class SiderDemo extends React.Component<
                 minHeight: 280,
               }}
             >
-              <MonitoringContainer />
+              <DataContainer />
             </Content>
           </Layout>
         </Layout>
