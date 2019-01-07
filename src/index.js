@@ -1,6 +1,7 @@
 // @flow
 import { BrowserRouter as Router } from 'react-router-dom';
-import React from 'react';
+import DevTools from 'mobx-react-devtools';
+import * as React from 'react';
 import { Provider } from 'mobx-react';
 import { render } from 'react-dom';
 
@@ -16,11 +17,15 @@ const root = document.getElementById('root');
 
 if (root != null) {
   render(
-    <Router>
-      <Provider rootStore={new RootStore()}>
-        <App />
-      </Provider>
-    </Router>,
+    <div>
+      {/* Enable ONLY during debugging */}
+      <DevTools />
+      <Router>
+        <Provider rootStore={new RootStore()}>
+          <App />
+        </Provider>
+      </Router>
+    </div>,
     root,
   );
 }
