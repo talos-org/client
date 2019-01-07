@@ -1,5 +1,5 @@
 import Dashboard from 'screens/Dashboard';
-import Onboarding from 'screens/Onboarding';
+import Wizard from 'screens/Wizard';
 import Welcome from 'screens/Welcome';
 
 export default [
@@ -8,8 +8,8 @@ export default [
     component: Dashboard,
   },
   {
-    path: '/onboarding/:type',
-    component: Onboarding,
+    path: '/wizard/:type',
+    component: Wizard,
   },
   {
     path: '/welcome',
