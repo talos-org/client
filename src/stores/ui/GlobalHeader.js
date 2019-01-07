@@ -1,6 +1,6 @@
 // @flow
 import { action } from 'mobx';
-import RootStore from '../RootStore';
+import RootStore from 'stores/RootStore';
 
 export default class GlobalHeaderStore {
   rootState: Object;
@@ -13,8 +13,6 @@ export default class GlobalHeaderStore {
 
   @action
   toggleSideMenu = () => {
-    // TODO: Remove this line
-    console.log(`Toggle: ${this.rootState.sidebarCollapsed}`);
     this.rootState.sidebarCollapsed = !this.rootState.sidebarCollapsed;
   };
 }

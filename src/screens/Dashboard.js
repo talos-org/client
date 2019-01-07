@@ -12,7 +12,7 @@ const { Content } = Layout;
 
 @inject('rootStore')
 @observer
-class Dashboard extends React.Component<{}> {
+class Dashboard extends React.Component<{ children?: React.Node }> {
   rootStore: RootStore;
   rootState: Object;
 
