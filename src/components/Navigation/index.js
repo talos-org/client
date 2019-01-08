@@ -10,7 +10,7 @@ import {
   Breadcrumb,
   Tooltip,
 } from 'antd';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
 import HeaderTitle from 'components/HeaderTitle/index';
 import MonitoringContainer from 'containers/MonitoringContainer/index';
@@ -27,7 +27,10 @@ const avatarMenu = (
 );
 
 export default class SiderDemo extends React.Component<
-  {},
+  {
+    match: object,
+    location: object,
+  },
   {
     collapsed: boolean,
     reload: boolean,
@@ -51,32 +54,75 @@ export default class SiderDemo extends React.Component<
 
   render() {
     const { reload, collapsed } = this.state;
+    const { match, location } = this.props;
+    const { path } = match;
 
     if (reload) {
       this.setState({ reload: false });
       return <Redirect to="/" />;
     }
 
+    const breadcrumbNameMap = {
+      '/monitoring': 'Monitoring',
+      '/data': 'Data',
+      '/account': 'Account',
+      '/settings': 'Settings',
+    };
+
+    const pathSnippets = location.pathname.split('/').filter(i => i);
+    let breadcrumbItems = [
+      <Breadcrumb.Item key="home">
+        <Link to="/">
+          <Icon type="home" />
+        </Link>
+      </Breadcrumb.Item>,
+    ].concat(
+      pathSnippets.map((_, index) => {
+        const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+        return (
+          <Breadcrumb.Item key={url}>
+            <Link to={url}>
+              {breadcrumbNameMap[url] || pathSnippets[index]}
+            </Link>
+          </Breadcrumb.Item>
+        );
+      }),
+    );
+
     return (
       <Layout style={{ height: '100vh' }}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <HeaderTitle />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1">
-              <Icon type="pie-chart" />
-              <span>Monitoring</span>
+          <Menu
+            theme="dark"
+            mode="inline"
+            selectedKeys={[
+              (pathSnippets.length > 0 && pathSnippets[0]) || 'monitoring',
+            ]}
+          >
+            <Menu.Item key="monitoring">
+              <Link to={`${path}monitoring`}>
+                <Icon type="pie-chart" />
+                <span>Monitoring</span>
+              </Link>
             </Menu.Item>
-            <Menu.Item key="2">
-              <Icon type="desktop" />
-              <span>Data</span>
+            <Menu.Item key="data">
+              <Link to={`${path}data`}>
+                <Icon type="desktop" />
+                <span>Data</span>
+              </Link>
             </Menu.Item>
-            <Menu.Item key="3">
-              <Icon type="user" />
-              <span>Account</span>
+            <Menu.Item key="account">
+              <Link to={`${path}account`}>
+                <Icon type="user" />
+                <span>Account</span>
+              </Link>
             </Menu.Item>
-            <Menu.Item key="4">
-              <Icon type="setting" />
-              <span>Settings</span>
+            <Menu.Item key="settings">
+              <Link to={`${path}settings`}>
+                <Icon type="setting" />
+                <span>Settings</span>
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -113,8 +159,7 @@ export default class SiderDemo extends React.Component<
           </Header>
           <Layout style={{ padding: '0 24px 24px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
-              <Breadcrumb.Item>Monitoring</Breadcrumb.Item>
+              {breadcrumbItems}
             </Breadcrumb>
             <Content
               style={{
@@ -124,7 +169,22 @@ export default class SiderDemo extends React.Component<
                 minHeight: 280,
               }}
             >
-              <DataContainer />
+              <Switch>
+                <Route
+                  path={`${path}monitoring`}
+                  component={MonitoringContainer}
+                />
+                <Route path={`${path}data`} component={DataContainer} />
+                <Route
+                  path={`${path}account`}
+                  render={() => <div>In construction...</div>}
+                />
+                <Route
+                  path={`${path}settings`}
+                  render={() => <div>In construction...</div>}
+                />
+                <Redirect from="/" to={`${path}monitoring`} />
+              </Switch>
             </Content>
           </Layout>
         </Layout>

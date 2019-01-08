@@ -4,9 +4,13 @@ import { Alert, Table, Button, Divider, Popconfirm } from 'antd';
 import axios from 'axios';
 import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
 import CreateStreamModal from '../../components/Modals/CreateStreamModal';
+import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
 export default class DataContainer extends React.Component<
-  {},
+  {
+    match: object,
+    location: object,
+  },
   {
     error: string,
     subscribed: array,
@@ -188,13 +192,15 @@ export default class DataContainer extends React.Component<
       subscribeModalState,
       createModalState,
     } = this.state;
+    const { match, location } = this.props;
+    const { path } = match;
 
     const columns = [
       {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        render: text => <a href="#">{text}</a>,
+        render: text => <Link to={`${path}/${text}`}>{text}</Link>,
       },
       {
         title: 'Creators',
@@ -245,37 +251,49 @@ export default class DataContainer extends React.Component<
     ];
 
     return (
-      <div>
-        {error && (
-          <Alert
-            message="An error occurred"
-            description={error}
-            type="error"
-            closable
-            onClose={this.onCloseAlert}
-          />
-        )}
-        <h1>Subscribed Streams</h1>
-        <Table columns={columns} dataSource={subscribed} />
-        <h1>Stream Actions</h1>
-        <Button style={{ marginRight: '10px' }} onClick={this.openSubModal}>
-          Subscribe
-        </Button>
-        <Button onClick={this.openCreateModal}>Create</Button>
-        <SubscribeStreamModal
-          unsubscribed={unsubscribed}
-          visible={subscribeModalState.visible}
-          confirmLoading={subscribeModalState.confirmLoading}
-          onOk={this.onOkSubModal}
-          onCancel={this.onCancelSubModal}
+      <Switch>
+        <Route
+          exact
+          path={`${path}`}
+          render={() => (
+            <div>
+              {error && (
+                <Alert
+                  message="An error occurred"
+                  description={error}
+                  type="error"
+                  closable
+                  onClose={this.onCloseAlert}
+                />
+              )}
+              <h1>Subscribed Streams</h1>
+              <Table columns={columns} dataSource={subscribed} />
+              <h1>Stream Actions</h1>
+              <Button
+                style={{ marginRight: '10px' }}
+                onClick={this.openSubModal}
+              >
+                Subscribe
+              </Button>
+              <Button onClick={this.openCreateModal}>Create</Button>
+              <SubscribeStreamModal
+                unsubscribed={unsubscribed}
+                visible={subscribeModalState.visible}
+                confirmLoading={subscribeModalState.confirmLoading}
+                onOk={this.onOkSubModal}
+                onCancel={this.onCancelSubModal}
+              />
+              <CreateStreamModal
+                visible={createModalState.visible}
+                confirmLoading={createModalState.confirmLoading}
+                onOk={this.onOkCreateModal}
+                onCancel={this.onCancelCreateModal}
+              />
+            </div>
+          )}
         />
-        <CreateStreamModal
-          visible={createModalState.visible}
-          confirmLoading={createModalState.confirmLoading}
-          onOk={this.onOkCreateModal}
-          onCancel={this.onCancelCreateModal}
-        />
-      </div>
+        <Route path={`${path}`} render={() => <div>In construction...</div>} />
+      </Switch>
     );
   }
 }
