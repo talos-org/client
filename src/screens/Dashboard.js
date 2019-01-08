@@ -1,11 +1,11 @@
 // @flow
 import * as React from 'react';
+import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Layout } from 'antd';
 import { Redirect } from 'react-router-dom';
 
 import GlobalHeader from 'components/GlobalHeader';
-import RootStore from 'stores/RootStore';
 import SideMenu from 'components/SideMenu';
 
 const { Content } = Layout;
@@ -13,23 +13,20 @@ const { Content } = Layout;
 @inject('rootStore')
 @observer
 class Dashboard extends React.Component<{ children?: React.Node }> {
-  rootStore: RootStore;
-  rootState: Object;
-
-  constructor(props) {
-    super(props);
-    this.rootStore = this.props.rootStore;
-    this.rootState = this.rootStore.rootState;
+  @computed
+  get allowAccessToDashboard() {
+    // $FlowFixMe
+    return Boolean(this.props.rootStore.rootState.currentBlockchain);
   }
 
   render() {
     const { children } = this.props;
 
-    if (this.rootStore.allowAccessToDashboard) {
+    if (this.allowAccessToDashboard) {
       return (
         <Layout>
           <SideMenu />
-          <Layout style={{ minHeight: '100vh' }}>
+          <Layout>
             <Content>
               <GlobalHeader />
               {children}

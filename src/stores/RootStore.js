@@ -34,11 +34,6 @@ export default class RootStore {
   }
 
   @computed
-  get allowAccessToDashboard() {
-    return Boolean(this.rootState.currentBlockchain);
-  }
-
-  @computed
   get redirectNeeded() {
     return (
       this.rootState.disconnect && !Boolean(this.rootState.currentBlockchain)
