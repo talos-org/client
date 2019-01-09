@@ -4,6 +4,7 @@ import { Alert, Table, Button, Divider, Popconfirm } from 'antd';
 import axios from 'axios';
 import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
 import CreateStreamModal from '../../components/Modals/CreateStreamModal';
+import DataItemsContainer from '../../containers/DataItemsContainer';
 import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
 export default class DataContainer extends React.Component<
@@ -292,7 +293,7 @@ export default class DataContainer extends React.Component<
             </div>
           )}
         />
-        <Route path={`${path}`} render={() => <div>In construction...</div>} />
+        <Route path={`${path}/:stream`} component={DataItemsContainer} />
       </Switch>
     );
   }
