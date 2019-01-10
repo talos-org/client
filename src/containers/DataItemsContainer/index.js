@@ -4,6 +4,7 @@ import { Alert, Table, Button, Divider, Popconfirm } from 'antd';
 import axios from 'axios';
 import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
 import CreateStreamModal from '../../components/Modals/CreateStreamModal';
+import DataItemEditorContainer from '../../containers/DataItemEditorContainer';
 import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
 export default class DataItemsContainer extends React.Component<
@@ -39,9 +40,7 @@ export default class DataItemsContainer extends React.Component<
         verbose: 'true',
       })
       .then(response => {
-        let subscribed = [];
-        let unsubscribed = [];
-        console.log('Streams:', response);
+        console.log('Data items:', response);
 
         let dataItems = response.data.Data;
         this.setState({ dataItems });
@@ -114,7 +113,7 @@ export default class DataItemsContainer extends React.Component<
             </div>
           )}
         />
-        <Route path={`${path}`} render={() => <div>In construction...</div>} />
+        <Route path={`${path}/:key`} component={DataItemEditorContainer} />
       </Switch>
     );
   }
