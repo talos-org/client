@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
+import { Button, Divider } from 'antd';
 import { computed } from 'mobx';
-import { Divider, Button } from 'antd';
 import FlexView from 'react-flexview';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -14,6 +14,7 @@ import Logo from 'components/ui/Logo';
 class WelcomeComponent extends React.Component<{}> {
   @computed
   get name() {
+    // $FlowFixMe
     return this.props.rootStore.rootState.currentBlockchain;
   }
 
@@ -41,7 +42,7 @@ class WelcomeComponent extends React.Component<{}> {
             </Link>
             <Divider>or</Divider>
             <Link to="/wizard/new">
-              <Button type="primary" block>
+              <Button block type="primary">
                 Create new blockchain
               </Button>
             </Link>
