@@ -1,15 +1,20 @@
 // @flow
 import * as React from 'react';
+import { computed } from 'mobx';
+import FlexView from 'react-flexview';
 import { inject, observer } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
 
-import RootStore from 'stores/RootStore';
 import WizardForm from 'components/Forms/Wizard';
 
 @inject('rootStore')
 @observer
 class WizardContainer extends React.Component<{ type: string }> {
-  rootStore: RootStore;
+  @computed
+  get currentStep() {
+    // $FlowFixMe
+    return this.props.rootStore.rootState.wizard.currentStep;
+  }
 
   render() {
     const { type } = this.props;
@@ -21,9 +26,14 @@ class WizardContainer extends React.Component<{ type: string }> {
       return <Redirect to="/wizard/new" />;
     } else {
       return (
-        <WizardForm
-          currentStep={this.props.rootStore.rootState.wizard.currentStep}
-        />
+        <FlexView
+          column
+          vAlignContent="center"
+          hAlignContent="center"
+          height="100%"
+        >
+          <WizardForm currentStep={this.currentStep} />
+        </FlexView>
       );
     }
   }

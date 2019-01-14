@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Slider } from 'antd';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
@@ -21,21 +21,25 @@ class StepSetup extends React.Component<
 
   @computed
   get maxBlockSize() {
+    // $FlowFixMe
     return this.props.rootStore.blockchainStore.maxBlockSize;
   }
 
   @computed
   get miningDiversity() {
+    // $FlowFixMe
     return this.props.rootStore.blockchainStore.miningDiversity;
   }
 
   @computed
   get miningTurnover() {
+    // $FlowFixMe
     return this.props.rootStore.blockchainStore.miningTurnover;
   }
 
   @computed
   get targetBlockTime() {
+    // $FlowFixMe
     return this.props.rootStore.blockchainStore.targetBlockTime;
   }
 
@@ -75,29 +79,27 @@ class StepSetup extends React.Component<
 
     return (
       <Form layout="horizontal">
-        <Form.Item label="Maximum block size">
-          {getFieldDecorator('maxBlocksize', {
+        <Form.Item label="Maximum block size (in bytes)">
+          {getFieldDecorator('maxBlockSize', {
             initialValue: this.maxBlockSize,
           })(<Input placeholder="Maximum block size" />)}
         </Form.Item>
         <Form.Item label="Mining diversity">
           {getFieldDecorator('miningDiversity', {
             initialValue: this.miningDiversity,
-          })(<Input placeholder="Mining diversity" />)}
+          })(<Slider max={1.0} min={0.1} step={0.1} />)}
         </Form.Item>
         <Form.Item label="Mining turnover">
           {getFieldDecorator('miningTurnover', {
             initialValue: this.miningTurnover,
-          })(<Input placeholder="Maximum block size" />)}
+          })(<Slider max={1.0} min={0.1} step={0.1} />)}
         </Form.Item>
-        <Form.Item label="Target block time">
+        <Form.Item label="Target block time (in seconds)">
           {getFieldDecorator('targetBlockTime', {
             initialValue: this.targetBlockTime,
-          })(<Input placeholder="Target time" />)}
+          })(<Input placeholder="Target block time" />)}
         </Form.Item>
         <Form.Item>
-          {/* Previous button does nothing right now */}
-          <Button>Previous</Button>
           <Button loading={loading} onClick={onValidateForm} type="primary">
             Next
           </Button>
