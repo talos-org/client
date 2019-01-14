@@ -8,14 +8,14 @@ const { Content } = Layout;
 
 class Wizard extends React.Component<{}> {
   render() {
-    // $FlowFixMe
     const {
+      // $FlowFixMe
       match: {
         params: { type },
       },
     } = this.props;
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout>
         <Content>
           <WizardContainer type={type} />
         </Content>
