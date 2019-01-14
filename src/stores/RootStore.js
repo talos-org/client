@@ -2,14 +2,17 @@
 import { action, computed, observable } from 'mobx';
 
 import BlockchainStore from 'stores/domain/Blockchain';
-import GlobalHeaderStore from 'stores/ui/GlobalHeader';
 import { get, remove } from 'utils/chainName';
+import GlobalHeaderStore from 'stores/ui/GlobalHeader';
 
 export default class RootStore {
   @observable
   rootState = {
     currentBlockchain: '',
     disconnect: false,
+    // FIXME: This, along with some other of these need
+    // to be moved into the global UI store
+    currentTab: 'monitoring',
     sidebarCollapsed: false,
     wizard: {
       currentStep: 0,
