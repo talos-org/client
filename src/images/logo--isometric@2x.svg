@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="249px" height="309px" viewBox="0 0 249 309" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>logo--isometric@2x</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="logo-new" transform="translate(-125.000000, -96.000000)" fill-rule="nonzero" stroke="#033FFF" stroke-width="1.5">
+            <g id="logo--isometric" transform="translate(126.000000, 96.000000)">
+                <g id="iso-cube--middle" transform="translate(0.000000, 50.000000)">
+                    <path d="M123.787395,0.88946073 L1.3893277,88.0052557 L123.699978,158.094258 L246.098046,70.9784634 L123.787395,0.88946073 Z" id="Rectangle" fill="#033FFF"></path>
+                    <g id="Group" transform="translate(0.000000, 71.000000)" stroke-linecap="square">
+                        <path d="M123.743687,87.9837191 L123.743687,136.5" id="Line-3"></path>
+                        <path d="M0.5,17.5 L0.5,66.5" id="Line"></path>
+                    </g>
+                </g>
+                <g id="iso-cube--bottom" transform="translate(0.000000, 100.000000)">
+                    <path d="M123.787395,0.88946073 L1.3893277,88.0052557 L123.699978,158.094258 L246.098046,70.9784634 L123.787395,0.88946073 Z" id="Shape" fill="#033FFF"></path>
+                    <path d="M244.88402,121.842536 L2.51593611,138.650848 L123.699978,208.094258 L244.88402,121.842536 Z" id="Path"></path>
+                    <g id="Group" transform="translate(0.000000, 71.000000)" stroke-linecap="square">
+                        <path d="M246.487373,0.5 L246.487373,49.5" id="Line-2"></path>
+                        <path d="M123.743687,87.9837191 L123.743687,136.5" id="Line-3"></path>
+                    </g>
+                </g>
+                <g id="iso-cube--top">
+                    <path d="M123.787395,0.88946073 L1.3893277,88.0052557 L123.699978,158.094258 L246.098046,70.9784634 L123.787395,0.88946073 Z" id="Rectangle" fill="#033FFF"></path>
+                    <path d="M244.88402,121.842536 L2.51593611,138.650848 L123.699978,208.094258 L244.88402,121.842536 Z" id="Path"></path>
+                    <g id="Group" transform="translate(0.000000, 71.000000)" stroke-linecap="square">
+                        <path d="M246.487373,0.5 L246.487373,49.5" id="Line-2"></path>
+                        <path d="M123.743687,87.9837191 L123.743687,136.5" id="Line-3"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
