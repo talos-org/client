@@ -1,12 +1,12 @@
 // @flow
+import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import DevTools from 'mobx-react-devtools';
-import * as React from 'react';
 import { Provider } from 'mobx-react';
 import { render } from 'react-dom';
 
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import App from './App';
 
 import RootStore from 'stores/RootStore';
 
@@ -14,6 +14,7 @@ import RootStore from 'stores/RootStore';
 import 'index.less';
 
 const root = document.getElementById('root');
+const rootStore = new RootStore();
 
 if (root != null) {
   render(
@@ -21,7 +22,7 @@ if (root != null) {
       {/* Enable ONLY during debugging */}
       <DevTools />
       <Router>
-        <Provider rootStore={new RootStore()}>
+        <Provider rootStore={rootStore}>
           <App />
         </Provider>
       </Router>
@@ -29,6 +30,8 @@ if (root != null) {
     root,
   );
 }
+
+window.__APP_STATE__ = rootStore;
 
 // Keep this
 serviceWorker.unregister();
