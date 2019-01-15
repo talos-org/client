@@ -22,8 +22,8 @@ export default () => {
     return (
       <BrowserRouter>
         <Switch>
-          <Route path="/" component={HomeContainer} />
           <Route exact path="/login" component={Login} />
+          <Route path="/" component={HomeContainer} />
           <Redirect to="/" />
         </Switch>
       </BrowserRouter>
