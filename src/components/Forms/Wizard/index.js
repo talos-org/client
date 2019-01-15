@@ -10,7 +10,7 @@ import StepReview from 'components/Forms/Wizard/StepReview';
 
 const { Step } = Steps;
 
-const FormHoF = (currentStep: number) => {
+const FormHoC = (currentStep: number) => {
   switch (currentStep) {
     case 0:
       return <StepConfigure />;
@@ -45,13 +45,13 @@ class WizardForm extends React.Component<
       return <Redirect to="/" />;
     } else {
       return (
-        <Card bordered={false}>
+        <Card>
           <Steps current={currentStep} direction="horizontal">
             <Step title="Configure blockchain" />
             <Step title="Setup blockchain" />
             <Step title="Review information" />
           </Steps>
-          <React.Fragment>{FormHoF(currentStep)}</React.Fragment>
+          <React.Fragment>{FormHoC(currentStep)}</React.Fragment>
         </Card>
       );
     }

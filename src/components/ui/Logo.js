@@ -1,7 +1,7 @@
 // @flow
 import styled, { css } from 'styled-components';
 
-import Logo2x from 'images/talogo@2x.png';
+import Logo2x from 'images/logo--isometric@2x.svg';
 import rem from 'utils/rem';
 
 const Logo = styled.div`
