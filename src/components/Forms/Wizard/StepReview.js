@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 
 import mock from 'api/mock';
 import { set } from 'utils/chainName';
+import axios from 'axios';
 
 const { TextArea } = Input;
 
@@ -15,7 +16,9 @@ const { TextArea } = Input;
 @observer
 @Form.create()
 class StepReview extends React.Component<
-  {},
+  {
+    onError: Function,
+  },
   {
     loading: boolean,
   },
@@ -62,7 +65,7 @@ class StepReview extends React.Component<
 
   render() {
     // $FlowFixMe
-    const { form } = this.props;
+    const { form, onError } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const { loading } = this.state;
 
@@ -70,40 +73,52 @@ class StepReview extends React.Component<
       validateFields((error, values) => {
         if (!error) {
           this.setState({ loading: true }, () => {
-            mock.then(t => {
-              new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  if (t) {
-                    const {
-                      blockchainName,
-                      description,
-                      maxBlockSize,
-                      miningDiversity,
-                      miningTurnover,
-                      targetBlockTime,
-                    } = values;
-                    // TODO: Find a better way to do this. This looks horrid.
-                    this.props.rootStore.blockchainStore.description = description;
-                    this.props.rootStore.blockchainStore.maxBlockSize = maxBlockSize;
-                    this.props.rootStore.blockchainStore.miningDiversity = miningDiversity;
-                    this.props.rootStore.blockchainStore.miningTurnover = miningTurnover;
-                    this.props.rootStore.blockchainStore.name = blockchainName;
-                    this.props.rootStore.blockchainStore.targetBlockTime = targetBlockTime;
-                    const success = set('chainName', blockchainName);
-                    this.setState({ loading: false }, () => {
-                      if (success) {
-                        // $FlowFixMe
-                        this.props.rootStore.rootState.currentBlockchain = blockchainName;
-                        // TODO: Maybe we can avoid this? I don’t know, don’t have time to think
-                        // about this right now.
-                        // $FlowFixMe
-                        this.props.history.push('/');
-                      }
-                    });
+            axios
+              .post('http://localhost:5000/api/create_chain', {
+                blockchainName: this.name,
+              })
+              .then(response =>
+                console.log('Successfully created chain:', response),
+              )
+              .then(() =>
+                axios.post('http://localhost:5000/api/config_parameters', {
+                  blockchainName: this.name,
+                  params: {
+                    description: this.description,
+                    max_block_size: this.maxBlockSize,
+                    target_block_time: this.targetBlockTime,
+                    mining_turnover: this.miningTurnover,
+                    mining_diversity: this.miningDiversity,
+                  },
+                }),
+              )
+              .then(response => {
+                console.log('Successfully configured chain:', response);
+                // TODO: Find a better way to do this. This looks horrid.
+                this.props.rootStore.blockchainStore.description = this.description;
+                this.props.rootStore.blockchainStore.maxBlockSize = this.maxBlockSize;
+                this.props.rootStore.blockchainStore.miningDiversity = this.miningDiversity;
+                this.props.rootStore.blockchainStore.miningTurnover = this.miningTurnover;
+                this.props.rootStore.blockchainStore.name = this.name;
+                this.props.rootStore.blockchainStore.targetBlockTime = this.targetBlockTime;
+                const success = set('chainName', this.name);
+                this.setState({ loading: false }, () => {
+                  if (success) {
+                    // $FlowFixMe
+                    this.props.rootStore.rootState.currentBlockchain = this.name;
+                    // TODO: Maybe we can avoid this? I don’t know, don’t have time to think
+                    // about this right now.
+                    // $FlowFixMe
+                    this.props.history.push('/');
                   }
-                }, 1500);
+                });
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                this.setState({ loading: false }, () =>
+                  onError(error.toString()),
+                );
               });
-            });
           });
         }
       });

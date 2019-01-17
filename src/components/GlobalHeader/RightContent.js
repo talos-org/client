@@ -80,7 +80,11 @@ class RightContent extends React.Component<
     return (
       <div style={{ float: 'right', marginRight: '25px' }}>
         <DisconnectModal
-          children={<p>Are you sure about this?</p>}
+          children={
+            <p>
+              Are you sure you wish to disconnect from the current blockchain?
+            </p>
+          }
           confirmLoading={confirmLoading}
           onCancel={this.handleCancel}
           onOk={this.handleDisconnect}
@@ -89,7 +93,9 @@ class RightContent extends React.Component<
         />
         <Dropdown overlay={menu}>
           <span>
-            <Avatar alt="avatar" size="small" />
+            <Avatar alt="avatar" size="small">
+              {this.currentBlockchain.charAt(0).toUpperCase()}
+            </Avatar>
             <span style={{ marginLeft: '7px' }}>{this.currentBlockchain}</span>
           </span>
         </Dropdown>

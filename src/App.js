@@ -18,7 +18,6 @@ class App extends Component {
           const Component = route.component;
           return (
             <Route
-              exact
               key={i}
               path={route.path}
               render={props => (

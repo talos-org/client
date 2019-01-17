@@ -19,7 +19,7 @@ class WelcomeComponent extends React.Component<{}> {
   }
 
   render() {
-    const { currentBlockchain } = this.name;
+    const currentBlockchain = this.name;
 
     if (currentBlockchain) {
       return <Redirect to="/" />;

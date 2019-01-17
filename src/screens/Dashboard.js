@@ -2,35 +2,26 @@
 import * as React from 'react';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { Layout } from 'antd';
-import { Redirect } from 'react-router-dom';
+import { Layout, Breadcrumb, Icon } from 'antd';
+import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
 import GlobalHeader from 'components/GlobalHeader';
 import SideMenu from 'components/SideMenu';
 
-// NOTE: Aaron, this is for when you finally merge my code with yours.
-// Simply uncomment the line below, and then in the HoC, just add
-// a new `switch` case!
-// import Data from 'components/Data';
+import DataContainer from 'containers/DataContainer';
 import Monitoring from 'components/Monitoring';
-import Settings from 'components/Settings';
 
 const { Content } = Layout;
 
-const DashboardHoC = (currentTab: string) => {
-  switch (currentTab) {
-    case 'monitoring':
-      return <Monitoring />;
-    case 'settings':
-      return <Settings />;
-    default:
-      return <Monitoring />;
-  }
-};
-
 @inject('rootStore')
 @observer
-class Dashboard extends React.Component<{}> {
+class Dashboard extends React.Component<
+  {
+    match: object,
+    location: object,
+  },
+  {},
+> {
   @computed
   get allowAccessToDashboard() {
     // $FlowFixMe
@@ -44,15 +35,69 @@ class Dashboard extends React.Component<{}> {
   }
 
   render() {
+    const { match, location } = this.props;
+    const { path } = match;
+
+    const breadcrumbNameMap = {
+      '/monitoring': 'Monitoring',
+      '/data': 'Data',
+      '/account': 'Account',
+      '/settings': 'Settings',
+    };
+
     if (this.allowAccessToDashboard) {
+      const pathSnippets = location.pathname.split('/').filter(i => i);
+      let breadcrumbItems = [
+        <Breadcrumb.Item key="home">
+          <Link to="/">
+            <Icon type="home" />
+          </Link>
+        </Breadcrumb.Item>,
+      ].concat(
+        pathSnippets.map((_, index) => {
+          const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+          return (
+            <Breadcrumb.Item key={url}>
+              <Link to={url}>
+                {breadcrumbNameMap[url] || pathSnippets[index]}
+              </Link>
+            </Breadcrumb.Item>
+          );
+        }),
+      );
+
       return (
         <Layout>
           <SideMenu />
           <Layout>
-            <Content>
-              <GlobalHeader />
-              {DashboardHoC(this.currentTab)}
-            </Content>
+            <GlobalHeader />
+            <Layout style={{ padding: '0 24px 24px' }}>
+              <Breadcrumb style={{ margin: '16px 0' }}>
+                {breadcrumbItems}
+              </Breadcrumb>
+              <Content
+                style={{
+                  margin: 0,
+                  padding: 24,
+                  background: '#fff',
+                  minHeight: 280,
+                }}
+              >
+                <Switch>
+                  <Route path={`${path}monitoring`} component={Monitoring} />
+                  <Route path={`${path}data`} component={DataContainer} />
+                  <Route
+                    path={`${path}account`}
+                    render={() => <div>In construction...</div>}
+                  />
+                  <Route
+                    path={`${path}settings`}
+                    render={() => <div>In construction...</div>}
+                  />
+                  <Redirect from="/" to={`${path}monitoring`} />
+                </Switch>
+              </Content>
+            </Layout>
           </Layout>
         </Layout>
       );

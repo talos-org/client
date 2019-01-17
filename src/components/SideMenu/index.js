@@ -34,6 +34,8 @@ class SideMenu extends React.Component<{}> {
   @computed
   get collapsed() {
     // $FlowFixMe
+    /* TODO: this collapsed state isn't being rememberd if you reload the page,
+      reverts to uncollapsed if you reload. */
     return this.props.rootStore.rootState.sidebarCollapsed;
   }
 
@@ -42,7 +44,7 @@ class SideMenu extends React.Component<{}> {
       <Sider collapsed={this.collapsed} collapsible trigger={null} width={256}>
         <SiderLogo>
           <img alt="logo" src={`${require('images/logo--isometric@2x.svg')}`} />
-          <span>Talos</span>
+          {!this.collapsed && <span>Talos</span>}
         </SiderLogo>
         <BaseMenu />
       </Sider>
