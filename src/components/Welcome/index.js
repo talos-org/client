@@ -1,37 +1,56 @@
 // @flow
 import * as React from 'react';
-import { Divider, Button } from 'antd';
+import { Button, Divider } from 'antd';
+import { computed } from 'mobx';
 import FlexView from 'react-flexview';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
-import HeaderTitle from 'components/HeaderTitle/index';
+import Logo from 'components/ui/Logo';
 
-export default class WelcomeComponent extends React.Component<{}> {
+@withRouter
+@inject('rootStore')
+@observer
+class WelcomeComponent extends React.Component<{}> {
+  @computed
+  get name() {
+    // $FlowFixMe
+    return this.props.rootStore.rootState.currentBlockchain;
+  }
+
   render() {
-    return (
-      <FlexView
-        column
-        vAlignContent="center"
-        hAlignContent="center"
-        height="100%"
-      >
-        <FlexView marginBottom={'2em'}>
-          <HeaderTitle />
+    const currentBlockchain = this.name;
+
+    if (currentBlockchain) {
+      return <Redirect to="/" />;
+    } else {
+      return (
+        <FlexView
+          column
+          vAlignContent="center"
+          hAlignContent="center"
+          height="100%"
+        >
+          <FlexView marginBottom={'2em'}>
+            <Logo />
+          </FlexView>
+          <FlexView column>
+            <Link to="/wizard/existing">
+              <Button type="primary" block>
+                Connect to existing blockchain
+              </Button>
+            </Link>
+            <Divider>or</Divider>
+            <Link to="/wizard/new">
+              <Button block type="primary">
+                Create new blockchain
+              </Button>
+            </Link>
+          </FlexView>
         </FlexView>
-        <FlexView column>
-          <Link to="/onboarding/existing">
-            <Button type="primary" block>
-              Connect to Existing Blockchain
-            </Button>
-          </Link>
-          <Divider>or</Divider>
-          <Link to="/onboarding/new">
-            <Button type="primary" block>
-              Create new Blockchain
-            </Button>
-          </Link>
-        </FlexView>
-      </FlexView>
-    );
+      );
+    }
   }
 }
+
+export default WelcomeComponent;

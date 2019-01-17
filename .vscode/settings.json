@@ -1,9 +1,9 @@
 {
     "files.exclude": {
-        "**/config/**": true
+        "./config/**": true
     },
     "files.watcherExclude": {
-        "**/config/**": true
+        "./config/": true
     },
     "flow.useNPMPackagedFlow": false,
     "javascript.implicitProjectConfig.experimentalDecorators": true,

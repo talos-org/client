@@ -1,44 +1,37 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
+import DevTools from 'mobx-react-devtools';
+import { Provider } from 'mobx-react';
 import { render } from 'react-dom';
 
-import App from 'screens/Root';
 import * as serviceWorker from './serviceWorker';
+import App from './App';
+
+import RootStore from 'stores/RootStore';
 
 // Import stylesheet(s)
 import 'index.less';
 
-// TODO: I usually set these defaults for all my
-// apps. But now that we’re using Less, maybe we can
-// just set these in the global default `index.less`?
-const GlobalStyle = createGlobalStyle`
-  * {
-    box-sizing: border-box;
-  }
-  *::after,*::before {
-    box-sizing: initial;
-  }
-  html {
-    margin: 0;
-    padding: 0;
-  }
-`;
-
 const root = document.getElementById('root');
+const rootStore = new RootStore();
 
 if (root != null) {
   render(
     <div>
-      <GlobalStyle />
+      {/* Enable ONLY during debugging
+      <DevTools /> */}
       <Router>
-        <App />
+        <Provider rootStore={rootStore}>
+          <App />
+        </Provider>
       </Router>
     </div>,
     root,
   );
 }
+
+window.__APP_STATE__ = rootStore;
 
 // Keep this
 serviceWorker.unregister();
