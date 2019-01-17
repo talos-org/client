@@ -44,12 +44,9 @@ export default class DataItemEditorContainer extends React.Component<
   getDataItemsByKey(blockchainName, streamName, key) {
     if (key !== 'New Key') {
       axios
-        .post('http://localhost:5000/api/get_items_by_key/', {
-          blockchainName,
-          streamName,
-          key,
-          verbose: 'true',
-        })
+        .get(
+          `http://localhost:5000/api/get_items_by_key?blockchainName=${blockchainName}&streamName=${streamName}&key=${key}`,
+        )
         .then(response => {
           console.log('Items:', response);
 
@@ -93,7 +90,7 @@ export default class DataItemEditorContainer extends React.Component<
   onSaveData = () => {
     if (this.state.key !== '') {
       axios
-        .post('http://localhost:5000/api/publish_item/', {
+        .post('http://localhost:5000/api/publish_item', {
           blockchainName: localStorage.getItem('chainName'),
           streamName: this.props.match.params.stream,
           keys: [this.state.key],

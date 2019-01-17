@@ -34,11 +34,9 @@ export default class DataItemsContainer extends React.Component<
 
   getStreamItems(blockchainName, streamName) {
     axios
-      .post('http://localhost:5000/api/get_stream_items/', {
-        blockchainName,
-        streamName,
-        verbose: 'true',
-      })
+      .get(
+        `http://localhost:5000/api/get_stream_items?blockchainName=${blockchainName}&streamName=${streamName}`,
+      )
       .then(response => {
         console.log('Data items:', response);
 

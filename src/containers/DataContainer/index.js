@@ -37,10 +37,9 @@ export default class DataContainer extends React.Component<
 
   getStreams(blockchainName) {
     axios
-      .post('http://localhost:5000/api/get_streams/', {
-        blockchainName,
-        verbose: 'true',
-      })
+      .get(
+        `http://localhost:5000/api/get_streams?blockchainName=${blockchainName}`,
+      )
       .then(response => {
         let subscribed = [];
         let unsubscribed = [];
@@ -64,7 +63,7 @@ export default class DataContainer extends React.Component<
 
   unsubscribeFromStreams(blockchainName, streams) {
     axios
-      .post('http://localhost:5000/api/unsubscribe/', {
+      .post('http://localhost:5000/api/unsubscribe', {
         blockchainName,
         streams,
       })
@@ -99,7 +98,7 @@ export default class DataContainer extends React.Component<
     this.setState({ subscribeModalState }, () => {
       if (streams.length > 0) {
         axios
-          .post('http://localhost:5000/api/subscribe/', {
+          .post('http://localhost:5000/api/subscribe', {
             blockchainName,
             streams,
           })
@@ -151,7 +150,7 @@ export default class DataContainer extends React.Component<
     const isOpen = type === 'Open' ? 'true' : 'false';
     this.setState({ createModalState }, () => {
       axios
-        .post('http://localhost:5000/api/create_stream/', {
+        .post('http://localhost:5000/api/create_stream', {
           blockchainName,
           streamName,
           isOpen,

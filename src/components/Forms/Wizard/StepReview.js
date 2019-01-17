@@ -74,14 +74,14 @@ class StepReview extends React.Component<
         if (!error) {
           this.setState({ loading: true }, () => {
             axios
-              .post('http://localhost:5000/api/create_chain/', {
+              .post('http://localhost:5000/api/create_chain', {
                 blockchainName: this.name,
               })
               .then(response =>
                 console.log('Successfully created chain:', response),
               )
               .then(() =>
-                axios.post('http://localhost:5000/api/config_parameters/', {
+                axios.post('http://localhost:5000/api/config_parameters', {
                   blockchainName: this.name,
                   params: {
                     description: this.description,
