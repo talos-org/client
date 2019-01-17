@@ -1,37 +1,80 @@
 // @flow
 import * as React from 'react';
-import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
+import { Card, Col, Layout, Row } from 'antd';
+import { Graph } from 'react-d3-graph';
+import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 
-const sample_data = [
-  { stream: 'Cat Scan', size: 2400 },
-  { stream: "Driver's License", size: 655 },
-  { stream: 'Health Card', size: 980 },
-  { stream: 'X-Ray', size: 5320 },
-  { stream: 'Other', size: 3642 },
-];
+import CurrentNode from 'components/Monitoring/CurrentNode';
+import _data from './data';
 
-const cols = {
-  size: {
-    tickInterval: 1000,
-    alias: 'Size (KB)',
+const { Content } = Layout;
+
+const makeData = () => {
+  const data = {
+    nodes: [],
+    links: [],
+    focusedNodeId: 1,
+  };
+
+  _data.forEach(d => {
+    data.nodes.push(d);
+    data.links.push({ source: 1, target: d.id });
+  });
+
+  return data;
+};
+
+const myConfig = {
+  nodeHighlightBehavior: true,
+  node: {
+    color: 'lightgreen',
+    size: 120,
+    highlightStrokeColor: 'blue',
   },
-  stream: {
-    alias: 'Stream Name',
+  link: {
+    highlightColor: 'lightblue',
   },
 };
 
-export default class MonitoringComponent extends React.Component<{}> {
+@observer
+class MonitoringComponent extends React.Component<{}> {
+  @observable currentNodeData;
+  @observable data;
+
+  constructor() {
+    super();
+    this.data = makeData();
+    this.onClickNode = this.onClickNode.bind(this);
+  }
+
+  onClickNode = nodeId => {
+    this.currentNodeData = this.data.nodes.find(x => x.id === Number(nodeId));
+  };
+
   render() {
     return (
-      <div>
-        <h1>Blockchain Storage Usage per Data Stream</h1>
-        <Chart width={800} height={600} data={sample_data} scale={cols}>
-          <Axis name="stream" title />
-          <Axis name="size" title />
-          <Tooltip />
-          <Geom type="interval" position="stream*size" />
-        </Chart>
-      </div>
+      <Layout>
+        <Content>
+          <Row gutter={8}>
+            <Col span={18}>
+              <Card title="All Nodes">
+                <Graph
+                  id="graph-id"
+                  onClickNode={this.onClickNode}
+                  data={this.data}
+                  config={myConfig}
+                />
+              </Card>
+            </Col>
+            <Col span={6}>
+              <CurrentNode currentNodeData={this.currentNodeData} />
+            </Col>
+          </Row>
+        </Content>
+      </Layout>
     );
   }
 }
+
+export default MonitoringComponent;

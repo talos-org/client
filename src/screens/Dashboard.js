@@ -98,6 +98,9 @@ class Dashboard extends React.Component<
                 </Switch>
               </Content>
             </Layout>
+            {/* <Content>
+              {DashboardHoC(this.currentTab)}
+            </Content> */}
           </Layout>
         </Layout>
       );
