@@ -14,14 +14,14 @@ export default class DataItemsContainer extends React.Component<
   },
   {
     error: string,
-    dataItems: Array,
+    uniqueDataItems: Array,
   },
 > {
   constructor() {
     super();
     this.state = {
       error: null /* error message from REST call */,
-      dataItems: [],
+      uniqueDataItems: [],
     };
   }
 
@@ -40,8 +40,19 @@ export default class DataItemsContainer extends React.Component<
       .then(response => {
         console.log('Data items:', response);
 
+        let uniqueData = {};
         let dataItems = response.data.Data;
-        this.setState({ dataItems });
+        /* traverse data items backwards, later data items have latest timestamps */
+        for (let i = dataItems.length - 1; i > 0; i--) {
+          let item = dataItems[i];
+          let key = item.keys[0];
+          if (!uniqueData.hasOwnProperty(key)) {
+            uniqueData[key] = item;
+          }
+        }
+
+        let uniqueDataItems = Object.values(uniqueData);
+        this.setState({ uniqueDataItems });
       })
       .catch(error => {
         console.error('Error:', error);
@@ -55,7 +66,7 @@ export default class DataItemsContainer extends React.Component<
   };
 
   render() {
-    const { error, dataItems } = this.state;
+    const { error, uniqueDataItems } = this.state;
     const { stream, match, location } = this.props;
     const { path, params } = match;
 
@@ -104,7 +115,7 @@ export default class DataItemsContainer extends React.Component<
                 />
               )}
               <h1>{`Data for '${params.stream}' Stream`}</h1>
-              <Table columns={columns} dataSource={dataItems} />
+              <Table columns={columns} dataSource={uniqueDataItems} />
               <Link to={`${location.pathname}/New Key`}>
                 <Button onClick={() => {}}>Add Key</Button>
               </Link>
