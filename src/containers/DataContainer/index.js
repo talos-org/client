@@ -90,7 +90,7 @@ export default class DataContainer extends React.Component<
     this.setState({ subscribeModalState });
   };
 
-  onOkSubModal = (blockchainName, streams) => {
+  onOkSubModal = (blockchainName, streams, rescan) => {
     const subscribeModalState = {
       visible: true,
       confirmLoading: true,
@@ -101,6 +101,7 @@ export default class DataContainer extends React.Component<
           .post('http://localhost:5000/api/subscribe', {
             blockchainName,
             streams,
+            rescan,
           })
           .then(response => {
             const subscribeModalState = {
