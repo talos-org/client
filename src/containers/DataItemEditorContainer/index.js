@@ -1,21 +1,21 @@
 // @flow
 import * as React from 'react';
-import { Alert, Table, Button, Divider, Popconfirm, Input } from 'antd';
+import { Button, Input } from 'antd';
 import axios from 'axios';
-import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
-import CreateStreamModal from '../../components/Modals/CreateStreamModal';
+// import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
+// import CreateStreamModal from '../../components/Modals/CreateStreamModal';
 import ReactJson from 'react-json-view';
-import { Link, Redirect, Switch, Route } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 export default class DataItemEditorContainer extends React.Component<
   {
-    match: object,
-    location: object,
+    match: Object,
+    location: Object,
   },
   {
     error: string,
     dataItems: Array,
-    latestItem: object,
+    latestItem: Object,
     key: string,
     jsonData: object,
     redirect: boolean,
@@ -114,15 +114,15 @@ export default class DataItemEditorContainer extends React.Component<
 
   render() {
     const {
-      error,
+      // error,
       dataItems,
-      latestItem,
+      // latestItem,
       key,
       jsonData,
       redirect,
     } = this.state;
-    const { match, location } = this.props;
-    const { path, params } = match;
+    const { match } = this.props;
+    const { params } = match;
 
     console.log(dataItems);
 
