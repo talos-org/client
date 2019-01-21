@@ -6,7 +6,6 @@ const URL = process.env.REACT_APP_BASE_URL
   : 'http://localhost:5000/api';
 
 const getClient = (baseURL = URL) => {
-  console.log(baseURL);
   const options = {
     baseURL,
   };
@@ -17,7 +16,7 @@ const getClient = (baseURL = URL) => {
 };
 
 class APIClient {
-  constructor(baseURL = null) {
+  constructor(baseURL = URL) {
     this.client = getClient(baseURL);
   }
 
