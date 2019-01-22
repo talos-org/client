@@ -1,6 +1,16 @@
 // @flow
 import * as React from 'react';
-import { Alert, Table, Button, Divider, Popconfirm, Input, Card } from 'antd';
+import {
+  Alert,
+  Button,
+  Divider,
+  Popconfirm,
+  Input,
+  Card,
+  Avatar,
+  List,
+  Icon,
+} from 'antd';
 import axios from 'axios';
 import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
 import CreateStreamModal from '../../components/Modals/CreateStreamModal';
@@ -120,6 +130,12 @@ export default class DataItemEditorContainer extends React.Component<
     }
   };
 
+  formatDateTime = timeMs => {
+    return new Date(timeMs * 1000).toLocaleString('en-US', {
+      timeZone: 'America/Toronto',
+    });
+  };
+
   render() {
     const {
       error,
@@ -163,14 +179,16 @@ export default class DataItemEditorContainer extends React.Component<
             />
           </Card.Grid>
           <Card.Grid style={{ width: '30%' }}>
-            Last updated:{' '}
-            {latestItem &&
-              new Date(latestItem.time * 1000).toLocaleString('en-US', {
-                timeZone: 'America/Toronto',
-              })}
+            Last updated: {latestItem && this.formatDateTime(latestItem.time)}
           </Card.Grid>
           <Card.Grid style={{ width: '30%' }}>
             By: {latestItem && latestItem.publishers}
+          </Card.Grid>
+          <Card.Grid style={{ width: '30%' }}>
+            <Button onClick={() => {}} disabled={itemHistory.length === 0}>
+              <Icon type="diff" />
+              View diff to previous version
+            </Button>
           </Card.Grid>
         </Card>
         <Button
@@ -181,6 +199,26 @@ export default class DataItemEditorContainer extends React.Component<
           Save
         </Button>
         <Divider orientation="left">History</Divider>
+        <List
+          itemLayout="horizontal"
+          dataSource={itemHistory}
+          renderItem={item => (
+            <List.Item>
+              {
+                <List.Item.Meta
+                  avatar={<Avatar icon="file-text" />}
+                  title="Edited"
+                  description={`${this.formatDateTime(item.time)} by ${
+                    item.publishers
+                  }`}
+                />
+              }
+              <Button onClick={() => {}}>
+                <Icon type="diff" />
+              </Button>
+            </List.Item>
+          )}
+        />
       </div>
     );
   }
