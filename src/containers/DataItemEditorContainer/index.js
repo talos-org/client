@@ -150,7 +150,7 @@ export default class DataItemEditorContainer extends React.Component<
           placeholder="Enter a new key name for this item"
           value={key}
           disabled={params.key !== 'New Key'}
-          style={{ marginBottom: '10px' }}
+          style={{ marginBottom: '10px', color: 'black', cursor: 'auto' }}
         />
         <Card title="Data">
           <Card.Grid style={{ width: '70%', fontSize: '1.5em' }}>
