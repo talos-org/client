@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Alert, Table, Button, Divider, Popconfirm, Input } from 'antd';
+import { Alert, Table, Button, Divider, Popconfirm, Input, Card } from 'antd';
 import axios from 'axios';
 import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
 import CreateStreamModal from '../../components/Modals/CreateStreamModal';
@@ -14,10 +14,11 @@ export default class DataItemEditorContainer extends React.Component<
   },
   {
     error: string,
-    dataItems: Array,
     latestItem: object,
+    latestItemJson: object,
     key: string,
     jsonData: object,
+    itemHistory: Array,
     redirect: boolean,
   },
 > {
@@ -25,8 +26,9 @@ export default class DataItemEditorContainer extends React.Component<
     super();
     this.state = {
       error: null /* error message from REST call */,
-      dataItems: [],
+      itemHistory: [],
       latestItem: null,
+      latestItemJson: {},
       key: '',
       jsonData: {},
       redirect: false,
@@ -52,18 +54,24 @@ export default class DataItemEditorContainer extends React.Component<
 
           let dataItems = response.data.Data;
           let latestItem = null;
+          let latestItemJson = {};
           let jsonData = {};
-          dataItems.forEach(item => {
-            if (!latestItem || latestItem.time < item.time) {
-              latestItem = item;
-            }
-          });
+          let itemHistory = [];
 
-          if (latestItem) {
+          if (dataItems.length > 0) {
+            latestItem = dataItems.pop();
+            itemHistory = dataItems.reverse();
             jsonData = JSON.parse(latestItem.data.json);
+            latestItemJson = jsonData; // save copy of data before its edited by user, used to know when to disable 'Save' button
           }
 
-          this.setState({ dataItems, latestItem, key, jsonData });
+          this.setState({
+            latestItem,
+            latestItemJson,
+            key,
+            jsonData,
+            itemHistory,
+          });
         })
         .catch(error => {
           console.error('Error:', error);
@@ -93,7 +101,7 @@ export default class DataItemEditorContainer extends React.Component<
         .post('http://localhost:5000/api/publish_item', {
           blockchainName: localStorage.getItem('chainName'),
           streamName: this.props.match.params.stream,
-          keys: [this.state.key],
+          keys: new Array(this.state.key),
           data: this.state.jsonData,
           verbose: 'true',
         })
@@ -115,16 +123,17 @@ export default class DataItemEditorContainer extends React.Component<
   render() {
     const {
       error,
-      dataItems,
       latestItem,
+      latestItemJson,
       key,
       jsonData,
+      itemHistory,
       redirect,
     } = this.state;
     const { match, location } = this.props;
     const { path, params } = match;
 
-    console.log(dataItems);
+    console.log(itemHistory);
 
     if (redirect) {
       this.setState({ redirect: false });
@@ -143,16 +152,35 @@ export default class DataItemEditorContainer extends React.Component<
           disabled={params.key !== 'New Key'}
           style={{ marginBottom: '10px' }}
         />
-        <ReactJson
-          src={jsonData}
-          onEdit={this.onEditJSON}
-          onAdd={this.onEditJSON}
-          onDelete={this.onEditJSON}
-          name={false}
-        />
-        <Button onClick={this.onSaveData} style={{ marginTop: '10px' }}>
+        <Card title="Data">
+          <Card.Grid style={{ width: '70%', fontSize: '1.5em' }}>
+            <ReactJson
+              src={jsonData}
+              onEdit={this.onEditJSON}
+              onAdd={this.onEditJSON}
+              onDelete={this.onEditJSON}
+              name={false}
+            />
+          </Card.Grid>
+          <Card.Grid style={{ width: '30%' }}>
+            Last updated:{' '}
+            {latestItem &&
+              new Date(latestItem.time * 1000).toLocaleString('en-US', {
+                timeZone: 'America/Toronto',
+              })}
+          </Card.Grid>
+          <Card.Grid style={{ width: '30%' }}>
+            By: {latestItem && latestItem.publishers}
+          </Card.Grid>
+        </Card>
+        <Button
+          onClick={this.onSaveData}
+          disabled={JSON.stringify(latestItemJson) === JSON.stringify(jsonData)}
+          style={{ marginTop: '10px' }}
+        >
           Save
         </Button>
+        <Divider orientation="left">History</Divider>
       </div>
     );
   }
