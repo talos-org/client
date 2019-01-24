@@ -41,7 +41,7 @@ export default class DataItemsContainer extends React.Component<
         console.log('Data items:', response);
 
         let uniqueData = {};
-        let dataItems = response.data.Data;
+        let dataItems = response.data;
         /* traverse data items backwards, later data items have latest timestamps */
         for (let i = dataItems.length - 1; i >= 0; i--) {
           let item = dataItems[i];

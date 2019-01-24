@@ -45,7 +45,7 @@ export default class DataContainer extends React.Component<
         let unsubscribed = [];
         console.log('Streams:', response);
 
-        let streams = response.data.Data;
+        let streams = response.data;
         streams.forEach(stream => {
           if (stream.subscribed) {
             subscribed.push(stream);

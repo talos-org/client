@@ -67,7 +67,7 @@ export default class DataItemEditorContainer extends React.Component<
         .then(response => {
           console.log('Items:', response);
 
-          let dataItems = response.data.Data;
+          let dataItems = response.data;
           let latestItem = null;
           let latestItemJson = {};
           let jsonData = {};
