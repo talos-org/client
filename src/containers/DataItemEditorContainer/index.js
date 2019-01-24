@@ -12,8 +12,7 @@ import {
   Icon,
 } from 'antd';
 import axios from 'axios';
-import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
-import CreateStreamModal from '../../components/Modals/CreateStreamModal';
+import DataItemDiffModal from '../../components/Modals/DataItemDiffModal';
 import ReactJson from 'react-json-view';
 import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
@@ -30,6 +29,9 @@ export default class DataItemEditorContainer extends React.Component<
     jsonData: object,
     itemHistory: Array,
     redirect: boolean,
+    dataItemDiffModalVisible: boolean,
+    dataItemDiffOldItem: Object,
+    dataItemDiffNewItem: Object,
   },
 > {
   constructor() {
@@ -42,6 +44,9 @@ export default class DataItemEditorContainer extends React.Component<
       key: '',
       jsonData: {},
       redirect: false,
+      dataItemDiffModalVisible: false,
+      dataItemDiffOldItem: null,
+      dataItemDiffNewItem: null,
     };
   }
 
@@ -136,6 +141,26 @@ export default class DataItemEditorContainer extends React.Component<
     });
   };
 
+  openDataItemDiff = (dataItemDiffOldItem, dataItemDiffNewItem) => {
+    const dataItemDiffModalVisible = true;
+    this.setState({
+      dataItemDiffModalVisible,
+      dataItemDiffOldItem,
+      dataItemDiffNewItem,
+    });
+  };
+
+  onCloseDataItemDiff = () => {
+    const dataItemDiffModalVisible = false;
+    const dataItemDiffOldItem = null;
+    const dataItemDiffNewItem = null;
+    this.setState({
+      dataItemDiffModalVisible,
+      dataItemDiffOldItem,
+      dataItemDiffNewItem,
+    });
+  };
+
   render() {
     const {
       error,
@@ -145,6 +170,9 @@ export default class DataItemEditorContainer extends React.Component<
       jsonData,
       itemHistory,
       redirect,
+      dataItemDiffModalVisible,
+      dataItemDiffOldItem,
+      dataItemDiffNewItem,
     } = this.state;
     const { match, location } = this.props;
     const { path, params } = match;
@@ -185,7 +213,10 @@ export default class DataItemEditorContainer extends React.Component<
             By: {latestItem && latestItem.publishers}
           </Card.Grid>
           <Card.Grid style={{ width: '30%' }}>
-            <Button onClick={() => {}} disabled={itemHistory.length === 0}>
+            <Button
+              onClick={() => this.openDataItemDiff(itemHistory[0], latestItem)}
+              disabled={itemHistory.length === 0}
+            >
               <Icon type="diff" />
               View diff to previous version
             </Button>
@@ -202,7 +233,7 @@ export default class DataItemEditorContainer extends React.Component<
         <List
           itemLayout="horizontal"
           dataSource={itemHistory}
-          renderItem={item => (
+          renderItem={(item, i) => (
             <List.Item>
               {
                 <List.Item.Meta
@@ -213,12 +244,27 @@ export default class DataItemEditorContainer extends React.Component<
                   }`}
                 />
               }
-              <Button onClick={() => {}}>
+              <Button
+                onClick={() => {
+                  this.openDataItemDiff(
+                    (itemHistory.length > i + 1 && itemHistory[i + 1]) || null,
+                    itemHistory[i],
+                  );
+                }}
+              >
                 <Icon type="diff" />
               </Button>
             </List.Item>
           )}
         />
+        {dataItemDiffNewItem && (
+          <DataItemDiffModal
+            visible={dataItemDiffModalVisible}
+            onClose={this.onCloseDataItemDiff}
+            oldItem={dataItemDiffOldItem}
+            newItem={dataItemDiffNewItem}
+          />
+        )}
       </div>
     );
   }
