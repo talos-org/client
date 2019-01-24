@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Card, Empty, Spin } from 'antd';
+import { Card, Empty } from 'antd';
 
 export default class CurrentNode extends React.Component<{
   currentNodeData: Object,
@@ -10,11 +10,9 @@ export default class CurrentNode extends React.Component<{
 
     if (!currentNodeData) {
       return (
-        <React.Suspense fallback={<Spin />}>
-          <Card title="Current Node Information">
-            <Empty description="No node selected" />
-          </Card>
-        </React.Suspense>
+        <Card title="Current Node Information">
+          <Empty description="No node selected" />
+        </Card>
       );
     } else {
       const {
