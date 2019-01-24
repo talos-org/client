@@ -42,7 +42,7 @@ export default class DataItemDiffModal extends React.Component<
         onCancel={onClose}
         footer={null}
       >
-        {(oldItem.data.json !== newItem.data.json && (
+        {((!oldItem || oldItem.data.json !== newItem.data.json) && (
           <Differ
             from={(oldItem && this.prettyPrintJson(oldItem.data.json)) || ''}
             to={this.prettyPrintJson(newItem.data.json)}
