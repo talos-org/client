@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+// $FlowFixMe
 import { Card, Col, Row, Skeleton } from 'antd';
 import { computed, observable } from 'mobx';
 import { Graph } from 'react-d3-graph';
@@ -29,6 +30,7 @@ class MonitoringComponent extends React.Component<{}, { loading: boolean }> {
   @observable loading: boolean = true;
 
   async componentDidMount() {
+    // $FlowFixMe
     await this.props.rootStore.graphStore.getCurrentGraphData();
     setInterval(this.getCurrentGraphData, 5000);
 
@@ -42,11 +44,15 @@ class MonitoringComponent extends React.Component<{}, { loading: boolean }> {
   }
 
   getCurrentGraphData = async () => {
+    // $FlowFixMe
     await this.props.rootStore.graphStore.getCurrentGraphData();
   };
 
   onClickNode = (nodeId: number) => {
-    this.currentNodeData = this.data.nodes.find(x => x.id === Number(nodeId));
+    // $FlowFixMe
+    this.currentNodeData = this.props.rootStore.graphStore.data.nodes.find(
+      x => x.id === Number(nodeId),
+    );
   };
 
   render() {
@@ -58,6 +64,7 @@ class MonitoringComponent extends React.Component<{}, { loading: boolean }> {
               <Graph
                 id="graph-id"
                 onClickNode={this.onClickNode}
+                // $FlowFixMe
                 data={this.props.rootStore.graphStore.data}
                 config={myConfig}
               />
