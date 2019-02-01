@@ -1,37 +1,83 @@
 // @flow
 import * as React from 'react';
-import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
+// $FlowFixMe
+import { Card, Col, Row, Skeleton } from 'antd';
+import { computed, observable } from 'mobx';
+import { Graph } from 'react-d3-graph';
+import { inject, observer } from 'mobx-react';
 
-const sample_data = [
-  { stream: 'Cat Scan', size: 2400 },
-  { stream: "Driver's License", size: 655 },
-  { stream: 'Health Card', size: 980 },
-  { stream: 'X-Ray', size: 5320 },
-  { stream: 'Other', size: 3642 },
-];
+import CurrentNode from 'components/Monitoring/CurrentNode';
 
-const cols = {
-  size: {
-    tickInterval: 1000,
-    alias: 'Size (KB)',
+const myConfig = {
+  nodeHighlightBehavior: true,
+  node: {
+    color: 'lightgreen',
+    highlightStrokeColor: 'blue',
+    labelProperty: 'name',
+    size: 120,
   },
-  stream: {
-    alias: 'Stream Name',
+  link: {
+    highlightColor: '#033fff',
   },
 };
 
-export default class MonitoringComponent extends React.Component<{}> {
+@inject('rootStore')
+@observer
+class MonitoringComponent extends React.Component<{}, { loading: boolean }> {
+  @observable currentNodeData: Object;
+  @observable data: Object;
+  @observable inactiveNodes: Array<string>;
+  @observable loading: boolean = true;
+
+  async componentDidMount() {
+    // $FlowFixMe
+    await this.props.rootStore.graphStore.getCurrentGraphData();
+    setInterval(this.getCurrentGraphData, 5000);
+
+    this.loading = false;
+  }
+
+  @computed
+  get currentBlockchain() {
+    // $FlowFixMe
+    return this.props.rootStore.rootState.currentBlockchain;
+  }
+
+  getCurrentGraphData = async () => {
+    // $FlowFixMe
+    await this.props.rootStore.graphStore.getCurrentGraphData();
+  };
+
+  onClickNode = (nodeId: number) => {
+    // $FlowFixMe
+    this.currentNodeData = this.props.rootStore.graphStore.data.nodes.find(
+      x => x.id === Number(nodeId),
+    );
+  };
+
   render() {
     return (
-      <div>
-        <h1>Blockchain Storage Usage per Data Stream</h1>
-        <Chart width={800} height={600} data={sample_data} scale={cols}>
-          <Axis name="stream" title />
-          <Axis name="size" title />
-          <Tooltip />
-          <Geom type="interval" position="stream*size" />
-        </Chart>
-      </div>
+      <Row gutter={8}>
+        <Col span={18}>
+          <Card title="All Nodes">
+            <Skeleton loading={this.loading}>
+              <Graph
+                id="graph-id"
+                onClickNode={this.onClickNode}
+                // $FlowFixMe
+                data={this.props.rootStore.graphStore.data}
+                config={myConfig}
+              />
+            </Skeleton>
+          </Card>
+        </Col>
+        <Col span={6}>
+          <CurrentNode currentNodeData={this.currentNodeData} />
+          {/* <InactiveNodes /> */}
+        </Col>
+      </Row>
     );
   }
 }
+
+export default MonitoringComponent;
