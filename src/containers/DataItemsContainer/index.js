@@ -2,8 +2,6 @@
 import * as React from 'react';
 import { Alert, Table, Button, Divider, Popconfirm } from 'antd';
 import axios from 'axios';
-import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
-import CreateStreamModal from '../../components/Modals/CreateStreamModal';
 import DataItemEditorContainer from '../../containers/DataItemEditorContainer';
 import { Link, Redirect, Switch, Route } from 'react-router-dom';
 

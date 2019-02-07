@@ -2,8 +2,10 @@
 import { action, computed, observable } from 'mobx';
 
 import BlockchainStore from 'stores/domain/Blockchain';
-import { get, remove } from 'utils/chainName';
 import GlobalHeaderStore from 'stores/ui/GlobalHeader';
+import GraphStore from 'stores/domain/Graph';
+
+import { get, remove } from 'utils/chainName';
 
 export default class RootStore {
   @observable
@@ -20,10 +22,12 @@ export default class RootStore {
   };
   blockchainStore: BlockchainStore;
   globalHeaderStore: GlobalHeaderStore;
+  graphStore: GraphStore;
 
   constructor() {
     this.blockchainStore = new BlockchainStore(this);
     this.globalHeaderStore = new GlobalHeaderStore(this);
+    this.graphStore = new GraphStore(this);
     this.rootState.currentBlockchain = get('chainName');
   }
 

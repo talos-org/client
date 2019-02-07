@@ -5,19 +5,19 @@ import axios from 'axios';
 import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
 import CreateStreamModal from '../../components/Modals/CreateStreamModal';
 import DataItemsContainer from '../../containers/DataItemsContainer';
-import { Link, Redirect, Switch, Route } from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 
 export default class DataContainer extends React.Component<
   {
-    match: object,
-    location: object,
+    match: Object,
+    location: Object,
   },
   {
     error: string,
-    subscribed: array,
-    unsubscribed: array,
-    subscribeModalState: object,
-    createModalState: object,
+    subscribed: Array,
+    unsubscribed: Array,
+    subscribeModalState: Object,
+    createModalState: Object,
   },
 > {
   constructor() {
@@ -199,7 +199,7 @@ export default class DataContainer extends React.Component<
       subscribeModalState,
       createModalState,
     } = this.state;
-    const { match, location } = this.props;
+    const { match } = this.props;
     const { path } = match;
 
     const columns = [
@@ -237,6 +237,7 @@ export default class DataContainer extends React.Component<
           <span>
             {record.restrict.write && (
               <span>
+                {/* eslint-disable-next-line */}
                 <a href="#">Edit Permissions</a>
                 <Divider type="vertical" />
               </span>
@@ -250,6 +251,7 @@ export default class DataContainer extends React.Component<
                 );
               }}
             >
+              {/* eslint-disable-next-line */}
               <a href="#">Unsubscribe</a>
             </Popconfirm>
           </span>
