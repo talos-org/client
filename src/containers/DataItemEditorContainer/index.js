@@ -20,6 +20,7 @@ export default class DataItemEditorContainer extends React.Component<
   {
     match: object,
     location: object,
+    onSaveCallback: Function,
   },
   {
     error: string,
@@ -28,7 +29,6 @@ export default class DataItemEditorContainer extends React.Component<
     key: string,
     jsonData: object,
     itemHistory: Array,
-    redirect: boolean,
     dataItemDiffModalVisible: boolean,
     dataItemDiffOldItem: Object,
     dataItemDiffNewItem: Object,
@@ -43,7 +43,6 @@ export default class DataItemEditorContainer extends React.Component<
       latestItemJson: {},
       key: '',
       jsonData: {},
-      redirect: false,
       dataItemDiffModalVisible: false,
       dataItemDiffOldItem: null,
       dataItemDiffNewItem: null,
@@ -51,14 +50,19 @@ export default class DataItemEditorContainer extends React.Component<
   }
 
   componentDidMount() {
+    this.reloadData();
+  }
+
+  reloadData(callback = () => {}) {
     this.getDataItemsByKey(
       localStorage.getItem('chainName'),
       this.props.match.params.stream,
       this.props.match.params.key,
+      callback,
     );
   }
 
-  getDataItemsByKey(blockchainName, streamName, key) {
+  getDataItemsByKey(blockchainName, streamName, key, callback = () => {}) {
     if (key !== 'New Key') {
       axios
         .get(
@@ -80,13 +84,16 @@ export default class DataItemEditorContainer extends React.Component<
             latestItemJson = jsonData; // save copy of data before its edited by user, used to know when to disable 'Save' button
           }
 
-          this.setState({
-            latestItem,
-            latestItemJson,
-            key,
-            jsonData,
-            itemHistory,
-          });
+          this.setState(
+            {
+              latestItem,
+              latestItemJson,
+              key,
+              jsonData,
+              itemHistory,
+            },
+            () => callback(),
+          );
         })
         .catch(error => {
           console.error('Error:', error);
@@ -111,19 +118,22 @@ export default class DataItemEditorContainer extends React.Component<
   };
 
   onSaveData = () => {
-    if (this.state.key !== '') {
+    const { key, jsonData } = this.state;
+    const { match, onSaveCallback, history } = this.props;
+
+    if (key !== '') {
       axios
         .post('http://localhost:5000/api/publish_item', {
           blockchainName: localStorage.getItem('chainName'),
-          streamName: this.props.match.params.stream,
-          keys: new Array(this.state.key),
-          data: this.state.jsonData,
+          streamName: match.params.stream,
+          keys: new Array(key),
+          data: jsonData,
           verbose: 'true',
         })
         .then(response => {
           console.log('Data posted:', response);
-          const redirect = true;
-          this.setState({ redirect });
+          history.push(`/data/${match.params.stream}/${key}`);
+          this.reloadData(onSaveCallback);
         })
         .catch(error => {
           console.error('Error:', error);
@@ -169,21 +179,12 @@ export default class DataItemEditorContainer extends React.Component<
       key,
       jsonData,
       itemHistory,
-      redirect,
       dataItemDiffModalVisible,
       dataItemDiffOldItem,
       dataItemDiffNewItem,
     } = this.state;
     const { match, location } = this.props;
     const { path, params } = match;
-
-    console.log(itemHistory);
-
-    if (redirect) {
-      this.setState({ redirect: false });
-
-      return <Redirect to={`/data/${match.params.stream}/${key}`} />;
-    }
 
     return (
       <div>

@@ -24,11 +24,15 @@ export default class DataItemsContainer extends React.Component<
   }
 
   componentDidMount() {
+    this.reloadData();
+  }
+
+  reloadData = () => {
     this.getStreamItems(
       localStorage.getItem('chainName'),
       this.props.match.params.stream,
     );
-  }
+  };
 
   getStreamItems(blockchainName, streamName) {
     axios
@@ -120,7 +124,15 @@ export default class DataItemsContainer extends React.Component<
             </div>
           )}
         />
-        <Route path={`${path}/:key`} component={DataItemEditorContainer} />
+        <Route
+          path={`${path}/:key`}
+          render={props => (
+            <DataItemEditorContainer
+              {...props}
+              onSaveCallback={this.reloadData}
+            />
+          )}
+        />
       </Switch>
     );
   }
