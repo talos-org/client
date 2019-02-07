@@ -68,7 +68,9 @@ class Dashboard extends React.Component<
 
       return (
         <Layout>
-          <SideMenu />
+          <SideMenu
+            tab={(pathSnippets.length > 0 && pathSnippets[0]) || 'monitoring'}
+          />
           <Layout>
             <GlobalHeader />
             <Layout style={{ padding: '0 24px 24px' }}>

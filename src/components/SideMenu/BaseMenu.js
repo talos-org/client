@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 @inject('rootStore')
 @observer
 class BaseMenu extends React.Component<{}> {
+  /* TODO: remove use of mobx for keeping track of tab here, we are using url path instead */
+
   constructor(props: any) {
     super(props);
     this.handleSelect = this.handleSelect.bind(this);
@@ -25,21 +27,17 @@ class BaseMenu extends React.Component<{}> {
     return this.props.rootStore.rootState.sidebarCollapsed;
   }
 
-  // TODO: Track selected tab using MobX, and handle
-  // changes here
   // $FlowFixMe
   handleSelect = ({ item, key, selectedKeys }) => {
-    /* TODO: I don't know if we need currentTab stored and I don't know
-       how to get this.props.history.push to work here, using <Link> instead */
     this.props.rootStore.rootState.currentTab = key;
   };
 
   render() {
-    /* TODO: for Menu use selectedKeys with tab from path not from mobX,
-      currently this breaks when you reload page */
+    const { tab } = this.props;
+
     return (
       <Menu
-        defaultSelectedKeys={[`${this.currentTab}`]}
+        selectedKeys={new Array(tab)}
         mode="inline"
         onSelect={this.handleSelect}
         theme="dark"

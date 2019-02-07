@@ -40,13 +40,15 @@ class SideMenu extends React.Component<{}> {
   }
 
   render() {
+    const { tab } = this.props;
+
     return (
       <Sider collapsed={this.collapsed} collapsible trigger={null} width={256}>
         <SiderLogo>
           <img alt="logo" src={`${require('images/logo--isometric@2x.svg')}`} />
           {!this.collapsed && <span>Talos</span>}
         </SiderLogo>
-        <BaseMenu />
+        <BaseMenu tab={tab} />
       </Sider>
     );
   }
