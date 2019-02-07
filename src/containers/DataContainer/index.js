@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Alert, Table, Button, Divider, Popconfirm } from 'antd';
+import { Alert, Table, Button, Divider, Popconfirm, Spin } from 'antd';
 import axios from 'axios';
 import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
 import CreateStreamModal from '../../components/Modals/CreateStreamModal';
@@ -36,7 +36,7 @@ export default class DataContainer extends React.Component<
   }
 
   getStreams(blockchainName) {
-    axios
+    return axios
       .get(
         `http://localhost:5000/api/get_streams?blockchainName=${blockchainName}`,
       )
@@ -45,7 +45,7 @@ export default class DataContainer extends React.Component<
         let unsubscribed = [];
         console.log('Streams:', response);
 
-        let streams = response.data.Data;
+        let streams = response.data;
         streams.forEach(stream => {
           if (stream.subscribed) {
             subscribed.push(stream);
@@ -62,7 +62,7 @@ export default class DataContainer extends React.Component<
   }
 
   unsubscribeFromStreams(blockchainName, streams) {
-    axios
+    return axios
       .post('http://localhost:5000/api/unsubscribe', {
         blockchainName,
         streams,
@@ -90,36 +90,40 @@ export default class DataContainer extends React.Component<
     this.setState({ subscribeModalState });
   };
 
-  onOkSubModal = (blockchainName, streams) => {
+  subscribeToStreams = (blockchainName, streams, rescan) => {
+    const subscribeModalState = {
+      visible: false,
+      confirmLoading: false,
+    };
+    let error = null;
+
+    return axios
+      .post('http://localhost:5000/api/subscribe', {
+        blockchainName,
+        streams,
+        rescan,
+      })
+      .then(response => {
+        console.log('Subscribed:', response);
+        this.getStreams(blockchainName);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        error = error.toString();
+      })
+      .then(() => {
+        this.setState({ subscribeModalState, error });
+      });
+  };
+
+  onOkSubModal = (blockchainName, streams, rescan) => {
     const subscribeModalState = {
       visible: true,
       confirmLoading: true,
     };
     this.setState({ subscribeModalState }, () => {
       if (streams.length > 0) {
-        axios
-          .post('http://localhost:5000/api/subscribe', {
-            blockchainName,
-            streams,
-          })
-          .then(response => {
-            const subscribeModalState = {
-              visible: false,
-              confirmLoading: false,
-            };
-            console.log('Subscribed:', response);
-            this.setState({ subscribeModalState }, () => {
-              this.getStreams(blockchainName);
-            });
-          })
-          .catch(error => {
-            const subscribeModalState = {
-              visible: false,
-              confirmLoading: false,
-            };
-            console.error('Error:', error);
-            this.setState({ subscribeModalState, error: error.toString() });
-          });
+        this.subscribeToStreams(blockchainName, streams, rescan);
       } else {
         this.onCancelSubModal();
       }
@@ -142,6 +146,32 @@ export default class DataContainer extends React.Component<
     this.setState({ createModalState });
   };
 
+  createStream = (blockchainName, streamName, isOpen) => {
+    const createModalState = {
+      visible: false,
+      confirmLoading: false,
+    };
+    let error = null;
+
+    return axios
+      .post('http://localhost:5000/api/create_stream', {
+        blockchainName,
+        streamName,
+        isOpen,
+      })
+      .then(response => {
+        console.log('Created:', response);
+        this.subscribeToStreams(blockchainName, new Array(streamName), false);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        error = error.toString();
+      })
+      .then(() => {
+        this.setState({ createModalState, error });
+      });
+  };
+
   onOkCreateModal = (blockchainName, streamName, type) => {
     const createModalState = {
       visible: true,
@@ -149,30 +179,7 @@ export default class DataContainer extends React.Component<
     };
     const isOpen = type === 'Open' ? 'true' : 'false';
     this.setState({ createModalState }, () => {
-      axios
-        .post('http://localhost:5000/api/create_stream', {
-          blockchainName,
-          streamName,
-          isOpen,
-        })
-        .then(response => {
-          const createModalState = {
-            visible: false,
-            confirmLoading: false,
-          };
-          console.log('Created:', response);
-          this.setState({ createModalState }, () => {
-            this.getStreams(blockchainName);
-          });
-        })
-        .catch(error => {
-          const createModalState = {
-            visible: false,
-            confirmLoading: false,
-          };
-          console.error('Error:', error);
-          this.setState({ createModalState, error: error.toString() });
-        });
+      this.createStream(blockchainName, streamName, isOpen);
     });
   };
 

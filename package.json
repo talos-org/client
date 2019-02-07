@@ -83,6 +83,7 @@
     "react-app-polyfill": "^0.1.3",
     "react-d3-graph": "^2.0.0-rc2",
     "react-dev-utils": "^6.1.1",
+    "react-differ": "^1.0.0",
     "react-dom": "^16.6.1",
     "react-flexview": "^4.0.1",
     "react-grid-system": "^4.3.1",

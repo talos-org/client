@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Modal, Table } from 'antd';
+import { Modal, Table, Checkbox } from 'antd';
 
 export default class SubscribeStreamModal extends React.Component<
   {
@@ -12,12 +12,14 @@ export default class SubscribeStreamModal extends React.Component<
   },
   {
     selected: Array,
+    rescan: boolean,
   },
 > {
   constructor() {
     super();
     this.state = {
       selected: null,
+      rescan: false,
     };
   }
 
@@ -26,7 +28,13 @@ export default class SubscribeStreamModal extends React.Component<
     this.props.onOk(
       localStorage.getItem('chainName'),
       selected ? selected.map(s => s.name) : [],
+      this.state.rescan,
     );
+  };
+
+  toggleRescan = e => {
+    const rescan = e.target.checked;
+    this.setState({ rescan });
   };
 
   render() {
@@ -66,6 +74,9 @@ export default class SubscribeStreamModal extends React.Component<
           columns={columns}
           dataSource={unsubscribed}
         />
+        <Checkbox onChange={this.toggleRescan}>
+          Rescan for old data items
+        </Checkbox>
       </Modal>
     );
   }

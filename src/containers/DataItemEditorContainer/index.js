@@ -1,47 +1,68 @@
 // @flow
 import * as React from 'react';
-import { Button, Input } from 'antd';
+import {
+  Alert,
+  Button,
+  Divider,
+  Popconfirm,
+  Input,
+  Card,
+  Avatar,
+  List,
+  Icon,
+} from 'antd';
 import axios from 'axios';
-// import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
-// import CreateStreamModal from '../../components/Modals/CreateStreamModal';
+import DataItemDiffModal from '../../components/Modals/DataItemDiffModal';
 import ReactJson from 'react-json-view';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
 export default class DataItemEditorContainer extends React.Component<
   {
-    match: Object,
-    location: Object,
+    match: object,
+    location: object,
+    onSaveCallback: Function,
   },
   {
     error: string,
-    dataItems: Array,
-    latestItem: Object,
+    latestItem: object,
+    latestItemJson: object,
     key: string,
     jsonData: object,
-    redirect: boolean,
+    itemHistory: Array,
+    dataItemDiffModalVisible: boolean,
+    dataItemDiffOldItem: Object,
+    dataItemDiffNewItem: Object,
   },
 > {
   constructor() {
     super();
     this.state = {
       error: null /* error message from REST call */,
-      dataItems: [],
+      itemHistory: [],
       latestItem: null,
+      latestItemJson: {},
       key: '',
       jsonData: {},
-      redirect: false,
+      dataItemDiffModalVisible: false,
+      dataItemDiffOldItem: null,
+      dataItemDiffNewItem: null,
     };
   }
 
   componentDidMount() {
+    this.reloadData();
+  }
+
+  reloadData(callback = () => {}) {
     this.getDataItemsByKey(
       localStorage.getItem('chainName'),
       this.props.match.params.stream,
       this.props.match.params.key,
+      callback,
     );
   }
 
-  getDataItemsByKey(blockchainName, streamName, key) {
+  getDataItemsByKey(blockchainName, streamName, key, callback = () => {}) {
     if (key !== 'New Key') {
       axios
         .get(
@@ -50,20 +71,29 @@ export default class DataItemEditorContainer extends React.Component<
         .then(response => {
           console.log('Items:', response);
 
-          let dataItems = response.data.Data;
+          let dataItems = response.data;
           let latestItem = null;
+          let latestItemJson = {};
           let jsonData = {};
-          dataItems.forEach(item => {
-            if (!latestItem || latestItem.time < item.time) {
-              latestItem = item;
-            }
-          });
+          let itemHistory = [];
 
-          if (latestItem) {
+          if (dataItems.length > 0) {
+            latestItem = dataItems.pop();
+            itemHistory = dataItems.reverse();
             jsonData = JSON.parse(latestItem.data.json);
+            latestItemJson = jsonData; // save copy of data before its edited by user, used to know when to disable 'Save' button
           }
 
-          this.setState({ dataItems, latestItem, key, jsonData });
+          this.setState(
+            {
+              latestItem,
+              latestItemJson,
+              key,
+              jsonData,
+              itemHistory,
+            },
+            () => callback(),
+          );
         })
         .catch(error => {
           console.error('Error:', error);
@@ -88,19 +118,22 @@ export default class DataItemEditorContainer extends React.Component<
   };
 
   onSaveData = () => {
-    if (this.state.key !== '') {
+    const { key, jsonData } = this.state;
+    const { match, onSaveCallback, history } = this.props;
+
+    if (key !== '') {
       axios
         .post('http://localhost:5000/api/publish_item', {
           blockchainName: localStorage.getItem('chainName'),
-          streamName: this.props.match.params.stream,
-          keys: [this.state.key],
-          data: this.state.jsonData,
+          streamName: match.params.stream,
+          keys: new Array(key),
+          data: jsonData,
           verbose: 'true',
         })
         .then(response => {
           console.log('Data posted:', response);
-          const redirect = true;
-          this.setState({ redirect });
+          history.push(`/data/${match.params.stream}/${key}`);
+          this.reloadData(onSaveCallback);
         })
         .catch(error => {
           console.error('Error:', error);
@@ -112,25 +145,46 @@ export default class DataItemEditorContainer extends React.Component<
     }
   };
 
+  formatDateTime = timeMs => {
+    return new Date(timeMs * 1000).toLocaleString('en-US', {
+      timeZone: 'America/Toronto',
+    });
+  };
+
+  openDataItemDiff = (dataItemDiffOldItem, dataItemDiffNewItem) => {
+    const dataItemDiffModalVisible = true;
+    this.setState({
+      dataItemDiffModalVisible,
+      dataItemDiffOldItem,
+      dataItemDiffNewItem,
+    });
+  };
+
+  onCloseDataItemDiff = () => {
+    const dataItemDiffModalVisible = false;
+    const dataItemDiffOldItem = null;
+    const dataItemDiffNewItem = null;
+    this.setState({
+      dataItemDiffModalVisible,
+      dataItemDiffOldItem,
+      dataItemDiffNewItem,
+    });
+  };
+
   render() {
     const {
-      // error,
-      dataItems,
-      // latestItem,
+      error,
+      latestItem,
+      latestItemJson,
       key,
       jsonData,
-      redirect,
+      itemHistory,
+      dataItemDiffModalVisible,
+      dataItemDiffOldItem,
+      dataItemDiffNewItem,
     } = this.state;
-    const { match } = this.props;
-    const { params } = match;
-
-    console.log(dataItems);
-
-    if (redirect) {
-      this.setState({ redirect: false });
-
-      return <Redirect to={`/data/${match.params.stream}/${key}`} />;
-    }
+    const { match, location } = this.props;
+    const { path, params } = match;
 
     return (
       <div>
@@ -141,18 +195,77 @@ export default class DataItemEditorContainer extends React.Component<
           placeholder="Enter a new key name for this item"
           value={key}
           disabled={params.key !== 'New Key'}
-          style={{ marginBottom: '10px' }}
+          style={{ marginBottom: '10px', color: 'black', cursor: 'auto' }}
         />
-        <ReactJson
-          src={jsonData}
-          onEdit={this.onEditJSON}
-          onAdd={this.onEditJSON}
-          onDelete={this.onEditJSON}
-          name={false}
-        />
-        <Button onClick={this.onSaveData} style={{ marginTop: '10px' }}>
+        <Card title="Data">
+          <Card.Grid style={{ width: '70%', fontSize: '1.5em' }}>
+            <ReactJson
+              src={jsonData}
+              onEdit={this.onEditJSON}
+              onAdd={this.onEditJSON}
+              onDelete={this.onEditJSON}
+              name={false}
+            />
+          </Card.Grid>
+          <Card.Grid style={{ width: '30%' }}>
+            Last updated: {latestItem && this.formatDateTime(latestItem.time)}
+          </Card.Grid>
+          <Card.Grid style={{ width: '30%' }}>
+            By: {latestItem && latestItem.publishers}
+          </Card.Grid>
+          <Card.Grid style={{ width: '30%' }}>
+            <Button
+              onClick={() => this.openDataItemDiff(itemHistory[0], latestItem)}
+              disabled={itemHistory.length === 0}
+            >
+              <Icon type="diff" />
+              View diff to previous version
+            </Button>
+          </Card.Grid>
+        </Card>
+        <Button
+          onClick={this.onSaveData}
+          disabled={JSON.stringify(latestItemJson) === JSON.stringify(jsonData)}
+          style={{ marginTop: '10px' }}
+        >
           Save
         </Button>
+        <Divider orientation="left">History</Divider>
+        <List
+          itemLayout="horizontal"
+          dataSource={itemHistory}
+          renderItem={(item, i) => (
+            <List.Item>
+              {
+                <List.Item.Meta
+                  avatar={<Avatar icon="file-text" />}
+                  title="Edited"
+                  description={`${this.formatDateTime(item.time)} by ${
+                    item.publishers
+                  }`}
+                />
+              }
+              <Button
+                onClick={() => {
+                  this.openDataItemDiff(
+                    (itemHistory.length > i + 1 && itemHistory[i + 1]) || null,
+                    itemHistory[i],
+                  );
+                }}
+              >
+                <Icon type="diff" />
+              </Button>
+            </List.Item>
+          )}
+        />
+        {dataItemDiffNewItem && (
+          <DataItemDiffModal
+            visible={dataItemDiffModalVisible}
+            onClose={this.onCloseDataItemDiff}
+            oldItem={dataItemDiffOldItem}
+            newItem={dataItemDiffNewItem}
+          />
+        )}
       </div>
     );
   }
