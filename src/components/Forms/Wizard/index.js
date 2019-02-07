@@ -16,13 +16,10 @@ const { Step } = Steps;
 class WizardForm extends React.Component<
   { currentStep: number },
   {
-    // Used to redirect user to the dashboard
-    redirectToReferrer: boolean,
     error: string,
   },
 > {
   state = {
-    redirectToReferrer: false,
     error: null,
   };
 
@@ -52,32 +49,28 @@ class WizardForm extends React.Component<
 
   render() {
     const { currentStep } = this.props;
-    const { redirectToReferrer, error } = this.state;
+    const { error } = this.state;
 
-    if (redirectToReferrer) {
-      return <Redirect to="/" />;
-    } else {
-      return (
-        <Card>
-          {error && (
-            <Alert
-              message="An error occurred"
-              description={error}
-              type="error"
-              closable
-              onClose={this.onCloseAlert}
-              style={{ marginBottom: '10px' }}
-            />
-          )}
-          <Steps current={currentStep} direction="horizontal">
-            <Step title="Configure blockchain" />
-            <Step title="Setup blockchain" />
-            <Step title="Review information" />
-          </Steps>
-          <React.Fragment>{this.FormHoC(currentStep)}</React.Fragment>
-        </Card>
-      );
-    }
+    return (
+      <Card>
+        {error && (
+          <Alert
+            message="An error occurred"
+            description={error}
+            type="error"
+            closable
+            onClose={this.onCloseAlert}
+            style={{ marginBottom: '10px' }}
+          />
+        )}
+        <Steps current={currentStep} direction="horizontal">
+          <Step title="Configure blockchain" />
+          <Step title="Setup blockchain" />
+          <Step title="Review information" />
+        </Steps>
+        <React.Fragment>{this.FormHoC(currentStep)}</React.Fragment>
+      </Card>
+    );
   }
 }
 
