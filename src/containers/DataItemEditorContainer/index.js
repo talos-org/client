@@ -69,8 +69,6 @@ export default class DataItemEditorContainer extends React.Component<
           `http://localhost:5000/api/get_items_by_key?blockchainName=${blockchainName}&streamName=${streamName}&key=${key}`,
         )
         .then(response => {
-          console.log('Items:', response);
-
           let dataItems = response.data;
           let latestItem = null;
           let latestItemJson = {};
@@ -131,7 +129,6 @@ export default class DataItemEditorContainer extends React.Component<
           verbose: 'true',
         })
         .then(response => {
-          console.log('Data posted:', response);
           history.push(`/data/${match.params.stream}/${key}`);
           this.reloadData(onSaveCallback);
         })

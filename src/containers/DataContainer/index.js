@@ -43,8 +43,6 @@ export default class DataContainer extends React.Component<
       .then(response => {
         let subscribed = [];
         let unsubscribed = [];
-        console.log('Streams:', response);
-
         let streams = response.data;
         streams.forEach(stream => {
           if (stream.subscribed) {
@@ -68,7 +66,6 @@ export default class DataContainer extends React.Component<
         streams,
       })
       .then(response => {
-        console.log('Unsubscribed:', response);
         this.getStreams(blockchainName);
       })
       .catch(error => {
@@ -104,7 +101,6 @@ export default class DataContainer extends React.Component<
         rescan,
       })
       .then(response => {
-        console.log('Subscribed:', response);
         this.getStreams(blockchainName);
       })
       .catch(error => {
@@ -160,7 +156,6 @@ export default class DataContainer extends React.Component<
         isOpen,
       })
       .then(response => {
-        console.log('Created:', response);
         this.subscribeToStreams(blockchainName, new Array(streamName), false);
       })
       .catch(error => {
@@ -210,19 +205,19 @@ export default class DataContainer extends React.Component<
         render: text => <Link to={`${path}/${text}`}>{text}</Link>,
       },
       {
-        title: 'Creators',
+        title: 'Creator',
         dataIndex: 'creators',
         key: 'name',
-      },
-      {
-        title: 'Items',
-        dataIndex: 'items',
-        key: 'items',
       },
       {
         title: 'Keys',
         dataIndex: 'keys',
         key: 'keys',
+      },
+      {
+        title: 'Versions',
+        dataIndex: 'items',
+        key: 'versions',
       },
       {
         title: 'Type',
