@@ -40,7 +40,7 @@ export default class DataItemsContainer extends React.Component<
         `http://localhost:5000/api/get_stream_keys?blockchainName=${blockchainName}&streamName=${streamName}`,
       )
       .then(response => {
-        const keys = response.data;
+        const keys = response.data.reverse();
         this.setState({ keys });
       })
       .catch(error => {
