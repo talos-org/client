@@ -9,6 +9,7 @@ export default class DataItemsContainer extends React.Component<
   {
     match: object,
     location: object,
+    onEditCallback: Function,
   },
   {
     error: string,
@@ -27,21 +28,22 @@ export default class DataItemsContainer extends React.Component<
     this.reloadData();
   }
 
-  reloadData = () => {
+  reloadData = (callback = () => {}) => {
     this.getStreamKeys(
       localStorage.getItem('chainName'),
       this.props.match.params.stream,
+      callback,
     );
   };
 
-  getStreamKeys(blockchainName, streamName) {
+  getStreamKeys(blockchainName, streamName, callback = () => {}) {
     axios
       .get(
         `http://localhost:5000/api/get_stream_keys?blockchainName=${blockchainName}&streamName=${streamName}`,
       )
       .then(response => {
         const keys = response.data.reverse();
-        this.setState({ keys });
+        this.setState({ keys }, () => callback());
       })
       .catch(error => {
         console.error('Error:', error);
@@ -56,7 +58,7 @@ export default class DataItemsContainer extends React.Component<
 
   render() {
     const { error, keys } = this.state;
-    const { stream, match, location } = this.props;
+    const { match, location, onEditCallback } = this.props;
     const { path, params } = match;
 
     const columns = [
@@ -116,7 +118,7 @@ export default class DataItemsContainer extends React.Component<
           render={props => (
             <DataItemEditorContainer
               {...props}
-              onSaveCallback={this.reloadData}
+              onEditCallback={() => this.reloadData(onEditCallback)}
             />
           )}
         />

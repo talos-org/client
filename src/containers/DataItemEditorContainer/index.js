@@ -20,7 +20,7 @@ export default class DataItemEditorContainer extends React.Component<
   {
     match: object,
     location: object,
-    onSaveCallback: Function,
+    onEditCallback: Function,
   },
   {
     error: string,
@@ -53,14 +53,14 @@ export default class DataItemEditorContainer extends React.Component<
     this.reloadData();
   }
 
-  reloadData(callback = () => {}) {
+  reloadData = (callback = () => {}) => {
     this.getDataItemsByKey(
       localStorage.getItem('chainName'),
       this.props.match.params.stream,
       this.props.match.params.key,
       callback,
     );
-  }
+  };
 
   getDataItemsByKey(blockchainName, streamName, key, callback = () => {}) {
     if (key !== 'New Key') {
@@ -117,7 +117,7 @@ export default class DataItemEditorContainer extends React.Component<
 
   onSaveData = () => {
     const { key, jsonData } = this.state;
-    const { match, onSaveCallback, history } = this.props;
+    const { match, onEditCallback, history } = this.props;
 
     if (key !== '') {
       axios
@@ -130,7 +130,7 @@ export default class DataItemEditorContainer extends React.Component<
         })
         .then(response => {
           history.push(`/data/${match.params.stream}/${key}`);
-          this.reloadData(onSaveCallback);
+          this.reloadData(onEditCallback);
         })
         .catch(error => {
           console.error('Error:', error);

@@ -32,10 +32,14 @@ export default class DataContainer extends React.Component<
   }
 
   componentDidMount() {
-    this.getStreams(localStorage.getItem('chainName'));
+    this.reloadData();
   }
 
-  getStreams(blockchainName) {
+  reloadData = (callback = () => {}) => {
+    this.getStreams(localStorage.getItem('chainName'), callback);
+  };
+
+  getStreams(blockchainName, callback = () => {}) {
     return axios
       .get(
         `http://localhost:5000/api/get_streams?blockchainName=${blockchainName}`,
@@ -51,7 +55,7 @@ export default class DataContainer extends React.Component<
             unsubscribed.push(stream);
           }
         });
-        this.setState({ subscribed, unsubscribed });
+        this.setState({ subscribed, unsubscribed }, () => callback());
       })
       .catch(error => {
         console.error('Error:', error);
@@ -296,7 +300,12 @@ export default class DataContainer extends React.Component<
             </div>
           )}
         />
-        <Route path={`${path}/:stream`} component={DataItemsContainer} />
+        <Route
+          path={`${path}/:stream`}
+          render={props => (
+            <DataItemsContainer {...props} onEditCallback={this.reloadData} />
+          )}
+        />
       </Switch>
     );
   }
