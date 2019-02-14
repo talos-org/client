@@ -168,6 +168,11 @@ export default class DataItemEditorContainer extends React.Component<
     });
   };
 
+  onCloseAlert = () => {
+    const error = null;
+    this.setState({ error });
+  };
+
   render() {
     const {
       error,
@@ -185,6 +190,15 @@ export default class DataItemEditorContainer extends React.Component<
 
     return (
       <div>
+        {error && (
+          <Alert
+            message="An error occurred"
+            description={error}
+            type="error"
+            closable
+            onClose={this.onCloseAlert}
+          />
+        )}
         <span>Key</span>
         <Input
           name="key"
