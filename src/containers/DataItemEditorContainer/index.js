@@ -1,20 +1,9 @@
 // @flow
 import * as React from 'react';
-import {
-  Alert,
-  Button,
-  Divider,
-  Popconfirm,
-  Input,
-  Card,
-  Avatar,
-  List,
-  Icon,
-} from 'antd';
+import { Alert, Button, Divider, Input, Card, Avatar, List, Icon } from 'antd';
 import axios from 'axios';
 import DataItemDiffModal from '../../components/Modals/DataItemDiffModal';
 import ReactJson from 'react-json-view';
-import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
 export default class DataItemEditorContainer extends React.Component<
   {
@@ -185,8 +174,8 @@ export default class DataItemEditorContainer extends React.Component<
       dataItemDiffOldItem,
       dataItemDiffNewItem,
     } = this.state;
-    const { match, location } = this.props;
-    const { path, params } = match;
+    const { match } = this.props;
+    const { params } = match;
 
     return (
       <div>
