@@ -46,7 +46,7 @@ export default class SubscribeStreamModal extends React.Component<
         key: 'name',
       },
       {
-        title: 'Creators',
+        title: 'Creator',
         dataIndex: 'creators',
         key: 'creators',
       },
@@ -73,6 +73,7 @@ export default class SubscribeStreamModal extends React.Component<
           rowSelection={rowSelection}
           columns={columns}
           dataSource={unsubscribed}
+          size="small"
         />
         <Checkbox onChange={this.toggleRescan}>
           Rescan for old data items
