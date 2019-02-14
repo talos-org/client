@@ -42,7 +42,7 @@ export default class DataContainer extends React.Component<
   getStreams(blockchainName, callback = () => {}) {
     return axios
       .get(
-        `http://localhost:5000/api/get_streams?blockchainName=${blockchainName}`,
+        `http://localhost:5000/api/get_streams?blockchainName=${blockchainName}&count=999999&start=-999999`,
       )
       .then(response => {
         let subscribed = [];

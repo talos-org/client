@@ -55,7 +55,7 @@ export default class DataItemEditorContainer extends React.Component<
     if (key !== 'New Key') {
       axios
         .get(
-          `http://localhost:5000/api/get_items_by_key?blockchainName=${blockchainName}&streamName=${streamName}&key=${key}`,
+          `http://localhost:5000/api/get_items_by_key?blockchainName=${blockchainName}&streamName=${streamName}&key=${key}&count=999999&start=-999999`,
         )
         .then(response => {
           let dataItems = response.data;
