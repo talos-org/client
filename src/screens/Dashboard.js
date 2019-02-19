@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
+// $FlowFixMe: Figure this out. Many `antd` components throw this error
 import { Layout, Breadcrumb, Icon } from 'antd';
 import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
@@ -15,13 +16,10 @@ const { Content } = Layout;
 
 @inject('rootStore')
 @observer
-class Dashboard extends React.Component<
-  {
-    match: object,
-    location: object,
-  },
-  {},
-> {
+class Dashboard extends React.Component<{
+  match: Object,
+  location: Object,
+}> {
   @computed
   get allowAccessToDashboard() {
     // $FlowFixMe
