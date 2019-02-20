@@ -12,10 +12,6 @@ export default class DataItemDiffModal extends React.Component<
   },
   {},
 > {
-  constructor() {
-    super();
-  }
-
   formatDateTime = timeMs => {
     return new Date(timeMs * 1000).toLocaleString('en-US', {
       timeZone: 'America/Toronto',

@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Card, Steps, Alert } from 'antd';
 import { inject, observer } from 'mobx-react';
-import { Redirect, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import StepConfigure from 'components/Forms/Wizard/StepConfigure';
 import StepSetup from 'components/Forms/Wizard/StepSetup';

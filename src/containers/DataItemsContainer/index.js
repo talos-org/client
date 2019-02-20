@@ -1,14 +1,14 @@
 // @flow
 import * as React from 'react';
-import { Alert, Table, Button, Divider, Popconfirm } from 'antd';
+import { Alert, Table, Button } from 'antd';
 import axios from 'axios';
 import DataItemEditorContainer from '../../containers/DataItemEditorContainer';
-import { Link, Redirect, Switch, Route } from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 
 export default class DataItemsContainer extends React.Component<
   {
-    match: object,
-    location: object,
+    match: Object,
+    location: Object,
   },
   {
     error: string,
