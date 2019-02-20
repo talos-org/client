@@ -119,19 +119,19 @@ export interface AxiosError extends Error {
   config: AxiosRequestConfig;
   code?: string;
   request?: any;
-  response?: AxiosResponse;
+  response?: AxiosResponse<T>;
   isAxiosError: boolean;
 }
 
 export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {}
 
 export interface AxiosInstance {
-  (config: AxiosRequestConfig): AxiosPromise;
-  (url: string, config?: AxiosRequestConfig): AxiosPromise;
+  (config: AxiosRequestConfig): AxiosPromise<T>;
+  (url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
   defaults: AxiosRequestConfig;
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>,
-    response: AxiosInterceptorManager<AxiosResponse>,
+    response: AxiosInterceptorManager<AxiosResponse<T>>,
   };
   getUri(config?: AxiosRequestConfig): string;
   request(config: AxiosRequestConfig): Promise<R>;
