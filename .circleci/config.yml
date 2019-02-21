@@ -1,67 +1,10 @@
-# Check https://circleci.com/docs/2.0/ for more details
-# For config.yml syntax see https://circleci.com/docs/2.0/configuration-reference/
-version: 2
-jobs:
-  test:
-    docker:
-      # Find Docker image at https://github.com/cypress-io/cypress-docker-images
-      - image: cypress/base:10
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-
-      # Download and cache dependencies for the app and for tests
-      - restore_cache:
-          keys:
-          - dependencies-{{ checksum "package.json" }}
-          # Fallback to using the latest cache if no exact match is found
-          - dependencies-
-
-      # Install NPM dependencies quickly using "npm ci"
-      # https://on.cypress.io/continuous-integration
-      # https://docs.npmjs.com/cli/ci
-      - run:
-          name: Install dependencies
-          command: npm ci
-
-      - save_cache:
-          paths:
-            # all NPM modules
-            - ~/.npm
-            # Cypress binary (or yarn dependencies)
-            - ~/.cache
-          key: dependencies-{{ checksum "package.json" }}
-
-      - run:
-          name: Launch Talos front-end
-          command: npm run start
-          background: true
-
-      ## now run cypress headlessly
-      ## and record all of the tests.
-      ## Cypress will search for a
-      ## CYPRESS_RECORD_KEY environment
-      ## variable by default and apply
-      ## this to the run.
-      - run:
-          name: Run Cypress tests
-          command: npm run cypress:run --
-
-      ## Alternatively we could specify
-      ## a specific record key to use
-      ## like this without having to
-      ## configure environment variables
-      ## - npm run cypress:run -- --record --key <your_record_key>
-
-      ## you can also start the server and
-      ## run e2e tests and shut down server with
-      ## a single command
-      ## - npm run test:ci
-
+version: 2.1
+orbs:
+  # Always fetch the latest version of the orb
+  cypress: cypress-io/cypress@1
 workflows:
-  version: 2
-  tests:
+  build:
     jobs:
-      - test
+      # "cypress" is the name of the imported orb
+      # "run" is the name of the job defined in the orb
+      - cypress/run
