@@ -8,8 +8,8 @@ workflows:
       # "cypress" is the name of the imported orb
       # "run" is the name of the job defined in the orb
       - cypress/run:
-        # Run the app, or else Cypress will error out
-        start: npm start
-        # Wait for the server to respond before running the tests.
-        # This is just a precautionary step.
-        wait-on: 'http://localhost:3000'
+          # Run the app, or else Cypress will error out
+          start: npm start
+          # Wait for the server to respond before running the tests.
+          # This is just a precautionary step.
+          wait-on: 'http://localhost:3000'
