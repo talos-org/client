@@ -8,6 +8,9 @@ workflows:
       # "cypress" is the name of the imported orb
       # "run" is the name of the job defined in the orb
       - cypress/run:
+          # Custom Cupress executor that runs tests in a Chrome browser (v69)
+          executor: cypress/browsers-chrome69
+          browser: chrome
           # Run the app, or else Cypress will error out
           start: npm start
           # Wait for the server to respond before running the tests.
