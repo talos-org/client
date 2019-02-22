@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 
 @inject('rootStore')
 @observer
-class BaseMenu extends React.Component<{}> {
-  /* TODO: remove use of mobx for keeping track of tab here, we are using url path instead */
-
+class BaseMenu extends React.Component<{ tab: string }> {
+  // TODO: remove use of mobx for keeping track of tab here.
+  // We are using url path instead
   constructor(props: any) {
     super(props);
     this.handleSelect = this.handleSelect.bind(this);
@@ -27,17 +27,24 @@ class BaseMenu extends React.Component<{}> {
     return this.props.rootStore.rootState.sidebarCollapsed;
   }
 
-  // $FlowFixMe
-  handleSelect = ({ item, key, selectedKeys }) => {
+  handleSelect = ({
+    item,
+    key,
+    selectedKeys,
+  }: {
+    item: string,
+    key: string,
+    selectedKeys: string[],
+  }) => {
+    // $FlowFixMe
     this.props.rootStore.rootState.currentTab = key;
   };
 
   render() {
     const { tab } = this.props;
-
     return (
       <Menu
-        selectedKeys={new Array(tab)}
+        selectedKeys={[...tab]}
         mode="inline"
         onSelect={this.handleSelect}
         theme="dark"

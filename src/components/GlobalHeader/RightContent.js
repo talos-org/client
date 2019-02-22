@@ -44,10 +44,11 @@ class RightContent extends React.Component<
       this.setState({ confirmLoading: false, visible: false });
     }, 1500);
 
+    // $FlowFixMe
     this.props.rootStore.disconnect();
   };
 
-  handleMenuClick = ({ key }) => {
+  handleMenuClick = ({ key }: { key: string }) => {
     if (key === 'disconnect') {
       this.showModal();
     }
@@ -69,6 +70,7 @@ class RightContent extends React.Component<
           <Icon type="setting" />
           <span>—</span>
         </Menu.Item>
+        {/* $FlowFixMe */}
         <Menu.Divider />
         <Menu.Item key="disconnect">
           <Icon type="logout" />

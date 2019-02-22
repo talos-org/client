@@ -7,8 +7,8 @@ import { Link, Switch, Route } from 'react-router-dom';
 
 export default class DataItemsContainer extends React.Component<
   {
-    match: object,
-    location: object,
+    match: Object,
+    location: Object,
     onEditCallback: Function,
   },
   {

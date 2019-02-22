@@ -7,16 +7,16 @@ import ReactJson from 'react-json-view';
 
 export default class DataItemEditorContainer extends React.Component<
   {
-    match: object,
-    location: object,
+    match: Object,
+    location: Object,
     onEditCallback: Function,
   },
   {
     error: string,
-    latestItem: object,
-    latestItemJson: object,
+    latestItem: Object,
+    latestItemJson: Object,
     key: string,
-    jsonData: object,
+    jsonData: Object,
     itemHistory: Array,
     dataItemDiffModalVisible: boolean,
     dataItemDiffOldItem: Object,

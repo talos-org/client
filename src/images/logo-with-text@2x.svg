@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="286px" height="309px" viewBox="0 0 286 309" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53 (72520) - https://sketchapp.com -->
+    <title>logo-text@2x</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="logo-new--inverted-text" transform="translate(-126.000000, -96.000000)">
+            <g id="logo-text" transform="translate(126.000000, 96.000000)">
+                <g id="logo--isometric" fill-rule="nonzero" stroke="#FEFEFE" stroke-width="1.5">
+                    <g id="iso-cube--middle" transform="translate(0.000000, 50.000000)">
+                        <path d="M123.787395,0.88946073 L1.3893277,88.0052557 L123.699978,158.094258 L246.098046,70.9784634 L123.787395,0.88946073 Z" id="Rectangle" fill="#FEFEFE"></path>
+                        <g id="Group" transform="translate(0.000000, 71.000000)" stroke-linecap="square">
+                            <path d="M123.743687,87.9837191 L123.743687,136.5" id="Line-3"></path>
+                        </g>
+                    </g>
+                    <g id="iso-cube--bottom" transform="translate(0.000000, 100.000000)">
+                        <path d="M123.787395,0.88946073 L1.3893277,88.0052557 L123.699978,158.094258 L246.098046,70.9784634 L123.787395,0.88946073 Z" id="Shape" fill="#FEFEFE"></path>
+                        <path d="M244.88402,121.842536 L2.51593611,138.650848 L123.699978,208.094258 L244.88402,121.842536 Z" id="Path"></path>
+                        <g id="Group" transform="translate(0.000000, 71.000000)" stroke-linecap="square">
+                            <path d="M246.487373,0.5 L246.487373,49.5" id="Line-2"></path>
+                            <path d="M123.743687,87.9837191 L123.743687,136.5" id="Line-3"></path>
+                        </g>
+                    </g>
+                    <g id="iso-cube--top">
+                        <path d="M123.787395,0.88946073 L1.3893277,88.0052557 L123.699978,158.094258 L246.098046,70.9784634 L123.787395,0.88946073 Z" id="Rectangle" fill="#FEFEFE"></path>
+                        <path d="M244.88402,121.842536 L2.51593611,138.650848 L123.699978,208.094258 L244.88402,121.842536 Z" id="Path"></path>
+                        <g id="Group" transform="translate(0.000000, 71.000000)" stroke-linecap="square">
+                            <path d="M123.743687,87.9837191 L123.743687,136.5" id="Line-3"></path>
+                        </g>
+                    </g>
+                </g>
+                <text id="Talos" font-family="JosefinSans-SemiBold, Josefin Sans" font-size="56" font-weight="500" letter-spacing="-0.9046152" fill="#FEFEFE">
+                    <tspan x="162" y="300">Talos</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
