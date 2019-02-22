@@ -39,7 +39,7 @@ export default class DataItemsContainer extends React.Component<
   getStreamKeys(blockchainName, streamName, callback = () => {}) {
     axios
       .get(
-        `http://localhost:5000/api/get_stream_keys?blockchainName=${blockchainName}&streamName=${streamName}&count=999999&start=-999999`,
+        `http://localhost:5000/api/data/get_stream_keys?blockchainName=${blockchainName}&streamName=${streamName}&count=999999&start=-999999`,
       )
       .then(response => {
         const keys = response.data.reverse();

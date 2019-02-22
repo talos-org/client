@@ -55,7 +55,7 @@ export default class DataItemEditorContainer extends React.Component<
     if (key !== 'New Key') {
       axios
         .get(
-          `http://localhost:5000/api/get_items_by_key?blockchainName=${blockchainName}&streamName=${streamName}&key=${key}&count=999999&start=-999999`,
+          `http://localhost:5000/api/data/get_items_by_keys?blockchainName=${blockchainName}&streamName=${streamName}&keys=${key}`,
         )
         .then(response => {
           let dataItems = response.data;
@@ -68,6 +68,11 @@ export default class DataItemEditorContainer extends React.Component<
             latestItem = dataItems.pop();
             itemHistory = dataItems.reverse();
             jsonData = JSON.parse(latestItem.data.json);
+
+            if (typeof jsonData !== 'object') {
+              jsonData = JSON.parse(jsonData);
+            }
+
             latestItemJson = jsonData; // save copy of data before its edited by user, used to know when to disable 'Save' button
           }
 
@@ -100,7 +105,6 @@ export default class DataItemEditorContainer extends React.Component<
 
   onEditJSON = edit => {
     const jsonData = edit.updated_src;
-    console.log(jsonData);
     this.setState({ jsonData });
   };
 
@@ -110,11 +114,11 @@ export default class DataItemEditorContainer extends React.Component<
 
     if (key !== '') {
       axios
-        .post('http://localhost:5000/api/publish_item', {
+        .post('http://localhost:5000/api/data/publish_item', {
           blockchainName: localStorage.getItem('chainName'),
           streamName: match.params.stream,
           keys: new Array(key),
-          data: jsonData,
+          data: JSON.stringify(jsonData),
           verbose: 'true',
         })
         .then(response => {
