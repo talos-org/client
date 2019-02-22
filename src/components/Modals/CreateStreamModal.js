@@ -4,7 +4,7 @@ import { Modal, Input, Select } from 'antd';
 
 const Option = Select.Option;
 
-export default class SubscribeStreamModal extends React.Component<
+export default class CreateStreamModal extends React.Component<
   {
     visible: boolean,
     confirmLoading: boolean,
