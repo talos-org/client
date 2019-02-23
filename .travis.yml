@@ -3,7 +3,7 @@ node_js:
   - '10'
   - '9'
 install:
-  - npm install -g codecov
+  - npm install
 jobs:
   include:
     - stage: test
@@ -11,6 +11,6 @@ jobs:
     - stage: generate
       # This will ensure that the latest installed `codecov` is ran
       # each time
-      script: codecov
+      script: ./node_modules/.bin/codecov
 notifications:
   email: false
