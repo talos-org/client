@@ -32,19 +32,21 @@ export default class DataContainer extends React.Component<
   }
 
   componentDidMount() {
-    this.getStreams(localStorage.getItem('chainName'));
+    this.reloadData();
   }
 
-  getStreams(blockchainName) {
+  reloadData = (callback = () => {}) => {
+    this.getStreams(localStorage.getItem('chainName'), callback);
+  };
+
+  getStreams(blockchainName, callback = () => {}) {
     return axios
       .get(
-        `http://localhost:5000/api/get_streams?blockchainName=${blockchainName}`,
+        `http://localhost:5000/api/data_streams/get_streams?blockchainName=${blockchainName}&count=999999&start=-999999`,
       )
       .then(response => {
         let subscribed = [];
         let unsubscribed = [];
-        console.log('Streams:', response);
-
         let streams = response.data;
         streams.forEach(stream => {
           if (stream.subscribed) {
@@ -53,7 +55,7 @@ export default class DataContainer extends React.Component<
             unsubscribed.push(stream);
           }
         });
-        this.setState({ subscribed, unsubscribed });
+        this.setState({ subscribed, unsubscribed }, () => callback());
       })
       .catch(error => {
         console.error('Error:', error);
@@ -63,12 +65,11 @@ export default class DataContainer extends React.Component<
 
   unsubscribeFromStreams(blockchainName, streams) {
     return axios
-      .post('http://localhost:5000/api/unsubscribe', {
+      .post('http://localhost:5000/api/data_streams/unsubscribe', {
         blockchainName,
         streams,
       })
       .then(response => {
-        console.log('Unsubscribed:', response);
         this.getStreams(blockchainName);
       })
       .catch(error => {
@@ -98,13 +99,12 @@ export default class DataContainer extends React.Component<
     let error = null;
 
     return axios
-      .post('http://localhost:5000/api/subscribe', {
+      .post('http://localhost:5000/api/data_streams/subscribe', {
         blockchainName,
         streams,
         rescan,
       })
       .then(response => {
-        console.log('Subscribed:', response);
         this.getStreams(blockchainName);
       })
       .catch(error => {
@@ -154,13 +154,12 @@ export default class DataContainer extends React.Component<
     let error = null;
 
     return axios
-      .post('http://localhost:5000/api/create_stream', {
+      .post('http://localhost:5000/api/data_streams/create_stream', {
         blockchainName,
         streamName,
         isOpen,
       })
       .then(response => {
-        console.log('Created:', response);
         this.subscribeToStreams(blockchainName, new Array(streamName), false);
       })
       .catch(error => {
@@ -177,7 +176,7 @@ export default class DataContainer extends React.Component<
       visible: true,
       confirmLoading: true,
     };
-    const isOpen = type === 'Open' ? 'true' : 'false';
+    const isOpen = type === 'Open' ? true : false;
     this.setState({ createModalState }, () => {
       this.createStream(blockchainName, streamName, isOpen);
     });
@@ -210,19 +209,19 @@ export default class DataContainer extends React.Component<
         render: text => <Link to={`${path}/${text}`}>{text}</Link>,
       },
       {
-        title: 'Creators',
+        title: 'Creator',
         dataIndex: 'creators',
         key: 'name',
-      },
-      {
-        title: 'Items',
-        dataIndex: 'items',
-        key: 'items',
       },
       {
         title: 'Keys',
         dataIndex: 'keys',
         key: 'keys',
+      },
+      {
+        title: 'Versions',
+        dataIndex: 'items',
+        key: 'versions',
       },
       {
         title: 'Type',
@@ -301,7 +300,12 @@ export default class DataContainer extends React.Component<
             </div>
           )}
         />
-        <Route path={`${path}/:stream`} component={DataItemsContainer} />
+        <Route
+          path={`${path}/:stream`}
+          render={props => (
+            <DataItemsContainer {...props} onEditCallback={this.reloadData} />
+          )}
+        />
       </Switch>
     );
   }

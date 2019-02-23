@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Button, Divider, Input, Card, Avatar, List, Icon } from 'antd';
+import { Alert, Button, Divider, Input, Card, Avatar, List, Icon } from 'antd';
 import axios from 'axios';
 import DataItemDiffModal from '../../components/Modals/DataItemDiffModal';
 import ReactJson from 'react-json-view';
@@ -9,7 +9,7 @@ export default class DataItemEditorContainer extends React.Component<
   {
     match: Object,
     location: Object,
-    onSaveCallback: Function,
+    onEditCallback: Function,
   },
   {
     error: string,
@@ -42,24 +42,22 @@ export default class DataItemEditorContainer extends React.Component<
     this.reloadData();
   }
 
-  reloadData(callback = () => {}) {
+  reloadData = (callback = () => {}) => {
     this.getDataItemsByKey(
       localStorage.getItem('chainName'),
       this.props.match.params.stream,
       this.props.match.params.key,
       callback,
     );
-  }
+  };
 
   getDataItemsByKey(blockchainName, streamName, key, callback = () => {}) {
     if (key !== 'New Key') {
       axios
         .get(
-          `http://localhost:5000/api/get_items_by_key?blockchainName=${blockchainName}&streamName=${streamName}&key=${key}`,
+          `http://localhost:5000/api/data/get_items_by_keys?blockchainName=${blockchainName}&streamName=${streamName}&keys=${key}`,
         )
         .then(response => {
-          console.log('Items:', response);
-
           let dataItems = response.data;
           let latestItem = null;
           let latestItemJson = {};
@@ -70,6 +68,11 @@ export default class DataItemEditorContainer extends React.Component<
             latestItem = dataItems.pop();
             itemHistory = dataItems.reverse();
             jsonData = JSON.parse(latestItem.data.json);
+
+            if (typeof jsonData !== 'object') {
+              jsonData = JSON.parse(jsonData);
+            }
+
             latestItemJson = jsonData; // save copy of data before its edited by user, used to know when to disable 'Save' button
           }
 
@@ -102,27 +105,25 @@ export default class DataItemEditorContainer extends React.Component<
 
   onEditJSON = edit => {
     const jsonData = edit.updated_src;
-    console.log(jsonData);
     this.setState({ jsonData });
   };
 
   onSaveData = () => {
     const { key, jsonData } = this.state;
-    const { match, onSaveCallback, history } = this.props;
+    const { match, onEditCallback, history } = this.props;
 
     if (key !== '') {
       axios
-        .post('http://localhost:5000/api/publish_item', {
+        .post('http://localhost:5000/api/data/publish_item', {
           blockchainName: localStorage.getItem('chainName'),
           streamName: match.params.stream,
           keys: new Array(key),
-          data: jsonData,
+          data: JSON.stringify(jsonData),
           verbose: 'true',
         })
         .then(response => {
-          console.log('Data posted:', response);
           history.push(`/data/${match.params.stream}/${key}`);
-          this.reloadData(onSaveCallback);
+          this.reloadData(onEditCallback);
         })
         .catch(error => {
           console.error('Error:', error);
@@ -160,8 +161,14 @@ export default class DataItemEditorContainer extends React.Component<
     });
   };
 
+  onCloseAlert = () => {
+    const error = null;
+    this.setState({ error });
+  };
+
   render() {
     const {
+      error,
       latestItem,
       latestItemJson,
       key,
@@ -176,6 +183,15 @@ export default class DataItemEditorContainer extends React.Component<
 
     return (
       <div>
+        {error && (
+          <Alert
+            message="An error occurred"
+            description={error}
+            type="error"
+            closable
+            onClose={this.onCloseAlert}
+          />
+        )}
         <span>Key</span>
         <Input
           name="key"

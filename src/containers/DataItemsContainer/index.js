@@ -9,17 +9,18 @@ export default class DataItemsContainer extends React.Component<
   {
     match: Object,
     location: Object,
+    onEditCallback: Function,
   },
   {
     error: string,
-    uniqueDataItems: Array,
+    keys: Array,
   },
 > {
   constructor() {
     super();
     this.state = {
       error: null /* error message from REST call */,
-      uniqueDataItems: [],
+      keys: [],
     };
   }
 
@@ -27,34 +28,22 @@ export default class DataItemsContainer extends React.Component<
     this.reloadData();
   }
 
-  reloadData = () => {
-    this.getStreamItems(
+  reloadData = (callback = () => {}) => {
+    this.getStreamKeys(
       localStorage.getItem('chainName'),
       this.props.match.params.stream,
+      callback,
     );
   };
 
-  getStreamItems(blockchainName, streamName) {
+  getStreamKeys(blockchainName, streamName, callback = () => {}) {
     axios
       .get(
-        `http://localhost:5000/api/get_stream_items?blockchainName=${blockchainName}&streamName=${streamName}`,
+        `http://localhost:5000/api/data/get_stream_keys?blockchainName=${blockchainName}&streamName=${streamName}&count=999999&start=-999999`,
       )
       .then(response => {
-        console.log('Data items:', response);
-
-        let uniqueData = {};
-        let dataItems = response.data;
-        /* traverse data items backwards, later data items have latest timestamps */
-        for (let i = dataItems.length - 1; i >= 0; i--) {
-          let item = dataItems[i];
-          let key = item.keys[0];
-          if (!uniqueData.hasOwnProperty(key)) {
-            uniqueData[key] = item;
-          }
-        }
-
-        let uniqueDataItems = Object.values(uniqueData);
-        this.setState({ uniqueDataItems });
+        const keys = response.data.reverse();
+        this.setState({ keys }, () => callback());
       })
       .catch(error => {
         console.error('Error:', error);
@@ -68,25 +57,25 @@ export default class DataItemsContainer extends React.Component<
   };
 
   render() {
-    const { error, uniqueDataItems } = this.state;
-    const { stream, match, location } = this.props;
+    const { error, keys } = this.state;
+    const { match, location, onEditCallback } = this.props;
     const { path, params } = match;
 
     const columns = [
       {
         title: 'Key',
-        dataIndex: 'keys',
-        key: 'keys',
+        dataIndex: 'key',
+        key: 'key',
         render: text => <Link to={`${location.pathname}/${text}`}>{text}</Link>,
       },
       {
-        title: 'Publishers',
-        dataIndex: 'publishers',
-        key: 'publishers',
+        title: 'Last Publisher',
+        dataIndex: 'last.publishers',
+        key: 'publisher',
       },
       {
         title: 'Last Modified',
-        dataIndex: 'time',
+        dataIndex: 'last.time',
         key: 'time',
         render: text =>
           new Date(text * 1000).toLocaleString('en-US', {
@@ -94,9 +83,9 @@ export default class DataItemsContainer extends React.Component<
           }),
       },
       {
-        title: 'Confirmations',
-        dataIndex: 'confirmations',
-        key: 'confirmations',
+        title: 'Versions',
+        dataIndex: 'items',
+        key: 'versions',
       },
     ];
 
@@ -117,7 +106,7 @@ export default class DataItemsContainer extends React.Component<
                 />
               )}
               <h1>{`Data for '${params.stream}' Stream`}</h1>
-              <Table columns={columns} dataSource={uniqueDataItems} />
+              <Table columns={columns} dataSource={keys} />
               <Link to={`${location.pathname}/New Key`}>
                 <Button onClick={() => {}}>Add Key</Button>
               </Link>
@@ -129,7 +118,7 @@ export default class DataItemsContainer extends React.Component<
           render={props => (
             <DataItemEditorContainer
               {...props}
-              onSaveCallback={this.reloadData}
+              onEditCallback={() => this.reloadData(onEditCallback)}
             />
           )}
         />

@@ -19,7 +19,13 @@ export default class DataItemDiffModal extends React.Component<
   };
 
   prettyPrintJson = json => {
-    return JSON.stringify(JSON.parse(json), null, 2);
+    let jsonData = JSON.parse(json);
+
+    if (typeof jsonData !== 'object') {
+      jsonData = JSON.parse(jsonData);
+    }
+
+    return JSON.stringify(jsonData, null, 2);
   };
 
   render() {
