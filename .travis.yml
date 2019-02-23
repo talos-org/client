@@ -11,6 +11,6 @@ jobs:
     - stage: generate
       # This will ensure that the latest installed `codecov` is ran
       # each time
-      script: ./node_modules/.bin/codecov
+      script: npm run codecov:generate
 notifications:
   email: false

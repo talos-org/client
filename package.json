@@ -13,6 +13,7 @@
   },
   "homepage": "https://github.com/talos-org/client#readme",
   "scripts": {
+    "codecov:generate": "codecov",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "glow": "glow --watch",
@@ -103,6 +104,7 @@
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "babel-plugin-styled-components": "^1.10.0",
     "canvas": "^2.2.0",
+    "codecov": "^3.2.0",
     "cypress": "^3.1.5",
     "cz-conventional-changelog": "^2.1.0",
     "enzyme": "^3.7.0",
