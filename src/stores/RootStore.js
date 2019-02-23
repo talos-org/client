@@ -1,6 +1,7 @@
 // @flow
 import { action, computed, observable } from 'mobx';
 
+import ApplicationStore from 'stores/ApplicationStore';
 import BlockchainStore from 'stores/domain/Blockchain';
 import GlobalHeaderStore from 'stores/ui/GlobalHeader';
 import GraphStore from 'stores/domain/Graph';
@@ -9,25 +10,30 @@ import { get, remove } from 'utils/chainName';
 
 export default class RootStore {
   @observable
+  // FIXME: Remove the use of a “root“ state
   rootState = {
     currentBlockchain: '',
+    // FIXME: Move this to `ApplicationStore`
     disconnect: false,
-    // FIXME: This, along with some other of these need
-    // to be moved into the global UI store
+    // TODO: Remove this (↓) as it’s no longer being used
     currentTab: 'monitoring',
     sidebarCollapsed: false,
     wizard: {
       currentStep: 0,
     },
   };
+
+  applicationStore: ApplicationStore;
   blockchainStore: BlockchainStore;
   globalHeaderStore: GlobalHeaderStore;
   graphStore: GraphStore;
 
   constructor() {
+    this.applicationStore = new ApplicationStore(this);
     this.blockchainStore = new BlockchainStore(this);
     this.globalHeaderStore = new GlobalHeaderStore(this);
     this.graphStore = new GraphStore(this);
+
     this.rootState.currentBlockchain = get('chainName');
   }
 
