@@ -1,16 +1,8 @@
 language: node_js
 node_js:
   - '10'
-  - '9'
 install:
   - npm install
-jobs:
-  include:
-    - stage: test
-      script: npm t
-    - stage: generate
-      # This will ensure that the latest installed `codecov` is ran
-      # each time
-      script: npm run codecov:generate
+script: npm run test:ci
 notifications:
   email: false
