@@ -19,7 +19,8 @@
     "start": "node scripts/start.js",
     "start:ff": "BROWSER='Firefox Nightly' node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "test:ci": "node scripts/test.js --coverageReporters=text-lcov | coveralls"
   },
   "husky": {
     "hooks": {
@@ -59,15 +60,16 @@
     "eslint-plugin-react": "7.11.1",
     "file-loader": "2.0.0",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
-    "fs-extra": "7.0.0",
     "html-webpack-plugin": "4.0.0-alpha.2",
     "identity-obj-proxy": "3.0.0",
+    "is-online": "^8.0.0",
     "jest": "23.6.0",
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
     "mini-css-extract-plugin": "0.4.3",
     "mobx": "^5.6.0",
     "mobx-react": "^5.3.6",
+    "mobx-utils": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "polished": "^2.3.1",
@@ -101,6 +103,8 @@
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "babel-plugin-styled-components": "^1.10.0",
     "canvas": "^2.2.0",
+    "codecov": "^3.2.0",
+    "coveralls": "^3.0.3",
     "cypress": "^3.1.5",
     "cz-conventional-changelog": "^2.1.0",
     "enzyme": "^3.7.0",
@@ -125,6 +129,8 @@
     "not op_mini all"
   ],
   "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage/",
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/*.d.ts"

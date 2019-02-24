@@ -14,6 +14,12 @@ import { Logo, LogoInverted } from 'components/ui/Logo';
 @observer
 class WelcomeComponent extends React.Component<{}> {
   @computed
+  get connected() {
+    // $FlowFixMe
+    return this.props.rootStore.applicationStore.connected;
+  }
+
+  @computed
   get currentBlockchain() {
     // $FlowFixMe
     return this.props.rootStore.rootState.currentBlockchain;
@@ -93,10 +99,18 @@ class WelcomeComponent extends React.Component<{}> {
                   lg: 5,
                 }}
               >
-                <Button block onClick={this.handleExisting}>
+                <Button
+                  block
+                  disabled={!this.connected}
+                  onClick={this.handleExisting}
+                >
                   Connect to existing blockchain
                 </Button>
-                <Button block onClick={this.handleNew}>
+                <Button
+                  block
+                  disabled={!this.connected}
+                  onClick={this.handleNew}
+                >
                   Create new blockchain
                 </Button>
               </ButtonGroup>
