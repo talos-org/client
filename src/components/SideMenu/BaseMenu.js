@@ -44,7 +44,7 @@ class BaseMenu extends React.Component<{ tab: string }> {
     const { tab } = this.props;
     return (
       <Menu
-        selectedKeys={[...tab]}
+        selectedKeys={[tab]}
         mode="inline"
         onSelect={this.handleSelect}
         theme="dark"
