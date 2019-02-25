@@ -15,7 +15,6 @@
   "scripts": {
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "glow": "glow --watch",
     "start": "node scripts/start.js",
     "start:ff": "BROWSER='Firefox Nightly' node scripts/start.js",
     "build": "node scripts/build.js",
@@ -103,7 +102,6 @@
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "babel-plugin-styled-components": "^1.10.0",
     "canvas": "^2.2.0",
-    "codecov": "^3.2.0",
     "coveralls": "^3.0.3",
     "cypress": "^3.1.5",
     "cz-conventional-changelog": "^2.1.0",
