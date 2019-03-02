@@ -17,6 +17,10 @@ Copy the contents of `env.example` into `.env` like so:
 $ cp .env.example .env
 ```
 
+### Notes
+
+`REACT_APP_BASE_URL` can be ignored unless you are running the Talos client on macOS, in which case, set it to the external IP address of the Google Cloud Platform (GCP) Virtual Machine (VM)
+
 ## Install dependencies
 
 ### npm
