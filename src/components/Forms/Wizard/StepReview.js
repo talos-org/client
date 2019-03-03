@@ -5,7 +5,7 @@ import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 
-import { launchDaemon } from 'api/wizard';
+import { createChain, launchDaemon } from 'api/wizard';
 import { set } from 'utils/chainName';
 
 const { TextArea } = Input;
@@ -72,6 +72,8 @@ class StepReview extends React.Component<
 
         if (!error) {
           this.setState({ loading: true }, () => {
+            createChain({ blockchainName }).then(({ data: { status } }) => {});
+
             launchDaemon({ blockchainName }).then(({ data }) => {
               this.setState({ loading: false }, () => {
                 // $FlowFixMe
@@ -106,6 +108,7 @@ class StepReview extends React.Component<
           })(
             <TextArea
               autosize={{ minRows: 2, maxRows: 6 }}
+              disabled={true}
               placeholder="Give your Blockchain a description"
             />,
           )}
@@ -113,22 +116,22 @@ class StepReview extends React.Component<
         <Form.Item label="Maximum block size">
           {getFieldDecorator('maxBlocksize', {
             initialValue: String(this.maxBlockSize),
-          })(<Input placeholder="Maximum block size" />)}
+          })(<Input disabled={true} placeholder="Maximum block size" />)}
         </Form.Item>
         <Form.Item label="Mining diversity">
           {getFieldDecorator('miningDiversity', {
             initialValue: this.miningDiversity,
-          })(<Slider max={1.0} min={0.1} step={0.1} />)}
+          })(<Slider disabled={true} max={1.0} min={0.1} step={0.1} />)}
         </Form.Item>
         <Form.Item label="Mining turnover">
           {getFieldDecorator('miningTurnover', {
             initialValue: this.miningTurnover,
-          })(<Slider max={1.0} min={0.1} step={0.1} />)}
+          })(<Slider disabled={true} max={1.0} min={0.1} step={0.1} />)}
         </Form.Item>
         <Form.Item label="Target block time (in seconds)">
           {getFieldDecorator('targetBlockTime', {
             initialValue: this.targetBlockTime,
-          })(<Input placeholder="Target block time" />)}
+          })(<Input disabled={true} placeholder="Target block time" />)}
         </Form.Item>
         <Form.Item>
           <Button onClick={handlePrevious} style={{ marginRight: '5px' }}>

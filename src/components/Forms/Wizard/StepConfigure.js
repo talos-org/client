@@ -4,8 +4,7 @@ import { Button, Form, Input } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
 
-import { createChain, doesBlockchainExist } from 'api/wizard';
-import { notify } from 'components/ui/Notification';
+import { doesBlockchainExist } from 'api/wizard';
 
 const { TextArea } = Input;
 
@@ -57,7 +56,7 @@ class StepConfigure extends React.Component<
             this.setState({ validateStatus: 'error' }, () => {
               this.inputEnabled = true;
               if (error.message === 'Network Error') {
-                callback(`Something went wrong. Please try again`);
+                callback('Something went wrong. Please try again');
               } else {
                 callback(
                   `The blockchain name ${value} is taken. Try another one`,
@@ -79,8 +78,7 @@ class StepConfigure extends React.Component<
     const validateForm = () => {
       this.setState({ loading: true }, () => {
         validateFields((error, { blockchainName, blockchainDescription }) => {
-          // Can ignore the error here because validation is done
-          // externally
+          // Can ignore the error here because validation is done externally
           this.setState({ loading: true }, () => {
             // $FlowFixMe
             this.props.rootStore.currentBlockchainStore.set(
@@ -93,13 +91,8 @@ class StepConfigure extends React.Component<
               blockchainDescription,
             );
 
-            createChain({ blockchainName }).then(({ data: { status } }) => {
-              this.setState({ loading: false }, () => {
-                notify('success', status);
-                // $FlowFixMe
-                this.props.rootStore.rootState.wizard.currentStep++;
-              });
-            });
+            // $FlowFixMe
+            this.props.rootStore.rootState.wizard.currentStep++;
           });
         });
       });
@@ -113,7 +106,6 @@ class StepConfigure extends React.Component<
           validateStatus={validateStatus}
         >
           {getFieldDecorator('blockchainName', {
-            // $FlowFixMe
             initialValue: this.props.rootStore.currentBlockchainStore.get(
               'name',
             ),
@@ -132,7 +124,9 @@ class StepConfigure extends React.Component<
         </Form.Item>
         <Form.Item label="Description">
           {getFieldDecorator('blockchainDescription', {
-            initialValue: '',
+            initialValue: this.props.rootStore.currentBlockchainStore.get(
+              'description',
+            ),
           })(
             <TextArea
               autosize={{ minRows: 2, maxRows: 6 }}

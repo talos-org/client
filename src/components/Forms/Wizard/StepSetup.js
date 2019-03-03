@@ -80,7 +80,6 @@ class StepSetup extends React.Component<
     };
 
     const handlePrevious = () => {
-      // FIXME: This will step back, but won’t populate the fields
       // $FlowFixMe
       this.props.rootStore.rootState.wizard.currentStep--;
     };
