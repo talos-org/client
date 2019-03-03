@@ -4,7 +4,8 @@ import { Button, Form, Input } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
 
-import mock from 'api/mock';
+import { createChain, doesBlockchainExist } from 'api/wizard';
+import { notify } from 'components/ui/Notification';
 
 const { TextArea } = Input;
 
@@ -15,71 +16,94 @@ class StepConfigure extends React.Component<
   {},
   {
     disabled: boolean,
-    isDirty: boolean,
     loading: boolean,
     validateStatus: 'success' | 'warning' | 'error' | 'validating' | '',
   },
 > {
+  @observable inputEnabled = true;
   @observable isDirty: boolean = false;
   state = {
     disabled: true,
-    isDirty: false,
     loading: false,
     validateStatus: '',
   };
 
-  constructor(props: any) {
-    super(props);
-    this.checkIfBlockchainExists = this.checkIfBlockchainExists.bind(this);
-    this.validateForm = this.validateForm.bind(this);
-  }
-
   // $FlowFixMe
   checkIfBlockchainExists = (rules, value, callback) => {
-    setTimeout(() => {
-      if (!value && this.isDirty) {
+    // $FlowFixMe
+    const {
+      form: { isFieldTouched },
+    } = this.props;
+    this.setState({ validateStatus: 'validating' });
+    if (isFieldTouched('blockchainName')) {
+      if (!value) {
         this.setState({ validateStatus: 'error' }, () => {
-          callback('error');
+          callback('A blockchain name is required');
         });
       } else {
-        // Try and create a blockchain here
-        this.setState({ validateStatus: 'success' }, () => {
-          this.setState({ disabled: false });
-        });
+        this.inputEnabled = false;
+        this.setState({ disabled: true });
+
+        doesBlockchainExist(value)
+          .then(({ data: { status } }) => {
+            this.setState({ validateStatus: 'success' }, () => {
+              this.inputEnabled = true;
+              this.setState({ disabled: false }, () => {
+                callback(status);
+              });
+            });
+          })
+          .catch(error => {
+            this.setState({ validateStatus: 'error' }, () => {
+              this.inputEnabled = true;
+              if (error.message === 'Network Error') {
+                callback(`Something went wrong. Please try again`);
+              } else {
+                callback(
+                  `The blockchain name ${value} is taken. Try another one`,
+                );
+              }
+            });
+          });
       }
-    }, 500);
-  };
-
-  handleBlur = (event: SyntheticFocusEvent<HTMLInputElement>) => {
-    this.isDirty = this.isDirty || !event.currentTarget.value;
-    this.setState({ validateStatus: 'validating' });
-  };
-
-  validateForm = () => {
-    this.setState({ loading: true }, () => {
-      mock.then(t => {
-        new Promise((resolve, reject) => {
-          setTimeout(() => {
-            if (t) {
-              this.props.rootStore.blockchainStore.name = document.querySelector(
-                '#blockchainName',
-              ).value;
-              this.props.rootStore.blockchainStore.description = document.querySelector(
-                '#blockchainDescription',
-              ).value;
-              this.props.rootStore.rootState.wizard.currentStep++;
-            }
-          }, 1500);
-        });
-      });
-    });
+    }
   };
 
   render() {
     // $FlowFixMe
     const { form } = this.props;
+    const { validateFields } = form;
     const { getFieldDecorator } = form;
     const { disabled, loading, validateStatus } = this.state;
+
+    const validateForm = () => {
+      this.setState({ loading: true }, () => {
+        validateFields((error, { blockchainName, blockchainDescription }) => {
+          // Can ignore the error here because validation is done
+          // externally
+          this.setState({ loading: true }, () => {
+            // $FlowFixMe
+            this.props.rootStore.currentBlockchainStore.set(
+              'name',
+              blockchainName,
+            );
+            // $FlowFixMe
+            this.props.rootStore.currentBlockchainStore.set(
+              'description',
+              blockchainDescription,
+            );
+
+            createChain({ blockchainName }).then(({ data: { status } }) => {
+              this.setState({ loading: false }, () => {
+                notify('success', status);
+                // $FlowFixMe
+                this.props.rootStore.rootState.wizard.currentStep++;
+              });
+            });
+          });
+        });
+      });
+    };
 
     return (
       <Form layout="horizontal">
@@ -89,18 +113,19 @@ class StepConfigure extends React.Component<
           validateStatus={validateStatus}
         >
           {getFieldDecorator('blockchainName', {
-            initialValue: '',
+            // $FlowFixMe
+            initialValue: this.props.rootStore.currentBlockchainStore.get(
+              'name',
+            ),
             rules: [
               {
-                required: true,
-                message: 'A blockchain name is required',
                 validator: this.checkIfBlockchainExists,
               },
             ],
             validateTrigger: 'onBlur',
           })(
             <Input
-              onBlur={this.handleBlur}
+              disabled={!this.inputEnabled}
               placeholder="Name your blockchain"
             />,
           )}
@@ -119,7 +144,7 @@ class StepConfigure extends React.Component<
           <Button
             disabled={disabled}
             loading={loading}
-            onClick={this.validateForm}
+            onClick={validateForm}
             type="primary"
           >
             Next

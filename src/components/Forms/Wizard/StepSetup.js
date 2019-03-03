@@ -4,8 +4,6 @@ import { Button, Form, Input, Slider } from 'antd';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
-import mock from 'api/mock';
-
 @inject('rootStore')
 @observer
 @Form.create()
@@ -22,25 +20,25 @@ class StepSetup extends React.Component<
   @computed
   get maxBlockSize() {
     // $FlowFixMe
-    return this.props.rootStore.blockchainStore.maxBlockSize;
+    return this.props.rootStore.currentBlockchainStore.get('maxBlockSize');
   }
 
   @computed
   get miningDiversity() {
     // $FlowFixMe
-    return this.props.rootStore.blockchainStore.miningDiversity;
+    return this.props.rootStore.currentBlockchainStore.get('miningDiversity');
   }
 
   @computed
   get miningTurnover() {
     // $FlowFixMe
-    return this.props.rootStore.blockchainStore.miningTurnover;
+    return this.props.rootStore.currentBlockchainStore.get('miningTurnover');
   }
 
   @computed
   get targetBlockTime() {
     // $FlowFixMe
-    return this.props.rootStore.blockchainStore.targetBlockTime;
+    return this.props.rootStore.currentBlockchainStore.get('targetBlockTime');
   }
 
   render() {
@@ -53,28 +51,38 @@ class StepSetup extends React.Component<
       validateFields((error, values) => {
         if (!error) {
           this.setState({ loading: true }, () => {
-            mock.then(t => {
-              new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  if (t) {
-                    const {
-                      maxBlockSize,
-                      miningDiversity,
-                      miningTurnover,
-                      targetBlockTime,
-                    } = values;
-                    this.props.rootStore.blockchainStore.maxBlockSize = maxBlockSize;
-                    this.props.rootStore.blockchainStore.miningDiversity = miningDiversity;
-                    this.props.rootStore.blockchainStore.miningTurnover = miningTurnover;
-                    this.props.rootStore.blockchainStore.targetBlockTime = targetBlockTime;
-                    this.props.rootStore.rootState.wizard.currentStep++;
-                  }
-                }, 1500);
-              });
-            });
+            const {
+              maxBlockSize,
+              miningDiversity,
+              miningTurnover,
+              targetBlockTime,
+            } = values;
+            this.props.rootStore.currentBlockchainStore.set(
+              'maxBlockSize',
+              maxBlockSize,
+            );
+            this.props.rootStore.currentBlockchainStore.set(
+              'miningDiversity',
+              miningDiversity,
+            );
+            this.props.rootStore.currentBlockchainStore.set(
+              'miningTurnover',
+              miningTurnover,
+            );
+            this.props.rootStore.currentBlockchainStore.set(
+              'targetBlockTime',
+              targetBlockTime,
+            );
+            this.props.rootStore.rootState.wizard.currentStep++;
           });
         }
       });
+    };
+
+    const handlePrevious = () => {
+      // FIXME: This will step back, but won’t populate the fields
+      // $FlowFixMe
+      this.props.rootStore.rootState.wizard.currentStep--;
     };
 
     return (
@@ -100,6 +108,13 @@ class StepSetup extends React.Component<
           })(<Input placeholder="Target block time" />)}
         </Form.Item>
         <Form.Item>
+          <Button
+            loading={loading}
+            onClick={handlePrevious}
+            style={{ marginRight: '5px' }}
+          >
+            Previous
+          </Button>
           <Button loading={loading} onClick={onValidateForm} type="primary">
             Next
           </Button>

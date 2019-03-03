@@ -3,6 +3,7 @@ import { action, computed, observable } from 'mobx';
 
 import ApplicationStore from 'stores/ApplicationStore';
 import BlockchainStore from 'stores/domain/Blockchain';
+import CurrentBlockchainStore from 'stores/domain/CurrentBlockchain';
 import GlobalHeaderStore from 'stores/ui/GlobalHeader';
 import GraphStore from 'stores/domain/Graph';
 
@@ -25,12 +26,14 @@ export default class RootStore {
 
   applicationStore: ApplicationStore;
   blockchainStore: BlockchainStore;
+  currentBlockchainStore: CurrentBlockchainStore;
   globalHeaderStore: GlobalHeaderStore;
   graphStore: GraphStore;
 
   constructor() {
     this.applicationStore = new ApplicationStore(this);
     this.blockchainStore = new BlockchainStore(this);
+    this.currentBlockchainStore = new CurrentBlockchainStore(this);
     this.globalHeaderStore = new GlobalHeaderStore(this);
     this.graphStore = new GraphStore(this);
 
