@@ -8,10 +8,11 @@ export const notify = (
   type: NotificationType,
   message: string,
   description?: string,
+  duration: number = 4.5,
 ) => {
   notification[type]({
     description,
-    duration: 0,
+    duration,
     message,
   });
 };
