@@ -21,8 +21,8 @@ const rootStore = new RootStore();
 if (root != null) {
   render(
     <div>
-      {/* Enable ONLY during debugging */}
-      <DevTools />
+      {/* Enable DevTools ONLY during debugging */}
+      {/*<DevTools />*/}
       <Router>
         <Provider rootStore={rootStore}>
           <ThemeProvider theme={theme}>
