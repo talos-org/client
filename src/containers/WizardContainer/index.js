@@ -110,26 +110,40 @@ class WizardContainer extends React.Component<{
             height="50%"
           >
             <Form layout="horizontal" hAlignContent="right">
-              <h3>Blockchains on the current network:</h3>
-              <div className="Demo">
+              <h1>Blockchains on the current network</h1>
+              <div className="Demo" style={{ marginBottom: '2em' }}>
                 <Row gutter={16}>
                   {chains.map((chain, id) => (
-                    <Col className="gutter-row" span={10}>
+                    <Col
+                      className="gutter-row"
+                      span={4}
+                      style={{ paddingTop: '8px', paddingBottom: '8px' }}
+                    >
                       <div className="gutter-box">
                         <Button
                           key={id}
                           onClick={() => this.showAlert(chain)}
                           name={chain}
+                          title={`Connect to ${chain}`}
                           type="primary"
+                          style={{ width: '100%' }}
                         >
-                          {chain}
+                          <div
+                            style={{
+                              overflow: 'hidden',
+                              whiteSpace: 'nowrap',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {chain}
+                          </div>
                         </Button>
                       </div>
                     </Col>
                   ))}
                 </Row>
               </div>
-              <h3>Connect to New Blockchain Network</h3>
+              <h1>Connect to new blockchain network</h1>
               <Form.Item hasFeedback label="Admin Node Address">
                 <Input
                   placeholder="Enter Admin Node Address"
@@ -147,7 +161,7 @@ class WizardContainer extends React.Component<{
                 Generate Wallet Address
               </Button>
             </Form>
-            <h3>Wallet Address: {walletAddress}</h3>
+            <h2>Wallet Address: {walletAddress}</h2>
           </FlexView>
         </Card>
       );
