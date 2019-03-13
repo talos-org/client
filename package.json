@@ -1,6 +1,6 @@
 {
   "name": "@talos-org/client",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "private": true,
   "repository": {
     "type": "git",
