@@ -18,8 +18,7 @@
     "start": "node scripts/start.js",
     "start:ff": "BROWSER='Firefox Nightly' node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
-    "test:ci": "node scripts/test.js --coverageReporters=text-lcov | coveralls"
+    "test": "node scripts/test.js"
   },
   "husky": {
     "hooks": {
@@ -127,7 +126,7 @@
     "not op_mini all"
   ],
   "jest": {
-    "collectCoverage": true,
+    "collectCoverage": false,
     "coverageDirectory": "./coverage/",
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
