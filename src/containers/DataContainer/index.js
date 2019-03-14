@@ -4,6 +4,7 @@ import { Alert, Table, Button, Divider, Popconfirm } from 'antd';
 import axios from 'axios';
 import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
 import CreateStreamModal from '../../components/Modals/CreateStreamModal';
+import EditStreamPermissionsModal from '../../components/Modals/EditStreamPermissionsModal';
 import DataItemsContainer from '../../containers/DataItemsContainer';
 import { Link, Switch, Route } from 'react-router-dom';
 
@@ -18,6 +19,7 @@ export default class DataContainer extends React.Component<
     unsubscribed: Array,
     subscribeModalState: Object,
     createModalState: Object,
+    permissionsModalState: Object,
   },
 > {
   constructor() {
@@ -28,6 +30,12 @@ export default class DataContainer extends React.Component<
       unsubscribed: null,
       subscribeModalState: { visible: false, confirmLoading: false },
       createModalState: { visible: false, confirmLoading: false },
+      permissionsModalState: {
+        streamName: null,
+        streamPermissions: [],
+        visible: false,
+        confirmLoading: false,
+      },
     };
   }
 
@@ -63,7 +71,9 @@ export default class DataContainer extends React.Component<
       });
   }
 
-  unsubscribeFromStreams(blockchainName, streams) {
+  unsubscribeFromStreams(streams) {
+    const blockchainName = localStorage.getItem('chainName');
+
     return axios
       .post('http://localhost:5000/api/data_streams/unsubscribe', {
         blockchainName,
@@ -171,6 +181,103 @@ export default class DataContainer extends React.Component<
       });
   };
 
+  openPermissionsModal = streamName => {
+    const blockchainName = localStorage.getItem('chainName');
+
+    axios
+      .get(
+        `http://localhost:5000/api/permissions/get_permissions?blockchainName=${blockchainName}&permissions=${streamName}.*&verbose=false`,
+      )
+      .then(response => {
+        let permissionsMap = {};
+        let permissions = response.data.permissions;
+        permissions.forEach(p => {
+          if (!permissionsMap.hasOwnProperty(p.address)) {
+            permissionsMap[p.address] = {
+              write: false,
+              activate: false,
+              admin: false,
+            };
+          }
+          permissionsMap[p.address][p.type] = true;
+        });
+        const streamPermissions = Object.keys(permissionsMap).map(key => {
+          return { address: key, permissions: permissionsMap[key] };
+        });
+        const permissionsModalState = {
+          streamName,
+          streamPermissions,
+          visible: true,
+          confirmLoading: false,
+        };
+        this.setState({ permissionsModalState });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        this.setState({ error: error.toString() });
+      });
+  };
+
+  updateStreamPermissions = (
+    streamName,
+    grantPermissions,
+    revokePermissions,
+  ) => {
+    const permissionsModalState = {
+      ...this.state.permissionsModalState,
+      visible: false,
+      confirmLoading: false,
+    };
+    const blockchainName = localStorage.getItem('chainName');
+    let error = null;
+
+    let promises = [];
+
+    grantPermissions.forEach(p => {
+      const address = p.address;
+      const permission = p.permission;
+
+      promises.push(
+        axios.post(
+          'http://localhost:5000/api/permissions/grant_stream_permission',
+          {
+            blockchainName,
+            address,
+            permission,
+            streamName,
+          },
+        ),
+      );
+    });
+
+    revokePermissions.forEach(p => {
+      const address = p.address;
+      const permission = p.permission;
+
+      promises.push(
+        axios.post(
+          'http://localhost:5000/api/permissions/revoke_stream_permission',
+          {
+            blockchainName,
+            address,
+            permission,
+            streamName,
+          },
+        ),
+      );
+    });
+
+    return axios
+      .all(promises)
+      .catch(error => {
+        console.error('Error:', error);
+        error = error.toString();
+      })
+      .then(() => {
+        this.setState({ permissionsModalState, error });
+      });
+  };
+
   onOkCreateModal = (blockchainName, streamName, type) => {
     const createModalState = {
       visible: true,
@@ -190,6 +297,30 @@ export default class DataContainer extends React.Component<
     this.setState({ createModalState });
   };
 
+  onOkPermissionsModal = (streamName, grantPermissions, revokePermissions) => {
+    const permissionsModalState = {
+      ...this.state.permissionsModalState,
+      visible: true,
+      confirmLoading: true,
+    };
+    this.setState({ permissionsModalState }, () => {
+      this.updateStreamPermissions(
+        streamName,
+        grantPermissions,
+        revokePermissions,
+      );
+    });
+  };
+
+  onCancelPermissionsModal = () => {
+    const permissionsModalState = {
+      ...this.state.permissionsModalState,
+      visible: false,
+      confirmLoading: false,
+    };
+    this.setState({ permissionsModalState });
+  };
+
   render() {
     const {
       error,
@@ -197,6 +328,7 @@ export default class DataContainer extends React.Component<
       unsubscribed,
       subscribeModalState,
       createModalState,
+      permissionsModalState,
     } = this.state;
     const { match } = this.props;
     const { path } = match;
@@ -237,21 +369,23 @@ export default class DataContainer extends React.Component<
             {record.restrict.write && (
               <span>
                 {/* eslint-disable-next-line */}
-                <a href="#">Edit Permissions</a>
+                <a
+                  href="javascript:"
+                  onClick={() => this.openPermissionsModal(record.name)}
+                >
+                  Edit Permissions
+                </a>
                 <Divider type="vertical" />
               </span>
             )}
             <Popconfirm
               title={`Unsubscribe from stream '${record.name}'?`}
-              onConfirm={() => {
-                this.unsubscribeFromStreams(
-                  localStorage.getItem('chainName'),
-                  new Array(record.name),
-                );
-              }}
+              onConfirm={() =>
+                this.unsubscribeFromStreams(new Array(record.name))
+              }
             >
               {/* eslint-disable-next-line */}
-              <a href="#">Unsubscribe</a>
+              <a href="javascript:">Unsubscribe</a>
             </Popconfirm>
           </span>
         ),
@@ -296,6 +430,14 @@ export default class DataContainer extends React.Component<
                 confirmLoading={createModalState.confirmLoading}
                 onOk={this.onOkCreateModal}
                 onCancel={this.onCancelCreateModal}
+              />
+              <EditStreamPermissionsModal
+                name={permissionsModalState.streamName}
+                permissions={permissionsModalState.streamPermissions}
+                visible={permissionsModalState.visible}
+                confirmLoading={permissionsModalState.confirmLoading}
+                onOk={this.onOkPermissionsModal}
+                onCancel={this.onCancelPermissionsModal}
               />
             </div>
           )}

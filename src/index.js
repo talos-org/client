@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+// eslint-disable-next-line
 import DevTools from 'mobx-react-devtools';
 import { Provider } from 'mobx-react';
 import { render } from 'react-dom';
