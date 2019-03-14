@@ -1,10 +1,9 @@
 // @flow
 import * as React from 'react';
-import { Alert, Table, Button, Divider, Popconfirm, Spin } from 'antd';
-import { action, computed, observable } from 'mobx';
+import { Alert, Table, Button, Popconfirm } from 'antd';
 import axios from 'axios';
 import AddNodeModal from '../Modals/AddNodeModal.js';
-import { Link, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 export default class AdminContainer extends React.Component<
   {
@@ -15,21 +14,19 @@ export default class AdminContainer extends React.Component<
     error: string,
     nodes: Array,
     addModalState: Object,
-    createModalState: Object,
   },
 > {
   constructor() {
     super();
     this.state = {
       error: null,
-      nodes: null,
+      nodes: [],
       addModalState: { visible: false, confirmLoading: false },
-      createModalState: { visible: false, confirmLoading: false },
     };
   }
 
   componentDidMount() {
-    this.getPermissions(localStorage.getItem('chainName'));
+    this.getNodes();
   }
 
   onCloseAlert = () => {
@@ -50,7 +47,7 @@ export default class AdminContainer extends React.Component<
         `http://35.196.26.90:5000/api/permissions/get_permissions?blockchainName=${blockchainName}&permissions=connect&verbose=false`,
       )
       .then(response => {
-        let nodes = response.data;
+        let nodes = response.data.permissions;
         this.setState({ nodes }, () => callback());
       })
       .catch(error => {
@@ -69,7 +66,6 @@ export default class AdminContainer extends React.Component<
       confirmLoading: true,
     };
     this.setState({ addModalState }, () => {
-      this.getNodes();
       this.addNode(blockchainName, newNodeAddress);
     });
   };
@@ -91,7 +87,7 @@ export default class AdminContainer extends React.Component<
   };
 
   addNode = (blockchainName, newNodeAddress) => {
-    const createModalState = {
+    const addModalState = {
       visible: false,
       confirmLoading: false,
     };
@@ -110,7 +106,7 @@ export default class AdminContainer extends React.Component<
         error = error.toString();
       })
       .then(() => {
-        this.setState({ createModalState, error });
+        this.setState({ addModalState });
       });
   };
 
@@ -142,26 +138,8 @@ export default class AdminContainer extends React.Component<
       });
   };
 
-  onOkCreateModal = (blockchainName, newNodeAddress) => {
-    const createModalState = {
-      visible: true,
-      confirmLoading: true,
-    };
-    this.setState({ createModalState }, () => {
-      this.addNode(blockchainName, newNodeAddress);
-    });
-  };
-
-  onCancelCreateModal = () => {
-    const createModalState = {
-      visible: false,
-      confirmLoading: false,
-    };
-    this.setState({ createModalState });
-  };
-
   render() {
-    const { error, addModalState, createModalState } = this.state;
+    const { error, addModalState, nodes } = this.state;
     const { match } = this.props;
     const { path } = match;
 
@@ -181,13 +159,6 @@ export default class AdminContainer extends React.Component<
         key: 'remove',
         render: (text, record) => (
           <span>
-            {record.restrict.write && (
-              <span>
-                {/* eslint-disable-next-line */}
-                <a href="#">Remove Permissions</a>
-                <Divider type="vertical" />
-              </span>
-            )}
             <Popconfirm
               title={`Are you sure you wish to remove this node from the network '${
                 record.address
@@ -200,7 +171,7 @@ export default class AdminContainer extends React.Component<
               }}
             >
               {/* eslint-disable-next-line */}
-              <a href="#">Remove Node</a>
+              <a href="javascript:">Remove Node</a>
             </Popconfirm>
           </span>
         ),
@@ -224,7 +195,7 @@ export default class AdminContainer extends React.Component<
                 />
               )}
               <h1>Connected Nodes</h1>
-              <Table columns={columns} />
+              <Table columns={columns} dataSource={nodes} />
               <h1>Add New Node to Network</h1>
 
               <Button onClick={this.openAddModal}>Add</Button>

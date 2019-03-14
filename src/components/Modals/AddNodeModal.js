@@ -40,15 +40,19 @@ export default class CreateStreamModal extends React.Component<
         visible={visible}
         confirmLoading={confirmLoading}
         onOk={this.onOk}
+        okText="Add"
         onCancel={onCancel}
       >
-        <span>Node</span>
+        <label>Node address</label>
         <Input
           name="name"
           onChange={this.handleNameChange}
           placeholder="Enter new node address"
           value={name}
+          title="Identifier of 26-39 alphanumeric characters, beginning with the number 1 or 3 and does not contain letters O, l, I, or the number 0"
           style={{ marginBottom: '10px' }}
+          required
+          pattern="^[13][a-km-zA-HJ-NP-Z1-9]{26,39}$"
         />
       </Modal>
     );
