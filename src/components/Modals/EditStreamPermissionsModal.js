@@ -37,8 +37,9 @@ export default class EditStreamPermissionsModal extends React.Component<
   }
 
   onOk = () => {
+    const { name } = this.props;
+    const { permissions } = this.state;
     const oldPermissions = this.props.permissions;
-    const { name, permissions } = this.state;
     let grantPermissions = [];
     let revokePermissions = [];
 
