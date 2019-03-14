@@ -67,6 +67,7 @@ export default class SubscribeStreamModal extends React.Component<
         visible={visible}
         confirmLoading={confirmLoading}
         onOk={this.onOk}
+        okText="Subscribe"
         onCancel={onCancel}
       >
         <Table
