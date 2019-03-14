@@ -1,8 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Layout, Button, Form, Input, Card, Row, Col } from 'antd';
-
-const { Content } = Layout;
+import { Button, Form, Input, Row, Col } from 'antd';
 
 export default class ExistingNode extends React.Component<{}> {
   render() {
@@ -14,6 +12,7 @@ export default class ExistingNode extends React.Component<{}> {
       generateAddress,
       handleAdminAddressChange,
     } = this.props;
+
     return (
       <Form layout="horizontal" hAlignContent="right">
         <h1>Recently connected blockchains</h1>
@@ -66,7 +65,7 @@ export default class ExistingNode extends React.Component<{}> {
         >
           Generate Wallet Address
         </Button>
-        <h2>Wallet Address: {walletAddress}</h2>
+        <h3 style={{ marginTop: '1em' }}>Wallet Address: {walletAddress}</h3>
       </Form>
     );
   }

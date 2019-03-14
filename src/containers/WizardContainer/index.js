@@ -4,23 +4,13 @@ import { computed } from 'mobx';
 import axios from 'axios';
 import FlexView from 'react-flexview';
 import { inject, observer } from 'mobx-react';
-import { Link, Redirect, withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import { Card } from 'antd';
 
-import { Button, Form, Input, Card, Row, Col } from 'antd';
-import { observable } from 'mobx';
-
-import mock from 'api/mock';
 import { set } from 'utils/chainName';
-
 import WizardForm from 'components/Forms/Wizard';
 import ExistingNode from 'components/Forms/Existing';
-import Logo from 'components/ui/Logo';
-import { link } from 'fs';
-
-import ExistingNodeComponent from 'components/Forms/Existing/index';
-import { launchDaemon, getBlockchains, connectToAdminNode } from 'api/wizard';
-
-const list = [];
+import { launchDaemon, getBlockchains } from 'api/wizard';
 
 @inject('rootStore')
 @observer
@@ -72,11 +62,6 @@ class WizardContainer extends React.Component<{
   }
 
   generateAddress(nodeAddress) {
-    let adminNodeAddress = nodeAddress;
-
-    //connectToAdminNode(adminNodeAddress).then(({error}) => {
-    //  console.log(error);
-    //});
     axios
       .post('http://35.196.109.167:5000/api/nodes/connect_to_admin_node', {
         adminNodeAddress: nodeAddress,
