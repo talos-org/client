@@ -50,7 +50,7 @@ class WizardContainer extends React.Component<{
   }
 
   getchains() {
-    fetch('http://35.196.109.167:5000/api/configuration/get_blockchains')
+    fetch('http://localhost:5000/api/configuration/get_blockchains')
       .then(response => {
         return response.json();
       })
@@ -68,7 +68,7 @@ class WizardContainer extends React.Component<{
   showAlert(chain) {
     const success = set('chainName', chain);
     axios
-      .post('http://35.196.109.167:5000/api/configuration/deploy_chain', {
+      .post('http://localhost:5000/api/configuration/deploy_chain', {
         blockchainName: chain,
       })
       .then(response => {
@@ -83,7 +83,7 @@ class WizardContainer extends React.Component<{
 
   generateAddress(nodeAddress) {
     axios
-      .post('http://35.196.109.167:5000/api/nodes/connect_to_admin_node', {
+      .post('http://localhost:5000/api/nodes/connect_to_admin_node', {
         adminNodeAddress: nodeAddress,
       })
       .then(response => {
