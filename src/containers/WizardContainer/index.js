@@ -10,7 +10,7 @@ import { Card } from 'antd';
 import { set } from 'utils/chainName';
 import WizardForm from 'components/Forms/Wizard';
 import ExistingNode from 'components/Forms/Existing';
-import { launchDaemon, getBlockchains } from 'api/wizard';
+import { launchDaemon, getBlockchains, connectToAdminNode } from 'api/wizard';
 
 @inject('rootStore')
 @observer
@@ -62,15 +62,14 @@ class WizardContainer extends React.Component<{
   }
 
   generateAddress(nodeAddress) {
-    axios
-      .post('http://35.196.109.167:5000/api/nodes/connect_to_admin_node', {
-        adminNodeAddress: nodeAddress,
-      })
-      .then(response => {
-        let wa = response.data.walletAddress;
-        this.setState({ walletAddress: wa });
-        this.getchains();
-      });
+    let adminNodeAddress = nodeAddress;
+
+    connectToAdminNode({ adminNodeAddress }).then(({ data }) => {
+      console.log(data);
+      let wa = data.walletAddress;
+      this.setState({ walletAddress: wa });
+      this.getchains();
+    });
   }
 
   render() {
