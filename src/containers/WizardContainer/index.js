@@ -13,9 +13,11 @@ import mock from 'api/mock';
 import { set } from 'utils/chainName';
 
 import WizardForm from 'components/Forms/Wizard';
+import ExistingNode from 'components/Forms/Existing';
 import Logo from 'components/ui/Logo';
 import { link } from 'fs';
 
+import ExistingNodeComponent from 'components/Forms/Existing/index';
 import { createChain, launchDaemon } from 'api/wizard';
 
 const list = [];
@@ -48,7 +50,7 @@ class WizardContainer extends React.Component<{
   }
 
   getchains() {
-    fetch('http://localhost:5000/api/configuration/get_blockchains')
+    fetch('http://35.196.109.167:5000/api/configuration/get_blockchains')
       .then(response => {
         return response.json();
       })
@@ -59,14 +61,14 @@ class WizardContainer extends React.Component<{
       });
   }
 
-  handleChange(event) {
+  handleAdminAddressChange(event) {
     this.setState({ title: event.target.value });
   }
 
   showAlert(chain) {
     const success = set('chainName', chain);
     axios
-      .post('http://localhost:5000/api/configuration/deploy_chain', {
+      .post('http://35.196.109.167:5000/api/configuration/deploy_chain', {
         blockchainName: chain,
       })
       .then(response => {
@@ -81,7 +83,7 @@ class WizardContainer extends React.Component<{
 
   generateAddress(nodeAddress) {
     axios
-      .post('http://localhost:5000/api/nodes/connect_to_admin_node', {
+      .post('http://35.196.109.167:5000/api/nodes/connect_to_admin_node', {
         adminNodeAddress: nodeAddress,
       })
       .then(response => {
@@ -109,59 +111,16 @@ class WizardContainer extends React.Component<{
             hAlignContent="center"
             height="50%"
           >
-            <Form layout="horizontal" hAlignContent="right">
-              <h1>Blockchains on the current network</h1>
-              <div className="Demo" style={{ marginBottom: '2em' }}>
-                <Row gutter={16}>
-                  {chains.map((chain, id) => (
-                    <Col
-                      className="gutter-row"
-                      span={4}
-                      style={{ paddingTop: '8px', paddingBottom: '8px' }}
-                    >
-                      <div className="gutter-box">
-                        <Button
-                          key={id}
-                          onClick={() => this.showAlert(chain)}
-                          name={chain}
-                          title={`Connect to ${chain}`}
-                          type="primary"
-                          style={{ width: '100%' }}
-                        >
-                          <div
-                            style={{
-                              overflow: 'hidden',
-                              whiteSpace: 'nowrap',
-                              textOverflow: 'ellipsis',
-                            }}
-                          >
-                            {chain}
-                          </div>
-                        </Button>
-                      </div>
-                    </Col>
-                  ))}
-                </Row>
-              </div>
-              <h1>Connect to new blockchain network</h1>
-              <Form.Item hasFeedback label="Admin Node Address">
-                <Input
-                  placeholder="Enter Admin Node Address"
-                  name="title"
-                  value={this.state.title}
-                  onChange={this.handleChange.bind(this)}
-                />
-              </Form.Item>
-              <Button
-                name="connectToNew"
-                type="primary"
-                onClick={() => this.generateAddress(this.state.title)}
-                hAlignContent="center"
-              >
-                Generate Wallet Address
-              </Button>
-            </Form>
-            <h2>Wallet Address: {walletAddress}</h2>
+            <ExistingNode
+              chains={chains}
+              walletAddress={walletAddress}
+              title={this.state.title}
+              onconnectexisting={chain => this.showAlert(chain)}
+              generateAddress={nodeAddress => this.generateAddress(nodeAddress)}
+              handleAdminAddressChange={event =>
+                this.handleAdminAddressChange(event)
+              }
+            />
           </FlexView>
         </Card>
       );
