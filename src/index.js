@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+// eslint-disable-next-line
 import DevTools from 'mobx-react-devtools';
 import { Provider } from 'mobx-react';
 import { render } from 'react-dom';
@@ -21,8 +22,8 @@ const rootStore = new RootStore();
 if (root != null) {
   render(
     <div>
-      {/* Enable ONLY during debugging */}
-      <DevTools />
+      {/* Enable DevTools ONLY during debugging */}
+      {/*<DevTools />*/}
       <Router>
         <Provider rootStore={rootStore}>
           <ThemeProvider theme={theme}>

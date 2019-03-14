@@ -62,16 +62,6 @@ class RightContent extends React.Component<
     const { confirmLoading, visible } = this.state;
     const menu = (
       <Menu selectedKeys={[]} onClick={this.handleMenuClick}>
-        <Menu.Item key="userCenter">
-          <Icon type="user" />
-          <span>—</span>
-        </Menu.Item>
-        <Menu.Item key="userinfo">
-          <Icon type="setting" />
-          <span>—</span>
-        </Menu.Item>
-        {/* $FlowFixMe */}
-        <Menu.Divider />
         <Menu.Item key="disconnect">
           <Icon type="logout" />
           <span>Disconnect</span>

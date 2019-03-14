@@ -23,18 +23,20 @@ const myConfig = {
 
 @inject('rootStore')
 @observer
-class MonitoringComponent extends React.Component<{}, { loading: boolean }> {
+class MonitoringComponent extends React.Component<{}> {
   @observable currentNodeData: Object;
-  @observable data: Object;
-  @observable inactiveNodes: Array<string>;
   @observable loading: boolean = true;
+  timer: IntervalID;
 
   async componentDidMount() {
-    // $FlowFixMe
-    await this.props.rootStore.graphStore.getCurrentGraphData();
-    setInterval(this.getCurrentGraphData, 5000);
-
+    await this.getCurrentGraphData();
     this.loading = false;
+
+    this.timer = setInterval(this.getCurrentGraphData, 15000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
   }
 
   @computed
@@ -50,7 +52,7 @@ class MonitoringComponent extends React.Component<{}, { loading: boolean }> {
 
   onClickNode = (nodeId: number) => {
     // $FlowFixMe
-    this.currentNodeData = this.props.rootStore.graphStore.data.nodes.find(
+    this.currentNodeData = this.props.rootStore.graphStore.graphData.nodes.find(
       x => x.id === Number(nodeId),
     );
   };
@@ -65,7 +67,7 @@ class MonitoringComponent extends React.Component<{}, { loading: boolean }> {
                 id="graph-id"
                 onClickNode={this.onClickNode}
                 // $FlowFixMe
-                data={this.props.rootStore.graphStore.data}
+                data={this.props.rootStore.graphStore.graphData}
                 config={myConfig}
               />
             </Skeleton>
@@ -73,7 +75,6 @@ class MonitoringComponent extends React.Component<{}, { loading: boolean }> {
         </Col>
         <Col span={6}>
           <CurrentNode currentNodeData={this.currentNodeData} />
-          {/* <InactiveNodes /> */}
         </Col>
       </Row>
     );

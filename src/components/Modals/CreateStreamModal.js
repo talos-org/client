@@ -46,6 +46,7 @@ export default class CreateStreamModal extends React.Component<
         visible={visible}
         confirmLoading={confirmLoading}
         onOk={this.onOk}
+        okText="Create"
         onCancel={onCancel}
       >
         <span>Name</span>
