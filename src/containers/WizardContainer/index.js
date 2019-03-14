@@ -18,7 +18,7 @@ import Logo from 'components/ui/Logo';
 import { link } from 'fs';
 
 import ExistingNodeComponent from 'components/Forms/Existing/index';
-import { createChain, launchDaemon } from 'api/wizard';
+import { launchDaemon, getBlockchains, connectToAdminNode } from 'api/wizard';
 
 const list = [];
 
@@ -50,15 +50,10 @@ class WizardContainer extends React.Component<{
   }
 
   getchains() {
-    fetch('http://localhost:5000/api/configuration/get_blockchains')
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        let chains = data['blockchains'];
-
-        this.setState({ chains: chains });
-      });
+    getBlockchains().then(({ data }) => {
+      let chains = data['blockchains'];
+      this.setState({ chains: chains });
+    });
   }
 
   handleAdminAddressChange(event) {
@@ -67,23 +62,23 @@ class WizardContainer extends React.Component<{
 
   showAlert(chain) {
     const success = set('chainName', chain);
-    axios
-      .post('http://localhost:5000/api/configuration/deploy_chain', {
-        blockchainName: chain,
-      })
-      .then(response => {
-        console.log(response);
-      });
+    let blockchainName = chain;
+    launchDaemon({ blockchainName }).then(({ data }) => {});
     this.setState({ redirect_monitoring: true }, () => {
       if (success) {
-        this.props.rootStore.rootState.currentBlockchain = chain;
+        this.props.rootStore.rootState.currentBlockchain = blockchainName;
       }
     });
   }
 
   generateAddress(nodeAddress) {
+    let adminNodeAddress = nodeAddress;
+
+    //connectToAdminNode(adminNodeAddress).then(({error}) => {
+    //  console.log(error);
+    //});
     axios
-      .post('http://localhost:5000/api/nodes/connect_to_admin_node', {
+      .post('http://35.196.109.167:5000/api/nodes/connect_to_admin_node', {
         adminNodeAddress: nodeAddress,
       })
       .then(response => {

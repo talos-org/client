@@ -4,7 +4,7 @@ import { Layout, Button, Form, Input, Card, Row, Col } from 'antd';
 
 const { Content } = Layout;
 
-class ExistingNode extends React.Component<{}> {
+export default class ExistingNode extends React.Component<{}> {
   render() {
     const {
       chains,
@@ -61,7 +61,7 @@ class ExistingNode extends React.Component<{}> {
         <Button
           name="connectToNew"
           type="primary"
-          onClick={generateAddress(title)}
+          onClick={() => generateAddress(title)}
           hAlignContent="center"
         >
           Generate Wallet Address
@@ -71,5 +71,3 @@ class ExistingNode extends React.Component<{}> {
     );
   }
 }
-
-export default ExistingNode;
