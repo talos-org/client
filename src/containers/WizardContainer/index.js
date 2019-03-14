@@ -74,18 +74,12 @@ class WizardContainer extends React.Component<{
   generateAddress(nodeAddress) {
     let adminNodeAddress = nodeAddress;
 
-    //connectToAdminNode(adminNodeAddress).then(({error}) => {
-    //  console.log(error);
-    //});
-    axios
-      .post('http://35.196.109.167:5000/api/nodes/connect_to_admin_node', {
-        adminNodeAddress: nodeAddress,
-      })
-      .then(response => {
-        let wa = response.data.walletAddress;
-        this.setState({ walletAddress: wa });
-        this.getchains();
-      });
+    connectToAdminNode({ adminNodeAddress }).then(({ data }) => {
+      console.log(data);
+      let wa = data.walletAddress;
+      this.setState({ walletAddress: wa });
+      this.getchains();
+    });
   }
 
   render() {
