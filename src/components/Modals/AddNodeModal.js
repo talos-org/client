@@ -1,8 +1,10 @@
 // @flow
 import * as React from 'react';
-import { Modal, Table, Checkbox, Button, Form, Input } from 'antd';
+import { Modal, Input, Select } from 'antd';
 
-export default class AddNodeModal extends React.Component<
+const Option = Select.Option;
+
+export default class CreateStreamModal extends React.Component<
   {
     visible: boolean,
     confirmLoading: boolean,
@@ -10,62 +12,44 @@ export default class AddNodeModal extends React.Component<
     onCancel: Function,
   },
   {
-    selected: Array,
-    rescan: boolean,
+    name: string,
   },
 > {
   constructor() {
     super();
     this.state = {
-      selected: null,
-      rescan: false,
+      name: '',
     };
   }
 
   onOk = () => {
-    const selected = this.state.selected;
-    this.props.onOk(
-      localStorage.getItem('chainName'),
-      selected ? selected.map(s => s.name) : [],
-      this.state.rescan,
-    );
+    this.props.onOk(localStorage.getItem('chainName'), this.state.name);
   };
 
-  toggleRescan = e => {
-    const rescan = e.target.checked;
-    this.setState({ rescan });
+  handleNameChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   render() {
-    const { visible, confirmLoading, onCancel, form } = this.props;
-    const { disabled, loading, validateStatus } = this.state;
-    const { TextArea } = Input;
-
-    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.setState({ selected: selectedRows });
-      },
-      getCheckboxProps: record => ({
-        name: record.name,
-      }),
-    };
+    const { name } = this.state;
+    const { visible, confirmLoading, onCancel } = this.props;
 
     return (
       <Modal
-        title="Connect a New Node"
+        title="Add a new node"
         visible={visible}
         confirmLoading={confirmLoading}
         onOk={this.onOk}
         onCancel={onCancel}
       >
-        <Form layout="horizontal">
-          <Form.Item label="Address">
-            <TextArea
-              autosize={{ minRows: 2, maxRows: 2 }}
-              placeholder="Enter new node address"
-            />
-          </Form.Item>
-        </Form>
+        <span>Node</span>
+        <Input
+          name="name"
+          onChange={this.handleNameChange}
+          placeholder="Enter new node address"
+          value={name}
+          style={{ marginBottom: '10px' }}
+        />
       </Modal>
     );
   }
