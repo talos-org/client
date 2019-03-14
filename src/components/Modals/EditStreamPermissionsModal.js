@@ -188,8 +188,10 @@ export default class EditStreamPermissionsModal extends React.Component<
               id="newWalletAddress"
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
               placeholder="Address"
+              title="Identifier of 26-39 alphanumeric characters, beginning with the number 1 or 3 and does not contain letters O, l, I, or the number 0"
               style={{ width: '32em' }}
               required
+              pattern="^[13][a-km-zA-HJ-NP-Z1-9]{26,39}$"
             />
           </Form.Item>
           <Form.Item>
