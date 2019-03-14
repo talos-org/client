@@ -6,6 +6,7 @@ import BlockchainStore from 'stores/domain/Blockchain';
 import CurrentBlockchainStore from 'stores/domain/CurrentBlockchain';
 import GlobalHeaderStore from 'stores/ui/GlobalHeader';
 import GraphStore from 'stores/domain/Graph';
+import NodeStore from 'stores/domain/Node';
 
 import { get, remove } from 'utils/chainName';
 
@@ -29,6 +30,7 @@ export default class RootStore {
   currentBlockchainStore: CurrentBlockchainStore;
   globalHeaderStore: GlobalHeaderStore;
   graphStore: GraphStore;
+  nodeStore: NodeStore;
 
   constructor() {
     this.applicationStore = new ApplicationStore(this);
@@ -36,6 +38,7 @@ export default class RootStore {
     this.currentBlockchainStore = new CurrentBlockchainStore(this);
     this.globalHeaderStore = new GlobalHeaderStore(this);
     this.graphStore = new GraphStore(this);
+    this.nodeStore = new NodeStore(this);
 
     this.rootState.currentBlockchain = get('chainName');
   }

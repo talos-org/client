@@ -4,5 +4,6 @@
     },
     "files.watcherExclude": {
         "./config/": true
-    }
+    },
+    "flow.pathToFlow": "${workspaceFolder}/node_modules/.bin/flow"
 }
