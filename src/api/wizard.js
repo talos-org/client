@@ -20,3 +20,11 @@ export function launchDaemon(data: { blockchainName: string }) {
 export function updateConfig(data: Object) {
   return client.post('/configuration/config_parameters', data);
 }
+
+export function getBlockchains() {
+  return client.get(`/configuration/get_blockchains`);
+}
+
+export function connectToAdminNode(data: { adminNodeAddress: string }) {
+  return client.post('/nodes/connect_to_admin_node', data);
+}
