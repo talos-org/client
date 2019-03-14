@@ -15,7 +15,7 @@ class SideMenu extends React.Component<{ tab: string }> {
   @computed
   get collapsed() {
     // $FlowFixMe
-    return this.props.rootStore.rootState.sidebarCollapsed;
+    return this.props.rootStore.globalHeaderStore.sidebarCollapsed;
   }
 
   render() {

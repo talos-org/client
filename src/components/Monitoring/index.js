@@ -14,7 +14,7 @@ const myConfig = {
     color: 'lightgreen',
     highlightStrokeColor: 'blue',
     labelProperty: 'name',
-    size: 120,
+    size: 210,
   },
   link: {
     highlightColor: '#033fff',
@@ -32,7 +32,9 @@ class MonitoringComponent extends React.Component<{}> {
     await this.getCurrentGraphData();
     this.loading = false;
 
-    this.timer = setInterval(this.getCurrentGraphData, 15000);
+    // $FlowFixMe
+    this.timer = setInterval(this.getCurrentGraphData, 1500);
+    console.log('[timer]', this.timer);
   }
 
   componentWillUnmount() {
@@ -46,6 +48,7 @@ class MonitoringComponent extends React.Component<{}> {
   }
 
   getCurrentGraphData = async () => {
+    console.log('lol');
     // $FlowFixMe
     await this.props.rootStore.graphStore.getCurrentGraphData();
   };
