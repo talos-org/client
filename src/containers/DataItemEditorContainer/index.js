@@ -67,12 +67,7 @@ export default class DataItemEditorContainer extends React.Component<
           if (dataItems.length > 0) {
             latestItem = dataItems.pop();
             itemHistory = dataItems.reverse();
-            jsonData = JSON.parse(latestItem.data.json);
-
-            if (typeof jsonData !== 'object') {
-              jsonData = JSON.parse(jsonData);
-            }
-
+            jsonData = latestItem.data.json;
             latestItemJson = jsonData; // save copy of data before its edited by user, used to know when to disable 'Save' button
           }
 
