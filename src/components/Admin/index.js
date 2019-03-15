@@ -26,15 +26,13 @@ export default class AdminContainer extends React.Component<
   }
 
   componentDidMount() {
-    this.getNodes();
+    this.reloadData();
   }
 
   onCloseAlert = () => {
     const error = null;
     this.setState({ error });
   };
-
-  getPermissions = () => {};
 
   reloadData = (callback = () => {}) => {
     this.getNodes(callback);
@@ -54,10 +52,6 @@ export default class AdminContainer extends React.Component<
         console.error('Error:', error);
         this.setState({ error: error.toString() });
       });
-  }
-
-  componentDidMount() {
-    this.getNodes();
   }
 
   onOkAddModal = (blockchainName, newNodeAddress) => {
@@ -106,14 +100,14 @@ export default class AdminContainer extends React.Component<
         error = error.toString();
       })
       .then(() => {
-        this.setState({ addModalState });
+        this.setState({ addModalState }, () => this.getNodes);
       });
   };
 
   removeNode = (blockchainName, address) => {
     let error = null;
     var addresses = [];
-    addresses.push(address);
+    addresses.push(address[0]);
     var permissions = [];
     permissions.push('connect');
 
@@ -134,7 +128,7 @@ export default class AdminContainer extends React.Component<
         error = error.toString();
       })
       .then(() => {
-        this.setState({ error });
+        this.setState({ error }, () => this.getNodes);
       });
   };
 
