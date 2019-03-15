@@ -6,7 +6,7 @@ import { computed, observable } from 'mobx';
 import { Graph } from 'react-d3-graph';
 import { inject, observer } from 'mobx-react';
 
-import CurrentNode from 'components/Monitoring/CurrentNode';
+import CurrentNode, { NodeAddress } from 'components/Monitoring/CurrentNode';
 
 const myConfig = {
   nodeHighlightBehavior: true,
@@ -14,7 +14,7 @@ const myConfig = {
     color: 'lightgreen',
     highlightStrokeColor: 'blue',
     labelProperty: 'name',
-    size: 120,
+    size: 210,
   },
   link: {
     highlightColor: '#033fff',
@@ -32,7 +32,7 @@ class MonitoringComponent extends React.Component<{}> {
     await this.getCurrentGraphData();
     this.loading = false;
 
-    this.timer = setInterval(this.getCurrentGraphData, 15000);
+    this.timer = setInterval(this.getCurrentGraphData, 1500);
   }
 
   componentWillUnmount() {
@@ -75,6 +75,7 @@ class MonitoringComponent extends React.Component<{}> {
         </Col>
         <Col span={6}>
           <CurrentNode currentNodeData={this.currentNodeData} />
+          <NodeAddress />
         </Col>
       </Row>
     );

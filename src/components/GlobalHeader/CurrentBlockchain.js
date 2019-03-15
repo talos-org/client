@@ -7,7 +7,7 @@ class CurrentBlockchain extends React.PureComponent<{}> {
   render() {
     return (
       <h1 style={{ textAlign: 'center' }}>
-        {/* $FlowFixMe  */}
+        {/* $FlowFixMe */}
         {this.props.rootStore.rootState.currentBlockchain}
       </h1>
     );

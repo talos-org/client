@@ -8,13 +8,6 @@ import { Link } from 'react-router-dom';
 @inject('rootStore')
 @observer
 class BaseMenu extends React.Component<{ tab: string }> {
-  // TODO: remove use of mobx for keeping track of tab here.
-  // We are using url path instead
-  constructor(props: any) {
-    super(props);
-    this.handleSelect = this.handleSelect.bind(this);
-  }
-
   @computed
   get currentTab() {
     // $FlowFixMe
@@ -24,7 +17,7 @@ class BaseMenu extends React.Component<{ tab: string }> {
   @computed
   get collapsed() {
     // $FlowFixMe
-    return this.props.rootStore.rootState.sidebarCollapsed;
+    return this.props.rootStore.globalHeaderStore.sidebarCollapsed;
   }
 
   handleSelect = ({

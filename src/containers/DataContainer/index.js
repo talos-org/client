@@ -8,6 +8,10 @@ import EditStreamPermissionsModal from '../../components/Modals/EditStreamPermis
 import DataItemsContainer from '../../containers/DataItemsContainer';
 import { Link, Switch, Route } from 'react-router-dom';
 
+const URL = process.env.REACT_APP_BASE_URL
+  ? `http://${process.env.REACT_APP_BASE_URL}:5000/api`
+  : 'http://localhost:5000/api';
+
 export default class DataContainer extends React.Component<
   {
     match: Object,
@@ -50,7 +54,7 @@ export default class DataContainer extends React.Component<
   getStreams(blockchainName, callback = () => {}) {
     return axios
       .get(
-        `http://localhost:5000/api/data_streams/get_streams?blockchainName=${blockchainName}&count=999999&start=-999999`,
+        `${URL}/data_streams/get_streams?blockchainName=${blockchainName}&count=999999&start=-999999`,
       )
       .then(response => {
         let subscribed = [];
@@ -75,7 +79,7 @@ export default class DataContainer extends React.Component<
     const blockchainName = localStorage.getItem('chainName');
 
     return axios
-      .post('http://localhost:5000/api/data_streams/unsubscribe', {
+      .post(`${URL}/data_streams/unsubscribe`, {
         blockchainName,
         streams,
       })
@@ -109,7 +113,7 @@ export default class DataContainer extends React.Component<
     let error = null;
 
     return axios
-      .post('http://localhost:5000/api/data_streams/subscribe', {
+      .post(`${URL}/data_streams/subscribe`, {
         blockchainName,
         streams,
         rescan,
@@ -164,7 +168,7 @@ export default class DataContainer extends React.Component<
     let error = null;
 
     return axios
-      .post('http://localhost:5000/api/data_streams/create_stream', {
+      .post(`${URL}/data_streams/create_stream`, {
         blockchainName,
         streamName,
         isOpen,
@@ -186,7 +190,7 @@ export default class DataContainer extends React.Component<
 
     axios
       .get(
-        `http://localhost:5000/api/permissions/get_permissions?blockchainName=${blockchainName}&permissions=${streamName}.*&verbose=false`,
+        `${URL}/permissions/get_permissions?blockchainName=${blockchainName}&permissions=${streamName}.*&verbose=false`,
       )
       .then(response => {
         let permissionsMap = {};
@@ -238,15 +242,12 @@ export default class DataContainer extends React.Component<
       const permission = p.permission;
 
       promises.push(
-        axios.post(
-          'http://localhost:5000/api/permissions/grant_stream_permission',
-          {
-            blockchainName,
-            address,
-            permission,
-            streamName,
-          },
-        ),
+        axios.post(`${URL}/permissions/grant_stream_permission`, {
+          blockchainName,
+          address,
+          permission,
+          streamName,
+        }),
       );
     });
 
@@ -255,15 +256,12 @@ export default class DataContainer extends React.Component<
       const permission = p.permission;
 
       promises.push(
-        axios.post(
-          'http://localhost:5000/api/permissions/revoke_stream_permission',
-          {
-            blockchainName,
-            address,
-            permission,
-            streamName,
-          },
-        ),
+        axios.post(`${URL}/permissions/revoke_stream_permission`, {
+          blockchainName,
+          address,
+          permission,
+          streamName,
+        }),
       );
     });
 

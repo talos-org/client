@@ -2,27 +2,25 @@
 import * as React from 'react';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
+// $FlowFixMe: Figure this out. Many `antd` components throw this error
 import { Layout, Breadcrumb, Icon } from 'antd';
 import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
-import GlobalHeader from 'components/GlobalHeader';
-import SideMenu from 'components/SideMenu';
-
 import DataContainer from 'containers/DataContainer';
+import GlobalHeader from 'components/GlobalHeader';
 import Monitoring from 'components/Monitoring';
+import SettingsContainer from 'containers/SettingsContainer';
+import SideMenu from 'components/SideMenu';
 import Admin from 'components/Admin';
 
 const { Content } = Layout;
 
 @inject('rootStore')
 @observer
-class Dashboard extends React.Component<
-  {
-    match: object,
-    location: object,
-  },
-  {},
-> {
+class Dashboard extends React.Component<{
+  match: Object,
+  location: Object,
+}> {
   @computed
   get allowAccessToDashboard() {
     // $FlowFixMe
@@ -92,7 +90,7 @@ class Dashboard extends React.Component<
                   <Route path={`${path}admin`} component={Admin} />
                   <Route
                     path={`${path}settings`}
-                    render={() => <div>In construction...</div>}
+                    component={SettingsContainer}
                   />
                   <Redirect from="/" to={`${path}monitoring`} />
                 </Switch>

@@ -1,14 +1,15 @@
 // @flow
 import { action, computed, observable } from 'mobx';
 
+import { get, remove } from 'utils/chainName';
+
 import ApplicationStore from 'stores/ApplicationStore';
 import BlockchainStore from 'stores/domain/Blockchain';
 import CurrentBlockchainStore from 'stores/domain/CurrentBlockchain';
 import GlobalHeaderStore from 'stores/ui/GlobalHeader';
 import GraphStore from 'stores/domain/Graph';
 import NodeStore from 'stores/domain/Node';
-
-import { get, remove } from 'utils/chainName';
+import SettingsStore from 'stores/ui/Settings';
 
 export default class RootStore {
   @observable
@@ -19,7 +20,6 @@ export default class RootStore {
     disconnect: false,
     // TODO: Remove this (↓) as it’s no longer being used
     currentTab: 'monitoring',
-    sidebarCollapsed: false,
     wizard: {
       currentStep: 0,
     },
@@ -31,6 +31,7 @@ export default class RootStore {
   globalHeaderStore: GlobalHeaderStore;
   graphStore: GraphStore;
   nodeStore: NodeStore;
+  settingsStore: SettingsStore;
 
   constructor() {
     this.applicationStore = new ApplicationStore(this);
@@ -39,6 +40,7 @@ export default class RootStore {
     this.globalHeaderStore = new GlobalHeaderStore(this);
     this.graphStore = new GraphStore(this);
     this.nodeStore = new NodeStore(this);
+    this.settingsStore = new SettingsStore(this);
 
     this.rootState.currentBlockchain = get('chainName');
   }
