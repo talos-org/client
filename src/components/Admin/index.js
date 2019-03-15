@@ -5,6 +5,10 @@ import axios from 'axios';
 import AddNodeModal from '../Modals/AddNodeModal.js';
 import { Switch, Route } from 'react-router-dom';
 
+const URL = process.env.REACT_APP_BASE_URL
+  ? `http://${process.env.REACT_APP_BASE_URL}:5000/api`
+  : 'http://localhost:5000/api';
+
 export default class AdminContainer extends React.Component<
   {
     match: Object,
@@ -42,7 +46,7 @@ export default class AdminContainer extends React.Component<
     const blockchainName = localStorage.getItem('chainName');
     return axios
       .get(
-        `http://35.196.26.90:5000/api/permissions/get_permissions?blockchainName=${blockchainName}&permissions=connect&verbose=false`,
+        `${URL}/permissions/get_permissions?blockchainName=${blockchainName}&permissions=connect&verbose=false`,
       )
       .then(response => {
         let nodes = response.data.permissions;
@@ -88,7 +92,7 @@ export default class AdminContainer extends React.Component<
     let error = null;
 
     return axios
-      .post('http://35.196.26.90:5000/api/nodes/add_node', {
+      .post(`${URL}/nodes/add_node`, {
         blockchainName,
         newNodeAddress,
       })
@@ -100,7 +104,7 @@ export default class AdminContainer extends React.Component<
         error = error.toString();
       })
       .then(() => {
-        this.setState({ addModalState }, () => this.getNodes);
+        this.setState({ addModalState }, () => this.getNodes());
       });
   };
 
@@ -112,14 +116,11 @@ export default class AdminContainer extends React.Component<
     permissions.push('connect');
 
     return axios
-      .post(
-        'http://35.196.26.90:5000/api/permissions/revoke_global_permission',
-        {
-          blockchainName,
-          addresses,
-          permissions,
-        },
-      )
+      .post(`${URL}/permissions/revoke_global_permission`, {
+        blockchainName,
+        addresses,
+        permissions,
+      })
       .then(response => {
         console.log('Permission Revoked:', response);
       })
@@ -128,7 +129,7 @@ export default class AdminContainer extends React.Component<
         error = error.toString();
       })
       .then(() => {
-        this.setState({ error }, () => this.getNodes);
+        this.setState({ error }, () => this.getNodes());
       });
   };
 
