@@ -15,11 +15,11 @@ describe('accessing the app thereafter', () => {
     window.localStorage.setItem('chainName', '__DEBUG__');
   });
 
-  it('takes the user to the dashboard', () => {
+  it.skip('takes the user to the dashboard', () => {
     cy.visit('/');
   });
 
-  it('can see the word “__DEBUG__” somewhere on the screen', () => {
+  it.skip('can see the word “__DEBUG__” somewhere on the screen', () => {
     cy.contains('__DEBUG__');
   });
 });

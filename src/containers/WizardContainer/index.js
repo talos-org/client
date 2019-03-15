@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { computed } from 'mobx';
-import axios from 'axios';
 import FlexView from 'react-flexview';
 import { inject, observer } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
