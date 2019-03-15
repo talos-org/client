@@ -5,6 +5,10 @@ import axios from 'axios';
 import DataItemEditorContainer from '../../containers/DataItemEditorContainer';
 import { Link, Switch, Route } from 'react-router-dom';
 
+const URL = process.env.REACT_APP_BASE_URL
+  ? `http://${process.env.REACT_APP_BASE_URL}:5000/api`
+  : 'http://localhost:5000/api';
+
 export default class DataItemsContainer extends React.Component<
   {
     match: Object,
@@ -39,7 +43,7 @@ export default class DataItemsContainer extends React.Component<
   getStreamKeys(blockchainName, streamName, callback = () => {}) {
     axios
       .get(
-        `http://localhost:5000/api/data/get_stream_keys?blockchainName=${blockchainName}&streamName=${streamName}&count=999999&start=-999999`,
+        `${URL}/data/get_stream_keys?blockchainName=${blockchainName}&streamName=${streamName}&count=999999&start=-999999`,
       )
       .then(response => {
         const keys = response.data.reverse();
