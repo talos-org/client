@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 // $FlowFixMe
-import { Card, Empty, Icon, Statistic } from 'antd';
+import { Card, Empty, Icon, List, Statistic } from 'antd';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
 
@@ -13,13 +13,7 @@ export default class CurrentNode extends React.Component<{
   render() {
     const { currentNodeData } = this.props;
 
-    if (!currentNodeData) {
-      return (
-        <Card title="Current Node Information">
-          <Empty description="No node selected" />
-        </Card>
-      );
-    } else {
+    const getData = () => {
       const {
         addr,
         addrlocal,
@@ -27,13 +21,53 @@ export default class CurrentNode extends React.Component<{
         bytesrecv,
         bytessent,
       } = currentNodeData;
+
+      return [
+        {
+          title: 'Ban Score',
+          description: `${banscore}`,
+        },
+        {
+          title: 'Address',
+          description: addr,
+        },
+        {
+          title: 'Local Address',
+          description: addrlocal,
+        },
+        {
+          title: 'Data received',
+          description: `${bytesrecv}B`,
+        },
+        {
+          title: 'Data sent',
+          description: `${bytessent}B`,
+        },
+      ];
+    };
+
+    if (!currentNodeData) {
       return (
         <Card title="Current Node Information">
-          <p>Address: {addr}</p>
-          <p>Local address: {addrlocal}</p>
-          <p>Total bytes received: {bytesrecv}</p>
-          <p>Total bytes sent: {bytessent}</p>
-          <p>Ban score: {banscore}</p>
+          <Empty description="No node selected" />
+        </Card>
+      );
+    } else {
+      return (
+        <Card title="Current Node Information">
+          <List
+            dataSource={getData()}
+            itemLayout="horizontal"
+            renderItem={item => (
+              <List.Item actions={item.actions}>
+                <List.Item.Meta
+                  title={item.title}
+                  description={item.description}
+                />
+              </List.Item>
+            )}
+            size="small"
+          />
         </Card>
       );
     }
