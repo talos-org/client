@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Modal, Input, Select } from 'antd';
+import { Modal, Input } from 'antd';
 
 export default class CreateStreamModal extends React.Component<
   {
