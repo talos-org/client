@@ -35,6 +35,7 @@ class BaseMenu extends React.Component<{ tab: string }> {
 
   render() {
     const { tab } = this.props;
+
     return (
       <Menu
         selectedKeys={[tab]}
@@ -55,10 +56,10 @@ class BaseMenu extends React.Component<{ tab: string }> {
             <span>Data</span>
           </Link>
         </Menu.Item>
-        <Menu.Item key="account">
-          <Link to={'/account'}>
+        <Menu.Item key="admin">
+          <Link to={'/admin'}>
             <Icon type="user" />
-            <span>Account</span>
+            <span>Admin</span>
           </Link>
         </Menu.Item>
         <Menu.Item key="settings">

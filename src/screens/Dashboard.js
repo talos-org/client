@@ -11,6 +11,7 @@ import GlobalHeader from 'components/GlobalHeader';
 import Monitoring from 'components/Monitoring';
 import SettingsContainer from 'containers/SettingsContainer';
 import SideMenu from 'components/SideMenu';
+import Admin from 'components/Admin';
 
 const { Content } = Layout;
 
@@ -39,7 +40,7 @@ class Dashboard extends React.Component<{
     const breadcrumbNameMap = {
       '/monitoring': 'Monitoring',
       '/data': 'Data',
-      '/account': 'Account',
+      '/admin': 'Admin',
       '/settings': 'Settings',
     };
 
@@ -86,10 +87,7 @@ class Dashboard extends React.Component<{
                 <Switch>
                   <Route path={`${path}monitoring`} component={Monitoring} />
                   <Route path={`${path}data`} component={DataContainer} />
-                  <Route
-                    path={`${path}account`}
-                    render={() => <div>In construction...</div>}
-                  />
+                  <Route path={`${path}admin`} component={Admin} />
                   <Route
                     path={`${path}settings`}
                     component={SettingsContainer}
