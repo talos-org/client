@@ -6,7 +6,7 @@ import { computed, observable } from 'mobx';
 import { Graph } from 'react-d3-graph';
 import { inject, observer } from 'mobx-react';
 
-import CurrentNode from 'components/Monitoring/CurrentNode';
+import CurrentNode, { NodeAddress } from 'components/Monitoring/CurrentNode';
 
 const myConfig = {
   nodeHighlightBehavior: true,
@@ -75,6 +75,7 @@ class MonitoringComponent extends React.Component<{}> {
         </Col>
         <Col span={6}>
           <CurrentNode currentNodeData={this.currentNodeData} />
+          <NodeAddress />
         </Col>
       </Row>
     );
