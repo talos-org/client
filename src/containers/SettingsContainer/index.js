@@ -2,14 +2,13 @@
 import * as React from 'react';
 import { Box } from 'rebass';
 // $FlowFixMe
-import { Menu, PageHeader, Typography } from 'antd';
+import { Menu, PageHeader } from 'antd';
 
 import { Container } from './index.styles';
 import GeneralSettings from 'components/Settings/General';
 import PollingSettings from 'components/Settings/Polling';
 
 const { Item } = Menu;
-const { Paragraph } = Typography;
 
 class SettingsContainer extends React.Component<{}> {
   handleSelect = ({
@@ -38,17 +37,17 @@ class SettingsContainer extends React.Component<{}> {
         </Box>
         <Box mx={[3, 4, 6]} width={1}>
           <PageHeader title="General Settings">
-            <Paragraph>
+            {/* <Paragraph>
               These settings will be remembered the next time you launch the
               application
-            </Paragraph>
+            </Paragraph> */}
             <GeneralSettings />
           </PageHeader>
           <PageHeader title="Polling Settings">
-            <Paragraph>
+            {/* <Paragraph>
               These settings will be remembered the next time you launch the
               application
-            </Paragraph>
+            </Paragraph> */}
             <PollingSettings />
           </PageHeader>
         </Box>
