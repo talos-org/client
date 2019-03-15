@@ -5,6 +5,10 @@ import axios from 'axios';
 import DataItemDiffModal from '../../components/Modals/DataItemDiffModal';
 import ReactJson from 'react-json-view';
 
+const URL = process.env.REACT_APP_BASE_URL
+  ? `http://${process.env.REACT_APP_BASE_URL}:5000/api`
+  : 'http://localhost:5000/api';
+
 export default class DataItemEditorContainer extends React.Component<
   {
     match: Object,
@@ -55,7 +59,7 @@ export default class DataItemEditorContainer extends React.Component<
     if (key !== 'New Key') {
       axios
         .get(
-          `http://localhost:5000/api/data/get_items_by_keys?blockchainName=${blockchainName}&streamName=${streamName}&keys=${key}`,
+          `${URL}/data/get_items_by_keys?blockchainName=${blockchainName}&streamName=${streamName}&keys=${key}`,
         )
         .then(response => {
           let dataItems = response.data;
@@ -109,7 +113,7 @@ export default class DataItemEditorContainer extends React.Component<
 
     if (key !== '') {
       axios
-        .post('http://localhost:5000/api/data/publish_item', {
+        .post(`${URL}/data/publish_item`, {
           blockchainName: localStorage.getItem('chainName'),
           streamName: match.params.stream,
           keys: new Array(key),
