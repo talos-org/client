@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Alert, Table, Button, Divider, Popconfirm } from 'antd';
+import { Alert, Table, Button, Divider, Popconfirm, message } from 'antd';
 import axios from 'axios';
 import SubscribeStreamModal from '../../components/Modals/SubscribeStreamModal';
 import CreateStreamModal from '../../components/Modals/CreateStreamModal';
@@ -174,6 +174,7 @@ export default class DataContainer extends React.Component<
         isOpen,
       })
       .then(response => {
+        message.success('Created successfully');
         this.subscribeToStreams(blockchainName, new Array(streamName), false);
       })
       .catch(error => {

@@ -1,6 +1,16 @@
 // @flow
 import * as React from 'react';
-import { Alert, Button, Divider, Input, Card, Avatar, List, Icon } from 'antd';
+import {
+  Alert,
+  Button,
+  Divider,
+  Input,
+  Card,
+  Avatar,
+  List,
+  Icon,
+  message,
+} from 'antd';
 import axios from 'axios';
 import DataItemDiffModal from '../../components/Modals/DataItemDiffModal';
 import ReactJson from 'react-json-view';
@@ -122,6 +132,7 @@ export default class DataItemEditorContainer extends React.Component<
         })
         .then(response => {
           history.push(`/data/${match.params.stream}/${key}`);
+          message.success('Saved data successfully');
           this.reloadData(onEditCallback);
         })
         .catch(error => {
