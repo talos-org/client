@@ -53,7 +53,6 @@ class NodeAddress extends React.Component<{}> {
   async componentWillMount() {
     const { data } = await getNodeAddress(this.currentBlockchain);
     this.currentNodeAddress = data.nodeAddress;
-    console.log(this.currentNodeAddress);
   }
 
   render() {
