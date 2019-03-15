@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Col, Icon, Layout, Row } from 'antd';
-import { computed } from 'mobx';
+import { action, computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
 import CurrentBlockchain from 'components/GlobalHeader/CurrentBlockchain';
@@ -15,9 +15,10 @@ class GlobalHeader extends React.Component<{}> {
   @computed
   get sidebarCollapsed() {
     // $FlowFixMe
-    return this.props.rootStore.sidebarCollapsed;
+    return this.props.rootStore.globalHeaderStore.sidebarCollapsed;
   }
 
+  @action
   toggle = () => {
     // $FlowFixMe
     this.props.rootStore.globalHeaderStore.toggleSideMenu();

@@ -6,11 +6,11 @@ import { inject, observer } from 'mobx-react';
 import { Layout, Breadcrumb, Icon } from 'antd';
 import { Link, Redirect, Switch, Route } from 'react-router-dom';
 
-import GlobalHeader from 'components/GlobalHeader';
-import SideMenu from 'components/SideMenu';
-
 import DataContainer from 'containers/DataContainer';
+import GlobalHeader from 'components/GlobalHeader';
 import Monitoring from 'components/Monitoring';
+import SettingsContainer from 'containers/SettingsContainer';
+import SideMenu from 'components/SideMenu';
 
 const { Content } = Layout;
 
@@ -92,7 +92,7 @@ class Dashboard extends React.Component<{
                   />
                   <Route
                     path={`${path}settings`}
-                    render={() => <div>In construction...</div>}
+                    component={SettingsContainer}
                   />
                   <Redirect from="/" to={`${path}monitoring`} />
                 </Switch>
