@@ -89,7 +89,6 @@ export default class AdminContainer extends React.Component<
       visible: false,
       confirmLoading: false,
     };
-    let error = null;
 
     return axios
       .post(`${URL}/nodes/add_node`, {

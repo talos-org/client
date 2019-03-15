@@ -2,8 +2,6 @@
 import * as React from 'react';
 import { Modal, Input, Select } from 'antd';
 
-const Option = Select.Option;
-
 export default class CreateStreamModal extends React.Component<
   {
     visible: boolean,
