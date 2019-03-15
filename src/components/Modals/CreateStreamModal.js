@@ -12,14 +12,14 @@ export default class CreateStreamModal extends React.Component<
     onCancel: Function,
   },
   {
-    address: string,
+    name: string,
     type: string,
   },
 > {
   constructor() {
     super();
     this.state = {
-      address: '',
+      name: '',
       type: 'Open',
     };
   }
@@ -27,17 +27,21 @@ export default class CreateStreamModal extends React.Component<
   onOk = () => {
     this.props.onOk(
       localStorage.getItem('chainName'),
-      this.state.address,
+      this.state.name,
       this.state.type,
     );
   };
 
   handleNameChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
-    this.setState({ [event.target.address]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  handleTypeChange = value => {
+    this.setState({ type: value });
   };
 
   render() {
-    const { address, type } = this.state;
+    const { name, type } = this.state;
     const { visible, confirmLoading, onCancel } = this.props;
 
     return (
@@ -51,10 +55,10 @@ export default class CreateStreamModal extends React.Component<
       >
         <span>Name</span>
         <Input
-          address="address"
+          name="name"
           onChange={this.handleNameChange}
           placeholder="Name of stream"
-          value={address}
+          value={name}
           style={{ marginBottom: '10px' }}
         />
         <span>Type</span>
