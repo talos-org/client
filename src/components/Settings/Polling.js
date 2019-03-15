@@ -83,14 +83,13 @@ class GeneralSettings extends React.Component<{}> {
           )}
         />
         <Form onSubmit={onValidateForm}>
-          <Form.Item>
+          <Form.Item colon={false} label="Polling time (in milliseconds)">
             {getFieldDecorator('pollingTime', {
               initialValue: this.props.rootStore.settingsStore.pollingTime,
               rules: [{ required: true, message: 'This field is required' }],
             })(
               <Input
                 allowClear
-                onChange={onValidateForm}
                 placeholder="Enter a value (in milliseconds)"
               />,
             )}
