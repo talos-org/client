@@ -86,7 +86,7 @@
     "react-json-view": "^1.19.1",
     "react-router-dom": "^4.3.1",
     "rebass": "^3.0.1",
-    "resolve": "1.8.1",
+    "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
     "styled-components": "^4.0.3",
