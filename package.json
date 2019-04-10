@@ -105,7 +105,7 @@
     "cypress": "^3.1.5",
     "cz-conventional-changelog": "^2.1.0",
     "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.6.0",
+    "enzyme-adapter-react-16": "^1.12.1",
     "enzyme-to-json": "^3.3.4",
     "eslint-plugin-cypress": "^2.2.1",
     "flow-bin": "^0.94.0",
